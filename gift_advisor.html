@@ -5,11 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Gift Advisor</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Use a modern, clean font -->
+    <!-- Lottie player for the subtle animation -->
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
     
-
-<script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
     <style>
         /* Base Styling & Font */
         body { font-family: 'Poppins', sans-serif; background-color: #f0f4f8; }
@@ -85,14 +84,21 @@
             <h1 class="text-4xl md:text-5xl font-extrabold text-indigo-700">
                 The Gift Genie <span class="animated-emoji">🧞‍♂️</span>
             </h1>
-            <p class="text-gray-600 mt-2 text-lg">Answer a few simple questions for personalized recommendations.</p>
+            <p class="text-gray-600 mt-2 text-lg">Answer a few simple questions for 5 personalized recommendations.</p>
         </header>
 
-        <!-- Questionnaire Section -->
+        <!-- Progress Bar -->
+        <div id="progress-container" class="mb-8">
+            <h2 id="progress-text" class="text-sm font-semibold text-indigo-700 mb-2">Progress: 0/5 Questions Answered</h2>
+            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                <div id="progress-bar" class="bg-indigo-500 h-2.5 rounded-full transition-all duration-500" style="width: 0%;"></div>
+            </div>
+        </div>
+        
         <div id="questionnaire" class="space-y-8">
             
             <div class="flex flex-col md:flex-row items-center justify-center bg-purple-50 p-4 rounded-lg shadow-inner mb-6">
-                <!-- Lottie Animation for visual appeal (Thoughtful/Smart theme) -->
+                <!-- Smart, elegant figure animation -->
                 <lottie-player 
                     src="https://lottie.host/85a6a611-3069-450f-a36c-9c748c03c51f/k3aA12hM67.json" 
                     background="transparent" 
@@ -108,270 +114,327 @@
 
             <div class="p-4 bg-indigo-50 border-l-4 border-indigo-400 rounded-lg">
                 <p class="text-sm text-indigo-700 font-medium">
-                    Disclaimer: This tool uses AI to suggest gift ideas. All "View on Amazon" links are guaranteed to be functional and dynamically search for the suggested item, including your **Amazon Affiliate tag**.
+                    Disclaimer: This tool uses AI to suggest gift ideas based on your input. All links are dynamic search links and contain your provided **Amazon Affiliate tag**.
                 </p>
             </div>
 
-            <!-- Question 1: Recipient Type (Mandatory) -->
+            <!-- Q1: Recipient (MANDATORY) -->
             <h2 class="text-xl font-bold text-gray-700 border-b pb-2 border-gray-200">1. Who is the gift for?</h2>
-            <div class="question-grid">
-                <button data-key="Recipient" data-answer="Family Member" class="choice-btn p-4 rounded-xl shadow-sm">Family Member</button>
-                <button data-key="Recipient" data-answer="Close Friend" class="choice-btn p-4 rounded-xl shadow-sm">Close Friend</button>
-                <button data-key="Recipient" data-answer="Coworker/Acquaintance" class="choice-btn p-4 rounded-xl shadow-sm">Coworker/Acquaintance</button>
-                <button data-key="Recipient" data-answer="Partner/Spouse" class="choice-btn p-4 rounded-xl shadow-sm">Partner/Spouse</button>
+            <div class="question-grid" data-key="Recipient">
+                <button data-answer="Family Member" class="choice-btn p-4 rounded-xl shadow-sm">Family Member</button>
+                <button data-answer="Close Friend" class="choice-btn p-4 rounded-xl shadow-sm">Close Friend</button>
+                <button data-answer="Coworker/Acquaintance" class="choice-btn p-4 rounded-xl shadow-sm">Coworker/Acquaintance</button>
+                <button data-answer="Partner/Spouse" class="choice-btn p-4 rounded-xl shadow-sm">Partner/Spouse</button>
             </div>
             
-            <!-- Question 2: Main Interest (OPTIONAL) -->
+            <!-- Q2: Interest (OPTIONAL) -->
             <h2 class="text-xl font-bold text-gray-700 border-b pb-2 border-gray-200">2. What is their main interest or hobby? (Optional)</h2>
-            <div class="question-grid">
-                <button data-key="Interest" data-answer="Cooking/Gourmet Food" class="choice-btn p-4 rounded-xl shadow-sm">Cooking/Food</button>
-                <button data-key="Interest" data-answer="Technology/Gaming" class="choice-btn p-4 rounded-xl shadow-sm">Tech/Gaming</button>
-                <button data-key="Interest" data-answer="Outdoors/Fitness" class="choice-btn p-4 rounded-xl shadow-sm">Outdoors/Fitness</button>
-                <button data-key="Interest" data-answer="Home Decor/Art" class="choice-btn p-4 rounded-xl shadow-sm">Home Decor/Art</button>
+            <div class="question-grid" data-key="Interest">
+                <button data-answer="Cooking/Gourmet Food" class="choice-btn p-4 rounded-xl shadow-sm">Cooking/Food</button>
+                <button data-answer="Technology/Gaming" class="choice-btn p-4 rounded-xl shadow-sm">Tech/Gaming</button>
+                <button data-answer="Outdoors/Fitness" class="choice-btn p-4 rounded-xl shadow-sm">Outdoors/Fitness</button>
+                <button data-answer="Home Decor/Art" class="choice-btn p-4 rounded-xl shadow-sm">Home Decor/Art</button>
+                <button data-answer="None/General" class="choice-btn p-4 rounded-xl shadow-sm">None/General</button>
             </div>
 
-            <!-- Question 3: Budget (Mandatory) -->
+            <!-- Q3: Budget (MANDATORY) -->
             <h2 class="text-xl font-bold text-gray-700 border-b pb-2 border-gray-200">3. What is your approximate budget?</h2>
-            <div class="question-grid">
-                <button data-key="Budget" data-answer="Under $25" class="choice-btn p-4 rounded-xl shadow-sm">Under $25</button>
-                <button data-key="Budget" data-answer="$25 - $75" class="choice-btn p-4 rounded-xl shadow-sm">$25 - $75</button>
-                <button data-key="Budget" data-answer="Over $75" class="choice-btn p-4 rounded-xl shadow-sm">Over $75</button>
+            <div class="question-grid" data-key="Budget">
+                <button data-answer="Under $25" class="choice-btn p-4 rounded-xl shadow-sm">Under $25</button>
+                <button data-answer="$25 - $75" class="choice-btn p-4 rounded-xl shadow-sm">$25 - $75</button>
+                <button data-answer="Over $75" class="choice-btn p-4 rounded-xl shadow-sm">Over $75</button>
             </div>
 
-            <!-- Question 4: Age Group (Mandatory) -->
+            <!-- Q4: Age (MANDATORY) -->
             <h2 class="text-xl font-bold text-gray-700 border-b pb-2 border-gray-200">4. What is the recipient's approximate age group?</h2>
-            <div class="question-grid">
-                <button data-key="Age" data-answer="Child (under 13)" class="choice-btn p-4 rounded-xl shadow-sm">Child (under 13)</button>
-                <button data-key="Age" data-answer="Teen (13-19)" class="choice-btn p-4 rounded-xl shadow-sm">Teen (13-19)</button>
-                <button data-key="Age" data-answer="Adult (20-60)" class="choice-btn p-4 rounded-xl shadow-sm">Adult (20-60)</button>
-                <button data-key="Age" data-answer="Senior (60+)" class="choice-btn p-4 rounded-xl shadow-sm">Senior (60+)</button>
+            <div class="question-grid" data-key="Age">
+                <button data-answer="Child (under 13)" class="choice-btn p-4 rounded-xl shadow-sm">Child (under 13)</button>
+                <button data-answer="Teen (13-19)" class="choice-btn p-4 rounded-xl shadow-sm">Teen (13-19)</button>
+                <button data-answer="Adult (20-55)" class="choice-btn p-4 rounded-xl shadow-sm">Adult (20-55)</button>
+                <button data-answer="Senior (55+)" class="choice-btn p-4 rounded-xl shadow-sm">Senior (55+)</button>
             </div>
 
-            <!-- Question 5: Occasion (Mandatory) -->
-            <h2 class="text-xl font-bold text-gray-700 border-b pb-2 border-gray-200">5. What is the occasion for the gift?</h2>
-            <div class="question-grid">
-                <button data-key="Occasion" data-answer="Birthday" class="choice-btn p-4 rounded-xl shadow-sm">Birthday</button>
-                <button data-key="Occasion" data-answer="Holiday (Christmas/Kwanzaa/etc.)" class="choice-btn p-4 rounded-xl shadow-sm">Holiday</button>
-                <button data-key="Occasion" data-answer="Housewarming/Host Gift" class="choice-btn p-4 rounded-xl shadow-sm">Housewarming/Host</button>
-                <button data-key="Occasion" data-answer="Just Because" class="choice-btn p-4 rounded-xl shadow-sm">Just Because</button>
-            </div>
-            
-            <!-- Question 6: Timeline/Urgency (Mandatory) -->
-            <h2 class="text-xl font-bold text-gray-700 border-b pb-2 border-gray-200">6. How urgently is the gift needed (delivery timeline)?</h2>
-            <div class="question-grid">
-                <button data-key="Timeline" data-answer="Immediate (Digital/Quick Ship)" class="choice-btn p-4 rounded-xl shadow-sm">Immediate (1-3 Days)</button>
-                <button data-key="Timeline" data-answer="Standard (Up to 14 days)" class="choice-btn p-4 rounded-xl shadow-sm">Standard (Up to 14)</button>
-                <button data-key="Timeline" data-answer="Flexible (Up to 30+ days)" class="choice-btn p-4 rounded-xl shadow-sm">Flexible (30+ Days)</button>
+            <!-- Q5: Occasion (MANDATORY) -->
+            <h2 class="text-xl font-bold text-gray-700 border-b pb-2 border-gray-200">5. What is the occasion?</h2>
+            <div class="question-grid" data-key="Occasion">
+                <button data-answer="Birthday" class="choice-btn p-4 rounded-xl shadow-sm">Birthday</button>
+                <button data-answer="Holiday/Christmas" class="choice-btn p-4 rounded-xl shadow-sm">Holiday/Christmas</button>
+                <button data-answer="Anniversary/Milestone" class="choice-btn p-4 rounded-xl shadow-sm">Anniversary/Milestone</button>
+                <button data-answer="Just Because/Thank You" class="choice-btn p-4 rounded-xl shadow-sm">Just Because/Thank You</button>
             </div>
 
-            <div class="pt-8">
-                <button id="submit-btn" class="w-full py-4 px-6 bg-gray-400 text-white font-extrabold text-lg rounded-xl shadow-lg transition duration-200 focus:outline-none focus:ring-4 focus:ring-green-400 flex items-center justify-center" disabled>
-                    <span id="submit-text">Answer 5 mandatory questions to get suggestions (0/5)</span>
-                    <span id="loading-indicator" class="hidden loading-ring ml-3"></span>
-                </button>
+            <!-- Q6: Timeline (MANDATORY) -->
+            <h2 class="text-xl font-bold text-gray-700 border-b pb-2 border-gray-200">6. How quickly do you need this gift?</h2>
+            <div class="question-grid" data-key="Timeline">
+                <button data-answer="Immediate (1-3 days)" class="choice-btn p-4 rounded-xl shadow-sm">Immediate (1-3 days)</button>
+                <button data-answer="Standard (4-7 days)" class="choice-btn p-4 rounded-xl shadow-sm">Standard (4-7 days)</button>
+                <button data-answer="Flexible (2+ weeks)" class="choice-btn p-4 rounded-xl shadow-sm">Flexible (2+ weeks)</button>
             </div>
+
+            <!-- Submit Button -->
+            <button id="submit-btn" disabled 
+                    class="w-full text-lg md:text-xl p-4 mt-8 rounded-xl shadow-md transition duration-200 
+                           bg-gray-400 text-gray-700 font-extrabold cursor-not-allowed">
+                Answer 5 Questions to Get Ideas
+            </button>
         </div>
 
-        <!-- Results Section (Hidden until submitted) -->
+        <!-- Results Section (Initially Hidden) -->
         <div id="results" class="hidden">
-            <h2 class="text-3xl font-bold text-center text-indigo-700 mb-6">Your AI-Powered Gift Ideas</h2>
-            <p class="text-center text-gray-600 mb-8">Based on your answers, here are 3 personalized gift suggestions:</p>
-
-            <div id="gift-grid" class="gift-grid grid md:grid-cols-3 gap-6">
-                <!-- Gift cards will be injected here -->
+            <h2 class="text-3xl font-extrabold text-indigo-700 text-center mb-6">Your Personalized Gift Ideas</h2>
+            
+            <p class="text-center text-gray-600 mb-8 p-3 bg-yellow-50 rounded-lg border border-yellow-200">
+                You received **5 unique recommendations**. Click "View on Amazon" to find the exact product described, with your selected budget filters applied!
+            </p>
+            
+            <div id="gift-cards-container" class="space-y-6">
+                <!-- Gift cards will be inserted here -->
             </div>
 
-            <div class="mt-10 flex justify-center">
-                <button onclick="resetApp()" class="py-3 px-6 bg-gray-200 text-gray-700 font-semibold rounded-xl hover:bg-gray-300 transition duration-150 shadow-md">
-                    Start Over
+            <!-- Run Again Button -->
+            <div class="mt-10 text-center">
+                <button id="restart-btn" 
+                        class="text-lg py-3 px-8 rounded-xl shadow-md bg-indigo-500 text-white font-bold 
+                               hover:bg-indigo-600 transition duration-200">
+                    Search Again or Find a Gift for Another Person 🔄
                 </button>
             </div>
         </div>
-        
-        <!-- Error/Message Box -->
-        <div id="message-box" class="hidden mt-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg"></div>
+
+        <!-- Error/Loading Messages -->
+        <div id="message-area" class="mt-8 text-center hidden">
+            <p id="error-message" class="text-red-500 font-semibold hidden"></p>
+            <div id="loading-spinner" class="hidden">
+                <svg class="animate-spin h-8 w-8 text-indigo-500 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <p class="mt-3 text-indigo-600 font-semibold">Generating 5 personalized gift ideas now...</p>
+            </div>
+        </div>
 
     </div>
 
     <script type="module">
-        // --- Configuration ---
-        // ⚠️ CRITICAL: YOU MUST REPLACE THE EMPTY STRING WITH YOUR ACTUAL GEMINI API KEY on GitHub!
-        const apiKey = "AIzaSyBGKVEl84vEUIwHYcHewWA_YUKgrJbyamg"; 
-        const affiliateTag = "giftwithai-21"; // Your confirmed Amazon Associate Tag!
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
-
+        // ----------------------------------------------------------------------
+        // CRITICAL CONFIGURATION SECTION
+        // ----------------------------------------------------------------------
         
-        // UI Elements
-        const questionnaireDiv = document.getElementById('questionnaire');
-        const resultsDiv = document.getElementById('results');
-        const submitBtn = document.getElementById('submit-btn');
-        const submitText = document.getElementById('submit-text');
-        const loadingIndicator = document.getElementById('loading-indicator');
-        const giftGrid = document.getElementById('gift-grid');
-        const messageBox = document.getElementById('message-box');
+        // 1. GEMINI API KEY: This is the source of the 403 Forbidden error.
+        // YOU MUST REPLACE THE EMPTY STRING WITH YOUR ACTUAL GEMINI API KEY.
+        const apiKey = "AIzaSyBGKVEl84vEUIwHYcHewWA_YUKgrJbyamg"; 
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+        
+        // 2. AMAZON AFFILIATE TAG: This is your unique ID for commission.
+        // The URL will look like amazon.com/s?k=ProductName&tag=giftwithai-21
+        const affiliateTag = "giftwithai-21"; 
 
-        // State Management
-        let userAnswers = {};
-        // Only these keys are mandatory for submission. 'Interest' is optional.
+        // 3. MANDATORY QUESTION DEFINITIONS
+        // Defines which questions must be answered before submission is enabled.
         const mandatoryKeys = ['Recipient', 'Budget', 'Age', 'Occasion', 'Timeline'];
         const totalMandatory = mandatoryKeys.length;
 
-        // JSON Schema for structured output
-        const responseSchema = {
-            type: "ARRAY",
-            items: {
-                type: "OBJECT",
-                properties: {
-                    "productName": { 
-                        "type": "STRING", 
-                        "description": "The concise name of the recommended Amazon product." 
-                    },
-                    "description": { 
-                        "type": "STRING", 
-                        "description": "A concise, engaging 1-2 sentence description explaining why this is the perfect gift." 
-                    },
-                    "category": { 
-                        "type": "STRING", 
-                        "description": "A broad category for the gift (e.g., 'Kitchen Gadget', 'Outdoor Gear', 'Tech Accessory')." 
-                    },
-                },
-                required: ["productName", "description", "category"]
-            }
-        };
-
-        // --- Core Functions ---
+        // ----------------------------------------------------------------------
+        // STATE AND ELEMENTS
+        // ----------------------------------------------------------------------
+        const selectedAnswers = {};
+        const state = { currentAnswers: 0 };
+        
+        const appElement = document.getElementById('app');
+        const questionnaireElement = document.getElementById('questionnaire');
+        const resultsElement = document.getElementById('results');
+        const submitBtn = document.getElementById('submit-btn');
+        const restartBtn = document.getElementById('restart-btn');
+        const cardsContainer = document.getElementById('gift-cards-container');
+        const loadingSpinner = document.getElementById('loading-spinner');
+        const errorMsg = document.getElementById('error-message');
+        const progressBar = document.getElementById('progress-bar');
+        const progressText = document.getElementById('progress-text');
+        
+        // ----------------------------------------------------------------------
+        // UTILITY FUNCTIONS
+        // ----------------------------------------------------------------------
 
         /**
-         * Converts the user answers into a structured prompt for the Gemini API.
-         * @returns {string} The formatted prompt string.
-         */
-        function buildPrompt() {
-            // Check for answers and set sensible defaults for the prompt
-            const recipient = userAnswers['Recipient'] || 'Someone special';
-            // Use the Interest answer if available, otherwise include a fallback phrase
-            const interest = userAnswers['Interest'] ? `Main Interest: ${userAnswers['Interest']}` : 'No specific interest provided, recommend a widely appreciated item.';
-            const budget = userAnswers['Budget'] || 'medium';
-            const age = userAnswers['Age'] || 'Adult';
-            const occasion = userAnswers['Occasion'] || 'a general celebration';
-            const timeline = userAnswers['Timeline'] || 'Standard delivery';
-
-
-            const prompt = `Act as an expert gift recommendation agent. Based on the following user preferences, generate exactly 3 unique and creative gift ideas available on Amazon. 
-
-            User Preferences:
-            1. Recipient Type: ${recipient}
-            2. ${interest}
-            3. Budget/Price Range: ${budget}
-            4. Recipient Age: ${age}
-            5. Occasion: ${occasion}
-            6. Delivery Timeline: ${timeline}
-
-            Ensure the product name and description are compelling and match the preferences. If the timeline is 'Immediate', prioritize digital, service, or easily shippable gifts. The response MUST strictly adhere to the provided JSON schema.`;
-            
-            return prompt;
-        }
-
-        /**
-         * Generates the Amazon affiliate link using the product name for a search.
-         * @param {string} productName The name of the product recommended by the AI.
-         * @returns {string} The complete Amazon search URL with the affiliate tag.
+         * Generates the dynamic Amazon affiliate search link.
+         * @param {string} productName The name of the product returned by the AI.
+         * @returns {string} The complete affiliate search URL.
          */
         function generateAffiliateLink(productName) {
-            // URL encodes the product name and uses it for an Amazon search, 
-            // ensuring a relevant link that is always functional.
-            const searchTerms = encodeURIComponent(productName);
-            // Search structure: /s?k=[SEARCH_TERM]&tag=[YOUR_ASSOCIATE_ID]
-            return `https://www.amazon.com/s?k=${searchTerms}&tag=${affiliateTag}`;
+            const encodedName = encodeURIComponent(productName);
+            // Uses the standard search structure for maximum relevance
+            return `https://www.amazon.com/s?k=${encodedName}&tag=${affiliateTag}`;
         }
 
         /**
-         * Shows a message box with an error or status.
-         * @param {string} message The message to display.
-         * @param {string} type The type of message ('error' or 'info').
+         * Maps the budget string to a specific, detailed prompt instruction.
+         * @param {string} budget The budget selected by the user.
+         * @returns {string} Detailed instruction for the AI.
          */
-        function showMessage(message, type = 'error') {
-            messageBox.textContent = message;
-            messageBox.className = `mt-6 p-4 rounded-lg text-center ${type === 'error' ? 'bg-red-100 border border-red-400 text-red-700' : 'bg-green-100 border border-green-400 text-green-700'}`;
-            messageBox.classList.remove('hidden');
+        function mapBudgetToPrompt(budget) {
+            switch (budget) {
+                case 'Under $25':
+                    return 'PRIORITIZE gifts likely found in the $10 to $25 range. Use small, thoughtful ideas.';
+                case '$25 - $75':
+                    return 'PRIORITIZE mid-range products priced between $30 and $70. Focus on quality items.';
+                case 'Over $75':
+                    return 'PRIORITIZE high-end or large gift bundles priced between $80 and $150. Focus on premium items.';
+                default:
+                    return '';
+            }
         }
 
         /**
-         * Renders the gift cards onto the results grid.
-         * @param {Array<Object>} gifts An array of gift objects from the Gemini API.
+         * Updates the UI to show the current progress through mandatory questions.
+         */
+        function updateProgressBar() {
+            const answeredMandatory = Object.keys(selectedAnswers).filter(key => mandatoryKeys.includes(key)).length;
+            const percentage = (answeredMandatory / totalMandatory) * 100;
+
+            state.currentAnswers = answeredMandatory;
+            progressText.textContent = `Progress: ${answeredMandatory}/${totalMandatory} Questions Answered`;
+            progressBar.style.width = `${percentage}%`;
+        }
+        
+        /**
+         * Checks if all mandatory questions have been answered and updates the button.
+         */
+        function checkReady() {
+            updateProgressBar();
+
+            if (state.currentAnswers === totalMandatory) {
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('bg-gray-400', 'text-gray-700', 'cursor-not-allowed');
+                submitBtn.classList.add('bg-yellow-500', 'text-indigo-900', 'hover:bg-yellow-600');
+                submitBtn.textContent = 'Generate 5 Gift Ideas!';
+            } else {
+                submitBtn.disabled = true;
+                submitBtn.classList.add('bg-gray-400', 'text-gray-700', 'cursor-not-allowed');
+                submitBtn.classList.remove('bg-yellow-500', 'text-indigo-900', 'hover:bg-yellow-600');
+                submitBtn.textContent = `Answer ${totalMandatory - state.currentAnswers} More Questions to Get Ideas`;
+            }
+        }
+
+        /**
+         * Handles user clicking a choice button.
+         * @param {HTMLElement} btn The button element clicked.
+         */
+        function handleChoice(btn) {
+            const key = btn.parentElement.dataset.key;
+            const answer = btn.dataset.answer;
+
+            // Clear previous active state for this question
+            btn.parentElement.querySelectorAll('.choice-btn').forEach(b => {
+                b.classList.remove('active');
+            });
+
+            // Set active state for the clicked button
+            btn.classList.add('active');
+
+            // Save the answer
+            selectedAnswers[key] = answer;
+            
+            checkReady();
+        }
+
+        /**
+         * Builds the structured JSON request payload for the Gemini API.
+         * @returns {object} The complete payload.
+         */
+        function buildPayload() {
+            const budgetPrompt = selectedAnswers.Budget ? mapBudgetToPrompt(selectedAnswers.Budget) : '';
+            const interest = selectedAnswers.Interest && selectedAnswers.Interest !== 'None/General' ? `Their primary interest is ${selectedAnswers.Interest}.` : '';
+
+            const userQuery = `Act as an expert gift advisor. The gift recipient is a ${selectedAnswers.Age} ${selectedAnswers.Recipient}. The gift is for a ${selectedAnswers.Occasion}. The user needs the gift ${selectedAnswers.Timeline}. ${interest} ${budgetPrompt} Based on these details, generate 5 distinct, high-quality, product-focused gift recommendations. For the image, use a placeholder URL that includes the product name.`;
+
+            // Schema to force the model to return 5 structured JSON objects
+            const payload = {
+                contents: [{ parts: [{ text: userQuery }] }],
+                generationConfig: {
+                    responseMimeType: "application/json",
+                    responseSchema: {
+                        type: "ARRAY",
+                        items: {
+                            type: "OBJECT",
+                            properties: {
+                                "productName": { "type": "STRING", "description": "A creative, concise name for the product idea." },
+                                "description": { "type": "STRING", "description": "A brief, compelling description (2-3 sentences max) tailored to the recipient's criteria." },
+                                "category": { "type": "STRING", "description": "The general product category (e.g., Home Goods, Tech, Apparel)." },
+                            },
+                            required: ["productName", "description", "category"]
+                        }
+                    }
+                }
+            };
+            return payload;
+        }
+
+        /**
+         * Renders the 5 gift ideas onto the page as cards.
+         * @param {Array<object>} gifts The array of gift objects from the API.
          */
         function renderGifts(gifts) {
-            giftGrid.innerHTML = ''; // Clear previous results
+            cardsContainer.innerHTML = '';
             
-            gifts.forEach((gift) => {
-                // Generates the highly relevant Amazon search link
-                const affiliateLink = generateAffiliateLink(gift.productName);
-                
-                // Use the product name for a highly relevant placeholder image text
-                const placeholderText = gift.productName.replace(/[^a-zA-Z\s]/g, '').split(' ').slice(0, 3).join('+');
-                
-                const cardHtml = `
-                    <div class="card bg-white p-5 rounded-xl shadow-lg flex flex-col justify-between transform hover:scale-[1.02] transition-transform duration-300">
-                        <!-- Placeholder Image uses the Product Name -->
-                        <img 
-                            src="https://placehold.co/300x180/EBF5FF/2B6CB0?text=${placeholderText}" 
-                            alt="${gift.productName}" 
-                            onerror="this.onerror=null;this.src='https://placehold.co/300x180/D1D5DB/4B5563?text=Gift';"
-                            class="w-full h-auto object-cover rounded-xl mb-4 border border-gray-200"
-                        >
+            gifts.forEach(gift => {
+                const productName = gift.productName || 'Thoughtful Gift Idea';
+                const description = gift.description || 'A unique and personalized item perfect for the occasion.';
+                const category = gift.category || 'General';
 
-                        <h3 class="text-xl font-extrabold text-gray-800 mb-1">${gift.productName}</h3>
-                        <p class="text-sm text-indigo-600 font-semibold mb-3">${gift.category}</p>
-                        <p class="text-gray-500 text-sm mb-4 flex-grow">${gift.description}</p>
-                        
+                // Create the dynamic Amazon Search Link
+                const affiliateLink = generateAffiliateLink(productName);
+                
+                // Create a placeholder image URL using the product name for visual relevance
+                const placeholderImageUrl = `https://placehold.co/400x250/6366f1/ffffff?text=${encodeURIComponent(productName.substring(0, 20) + '...')}`;
+
+                const cardHtml = `
+                    <div class="card p-6 rounded-2xl shadow-lg flex flex-col space-y-4">
+                        <img src="${placeholderImageUrl}" alt="${productName}" class="w-full h-auto rounded-xl object-cover border border-gray-100">
+                        <div class="flex-grow">
+                            <span class="text-sm font-medium text-indigo-500 bg-indigo-50 px-3 py-1 rounded-full">${category}</span>
+                            <h3 class="text-2xl font-bold text-gray-800 mt-2">${productName}</h3>
+                            <p class="text-gray-600 mt-2">${description}</p>
+                        </div>
                         <a 
                             href="${affiliateLink}" 
                             target="_blank" 
-                            class="mt-auto block text-center py-3 px-4 bg-yellow-400 text-gray-900 font-bold rounded-xl hover:bg-yellow-500 transition duration-150 shadow-md text-base"
+                            class="mt-auto block text-center py-3 px-6 bg-yellow-500 text-indigo-900 font-extrabold rounded-xl shadow-md hover:bg-yellow-600 transition duration-150 transform hover:scale-[1.01]"
                         >
                             View on Amazon ↗️
                         </a>
                     </div>
                 `;
-                giftGrid.insertAdjacentHTML('beforeend', cardHtml);
+                cardsContainer.innerHTML += cardHtml;
             });
-            
-            questionnaireDiv.classList.add('hidden');
-            resultsDiv.classList.remove('hidden');
         }
 
         /**
-         * Fetches gift recommendations from the Gemini API.
+         * Main function to call the Gemini API.
          */
-        async function fetchRecommendations() {
-            // Check API Key
-            if (!apiKey || apiKey === "") {
-                showMessage("Error: Gemini API Key is missing. Please insert your key into the 'apiKey' variable on GitHub and commit the change.", 'error');
+        async function getRecommendations() {
+            // Check for API Key (prevents unnecessary failed requests)
+            if (!apiKey || apiKey === "YOUR_KEY_HERE" || apiKey.length < 5) {
+                console.error("API Key is missing or invalid. Please insert your key into the code.");
+                errorMsg.textContent = "Error: API Key is missing. Check the console for details.";
+                errorMsg.classList.remove('hidden');
+                loadingSpinner.classList.add('hidden');
                 return;
             }
-
-            loadingIndicator.classList.remove('hidden');
-            submitText.textContent = 'Generating ideas...';
-            submitBtn.disabled = true;
-            submitBtn.classList.remove('bg-green-600', 'hover:bg-green-700');
-            submitBtn.classList.add('bg-indigo-500'); // Transition to an active color
-            messageBox.classList.add('hidden');
             
-            const userPrompt = buildPrompt();
+            // Hide questionnaire, show loading
+            questionnaireElement.classList.add('hidden');
+            resultsElement.classList.add('hidden');
+            document.getElementById('message-area').classList.remove('hidden');
+            errorMsg.classList.add('hidden');
+            loadingSpinner.classList.remove('hidden');
 
-            const payload = {
-                contents: [{ parts: [{ text: userPrompt }] }],
-                generationConfig: {
-                    responseMimeType: "application/json",
-                    responseSchema: responseSchema,
-                },
-                // Use a system instruction to fully define the model's persona
-                systemInstruction: {
-                    parts: [{ text: "You are a specialized AI Gift Advisor that recommends exactly 3 products available on Amazon. You must adhere strictly to the provided JSON schema." }]
-                }
-            };
+            const payload = buildPayload();
+            let attempts = 0;
+            const maxAttempts = 3;
+            let result = null;
 
-            // Simple exponential backoff retry mechanism 
-            for (let i = 0; i < 3; i++) {
+            while (attempts < maxAttempts) {
+                attempts++;
                 try {
                     const response = await fetch(apiUrl, {
                         method: 'POST',
@@ -379,124 +442,86 @@
                         body: JSON.stringify(payload)
                     });
 
-                    if (response.status === 403) {
-                        throw new Error("403 Forbidden. Check your Gemini API Key status and ensure billing is enabled for the associated project.");
-                    }
                     if (!response.ok) {
+                        if (response.status === 403) {
+                            throw new Error(`API request failed with status: 403. Check your API key and billing status.`);
+                        }
                         throw new Error(`API request failed with status: ${response.status}`);
                     }
 
-                    const result = await response.json();
+                    const jsonResponse = await response.json();
                     
-                    const jsonText = result.candidates?.[0]?.content?.parts?.[0]?.text;
-
-                    if (!jsonText) {
-                        throw new Error("API response was missing expected JSON text.");
+                    if (jsonResponse.candidates && jsonResponse.candidates.length > 0) {
+                        const contentText = jsonResponse.candidates[0].content.parts[0].text.trim();
+                        // The structured output is returned as a string, must be parsed
+                        result = JSON.parse(contentText);
+                        break; // Success! Exit the retry loop.
                     }
-
-                    const gifts = JSON.parse(jsonText);
-                    
-                    if (Array.isArray(gifts) && gifts.length === 3) {
-                        renderGifts(gifts);
-                        return; // Success
-                    } else {
-                         throw new Error("Model returned malformed data or not exactly 3 items.");
-                    }
-
                 } catch (error) {
-                    console.error(`Attempt ${i + 1} failed:`, error.message);
-                    if (i === 2) {
-                        showMessage(`Failed to get recommendations after multiple attempts. Error: ${error.message}. Please check console for details.`);
+                    console.error(`Attempt ${attempts} failed:`, error.message);
+                    if (error.message.includes('403')) {
+                        // Critical error, do not retry
+                        errorMsg.textContent = `API request failed with status: 403 Forbidden. Please verify your Gemini API key and billing status.`;
+                        errorMsg.classList.remove('hidden');
+                        loadingSpinner.classList.add('hidden');
+                        return;
                     }
-                    // Exponential backoff
-                    await new Promise(resolve => setTimeout(resolve, Math.pow(2, i) * 1000));
+                    await new Promise(resolve => setTimeout(resolve, 2000 * attempts)); // Exponential backoff
                 }
             }
-            // If function reaches here, all attempts failed
-            loadingIndicator.classList.add('hidden');
-            submitText.textContent = 'Submit';
-            submitBtn.classList.remove('bg-indigo-500');
-            submitBtn.classList.add('bg-gray-400');
-            submitBtn.disabled = false;
-        }
 
-        // --- UI Event Handlers ---
-
-        /**
-         * Handles the selection of a choice button.
-         * @param {Event} e The click event.
-         */
-        function handleChoice(e) {
-            const button = e.currentTarget;
-            const key = button.getAttribute('data-key');
-            const answer = button.getAttribute('data-answer');
+            loadingSpinner.classList.add('hidden');
             
-            // Deselect all buttons for this question group
-            document.querySelectorAll(`button[data-key='${key}']`).forEach(btn => {
-                btn.classList.remove('active');
-            });
+            if (result && Array.isArray(result) && result.length > 0) {
+                renderGifts(result);
+                resultsElement.classList.remove('hidden');
+                document.getElementById('message-area').classList.add('hidden');
 
-            // Select the clicked button
-            button.classList.add('active');
+                // Scroll to the results
+                resultsElement.scrollIntoView({ behavior: 'smooth' });
 
-            // Update state
-            userAnswers[key] = answer;
-            
-            // Check readiness
-            checkReady();
-        }
-        
-        /**
-         * Checks if all mandatory questions have been answered to enable the submit button.
-         */
-        function checkReady() {
-            let answeredMandatory = 0;
-            mandatoryKeys.forEach(key => {
-                if (userAnswers[key]) {
-                    answeredMandatory++;
-                }
-            });
-
-            if (answeredMandatory === totalMandatory) {
-                submitBtn.disabled = false;
-                submitBtn.classList.remove('bg-gray-400');
-                submitBtn.classList.add('bg-green-600', 'hover:bg-green-700');
-                submitText.textContent = 'Get My Gift Ideas!';
             } else {
-                submitBtn.disabled = true;
-                submitBtn.classList.add('bg-gray-400');
-                submitBtn.classList.remove('bg-green-600', 'hover:bg-green-700');
-                submitText.textContent = `Answer ${totalMandatory} mandatory questions to get suggestions (${answeredMandatory}/${totalMandatory})`;
+                errorMsg.textContent = "Failed to get recommendations after multiple attempts. Please try again later.";
+                errorMsg.classList.remove('hidden');
             }
         }
 
-        /**
-         * Resets the application state and UI.
-         */
-        window.resetApp = function() {
-            userAnswers = {};
-            // Deselect all buttons
-            document.querySelectorAll('.choice-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            resultsDiv.classList.add('hidden');
-            questionnaireDiv.classList.remove('hidden');
-            messageBox.classList.add('hidden');
-            checkReady();
-        }
-
-        // --- Initialization ---
-        document.addEventListener('DOMContentLoaded', () => {
-            // Attach event listeners to all choice buttons
-            document.querySelectorAll('.choice-btn').forEach(button => {
-                button.addEventListener('click', handleChoice);
-            });
-            
-            // Attach event listener to the main submit button
-            submitBtn.addEventListener('click', fetchRecommendations);
-
-            checkReady(); // Initial check
+        // ----------------------------------------------------------------------
+        // EVENT LISTENERS
+        // ----------------------------------------------------------------------
+        
+        // Listener for all choice buttons
+        questionnaireElement.addEventListener('click', (event) => {
+            const btn = event.target.closest('.choice-btn');
+            if (btn) {
+                handleChoice(btn);
+            }
         });
+
+        // Listener for the submit button
+        submitBtn.addEventListener('click', getRecommendations);
+
+        // Listener for the restart button
+        restartBtn.addEventListener('click', () => {
+            // Clear selections
+            Object.keys(selectedAnswers).forEach(key => delete selectedAnswers[key]);
+            
+            // Reset UI
+            questionnaireElement.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('active'));
+            resultsElement.classList.add('hidden');
+            questionnaireElement.classList.remove('hidden');
+            document.getElementById('message-area').classList.add('hidden');
+            
+            // Reset state
+            checkReady();
+            
+            // Scroll to the top
+            appElement.scrollIntoView({ behavior: 'smooth' });
+        });
+
+        // Initial check when the page loads
+        checkReady();
+
     </script>
 </body>
 </html>
