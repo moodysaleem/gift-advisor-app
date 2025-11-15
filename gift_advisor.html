@@ -11,7 +11,14 @@
     
     <style>
         /* Base Styling & Font */
-        body { font-family: 'Poppins', sans-serif; background-color: #f0f4f8; }
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background-color: #f0f4f8; 
+            /* Ensures the content centers but allows the height to expand naturally */
+            display: flex; 
+            justify-content: center;
+            /* FIX: Removed min-h-screen to ensure proper mobile scrolling */
+        }
         
         /* Interactive Card Styling */
         .card { 
@@ -83,7 +90,7 @@
         }
     </style>
 </head>
-<body class="min-h-screen p-4 md:p-8 bg-gray-50 flex justify-center">
+<body class="p-4 md:p-8 bg-gray-50">
 
     <div id="app" class="container max-w-5xl w-full bg-white shadow-2xl rounded-2xl p-6 md:p-12 border-t-4 border-indigo-500">
         
@@ -352,6 +359,7 @@
             const payload = {
                 contents: [{ parts: [{ text: userQuery }] }],
                 systemInstruction: { parts: [{ text: systemPrompt }] },
+                tools: [{ "google_search": {} }], // Enables Google Search grounding for up-to-date trend data
                 generationConfig: {
                     responseMimeType: "application/json",
                     responseSchema: {
