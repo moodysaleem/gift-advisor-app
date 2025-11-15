@@ -221,9 +221,9 @@
 
         // 3. MANDATORY QUESTION DEFINITIONS
         // Defines which questions must be answered before submission is enabled.
-        // NOTE: The 'Interest' question has been removed from the HTML.
+        // Total mandatory questions is now 5.
         const mandatoryKeys = ['Recipient', 'Budget', 'Age', 'Occasion', 'Timeline'];
-        const totalMandatory = mandatoryKeys.length; // This is now 5
+        const totalMandatory = mandatoryKeys.length; // This is 5
 
         // ----------------------------------------------------------------------
         // STATE AND ELEMENTS
@@ -335,13 +335,11 @@
          */
         function buildPayload() {
             const budgetPrompt = selectedAnswers.Budget ? mapBudgetToPrompt(selectedAnswers.Budget) : '';
-            // Interest is now optional, check if it was answered
-            const interest = selectedAnswers.Interest && selectedAnswers.Interest !== 'None/General' ? `Their primary interest is ${selectedAnswers.Interest}.` : '';
 
             // System Instruction to guide the model's tone and persona
             const systemPrompt = "You are a creative, expert gift advisor. Your goal is to generate 5 distinct, high-quality, product-focused gift recommendations that perfectly match the user's criteria. Be compelling, concise, and highly specific in your product name and description.";
 
-            const userQuery = `The gift recipient is a ${selectedAnswers.Age} ${selectedAnswers.Recipient}. The gift is for a ${selectedAnswers.Occasion}. The user needs the gift ${selectedAnswers.Timeline}. ${interest} ${budgetPrompt} Generate 5 distinct, high-quality gift recommendations and provide a detailed visual search term for each product so an image can be found.`;
+            const userQuery = `The gift recipient is a ${selectedAnswers.Age} ${selectedAnswers.Recipient}. The gift is for a ${selectedAnswers.Occasion}. The user needs the gift ${selectedAnswers.Timeline}. ${budgetPrompt} Generate 5 distinct, high-quality gift recommendations and provide a detailed visual search term for each product so an image can be found.`;
 
             // Schema to force the model to return 5 structured JSON objects
             const payload = {
@@ -477,7 +475,7 @@
                 resultsElement.classList.remove('hidden');
                 document.getElementById('message-area').classList.add('hidden');
 
-                // Scroll to the results
+                // *** FIX IMPLEMENTED HERE: SMOOTH SCROLL TO RESULTS ***
                 resultsElement.scrollIntoView({ behavior: 'smooth' });
 
             } else {
