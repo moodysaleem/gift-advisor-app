@@ -175,19 +175,19 @@
             <button id="submit-btn" disabled 
                     class="w-full text-lg md:text-xl p-4 mt-8 rounded-xl shadow-md transition duration-200 
                            bg-gray-400 text-gray-700 font-extrabold cursor-not-allowed">
-                Answer 5 Questions to Get Ideas
+                Answer 5 Mandatory Questions
             </button>
         </div>
 
         <!-- Results Section (Initially Hidden) -->
         <div id="results" class="hidden">
-            <h2 class="text-3xl font-extrabold text-indigo-700 text-center mb-6">Your Personalized Gift Ideas</h2>
+            <h2 class="text-3xl font-extrabold text-indigo-700 text-center mb-6">Your 5 Personalized Gift Ideas</h2>
             
             <p class="text-center text-gray-600 mb-8 p-3 bg-yellow-50 rounded-lg border border-yellow-200">
-                You received **5 unique recommendations**. Click "View on Amazon" to find the exact product described, with your selected budget filters applied!
+                You received **5 unique recommendations**. Click "View on Amazon" to search for the exact product described!
             </p>
             
-            <div id="gift-cards-container" class="space-y-6">
+            <div id="gift-cards-container" class="space-y-6 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-6 md:space-y-0">
                 <!-- Gift cards will be inserted here -->
             </div>
 
@@ -196,7 +196,7 @@
                 <button id="restart-btn" 
                         class="text-lg py-3 px-8 rounded-xl shadow-md bg-indigo-500 text-white font-bold 
                                hover:bg-indigo-600 transition duration-200">
-                    Search Again or Find a Gift for Another Person 🔄
+                    Find a Gift for Another Person 🔄
                 </button>
             </div>
         </div>
@@ -276,9 +276,9 @@
                 case 'Under $25':
                     return 'PRIORITIZE gifts likely found in the $10 to $25 range. Use small, thoughtful ideas.';
                 case '$25 - $75':
-                    return 'PRIORITIZE mid-range products priced between $30 and $70. Focus on quality items.';
+                    return 'PRIORITIZE mid-range products priced between $30 to $70. Focus on quality items.';
                 case 'Over $75':
-                    return 'PRIORITIZE high-end or large gift bundles priced between $80 and $150. Focus on premium items.';
+                    return 'PRIORITIZE high-end or large gift bundles priced between $80 to $150. Focus on premium items.';
                 default:
                     return '';
             }
@@ -311,7 +311,7 @@
                 submitBtn.disabled = true;
                 submitBtn.classList.add('bg-gray-400', 'text-gray-700', 'cursor-not-allowed');
                 submitBtn.classList.remove('bg-yellow-500', 'text-indigo-900', 'hover:bg-yellow-600');
-                submitBtn.textContent = `Answer ${totalMandatory - state.currentAnswers} More Questions to Get Ideas`;
+                submitBtn.textContent = `Answer ${totalMandatory - state.currentAnswers} Mandatory Questions`;
             }
         }
 
@@ -345,11 +345,15 @@
             const budgetPrompt = selectedAnswers.Budget ? mapBudgetToPrompt(selectedAnswers.Budget) : '';
             const interest = selectedAnswers.Interest && selectedAnswers.Interest !== 'None/General' ? `Their primary interest is ${selectedAnswers.Interest}.` : '';
 
-            const userQuery = `Act as an expert gift advisor. The gift recipient is a ${selectedAnswers.Age} ${selectedAnswers.Recipient}. The gift is for a ${selectedAnswers.Occasion}. The user needs the gift ${selectedAnswers.Timeline}. ${interest} ${budgetPrompt} Based on these details, generate 5 distinct, high-quality, product-focused gift recommendations. For the image, use a placeholder URL that includes the product name.`;
+            // System Instruction to guide the model's tone and persona
+            const systemPrompt = "You are a creative, expert gift advisor. Your goal is to generate 5 distinct, high-quality, product-focused gift recommendations that perfectly match the user's criteria. Be compelling, concise, and highly specific in your product name and description.";
+
+            const userQuery = `The gift recipient is a ${selectedAnswers.Age} ${selectedAnswers.Recipient}. The gift is for a ${selectedAnswers.Occasion}. The user needs the gift ${selectedAnswers.Timeline}. ${interest} ${budgetPrompt} Generate 5 distinct, high-quality gift recommendations and provide a detailed visual search term for each product so an image can be found.`;
 
             // Schema to force the model to return 5 structured JSON objects
             const payload = {
                 contents: [{ parts: [{ text: userQuery }] }],
+                systemInstruction: { parts: [{ text: systemPrompt }] },
                 generationConfig: {
                     responseMimeType: "application/json",
                     responseSchema: {
@@ -357,11 +361,12 @@
                         items: {
                             type: "OBJECT",
                             properties: {
-                                "productName": { "type": "STRING", "description": "A creative, concise name for the product idea." },
+                                "productName": { "type": "STRING", "description": "A creative, concise name for the product idea (e.g., 'The Smart Brew Coffee Mug')." },
                                 "description": { "type": "STRING", "description": "A brief, compelling description (2-3 sentences max) tailored to the recipient's criteria." },
                                 "category": { "type": "STRING", "description": "The general product category (e.g., Home Goods, Tech, Apparel)." },
+                                "searchImageUrl": { "type": "STRING", "description": "A highly specific, visual search term (e.g., 'Sleek matte black smart coffee mug with wooden handle') suitable for an image search engine." },
                             },
-                            required: ["productName", "description", "category"]
+                            required: ["productName", "description", "category", "searchImageUrl"]
                         }
                     }
                 }
@@ -380,12 +385,14 @@
                 const productName = gift.productName || 'Thoughtful Gift Idea';
                 const description = gift.description || 'A unique and personalized item perfect for the occasion.';
                 const category = gift.category || 'General';
+                const searchImageUrl = gift.searchImageUrl || productName; // Use product name if visual term is missing
 
                 // Create the dynamic Amazon Search Link
                 const affiliateLink = generateAffiliateLink(productName);
                 
-                // Create a placeholder image URL using the product name for visual relevance
-                const placeholderImageUrl = `https://placehold.co/400x250/6366f1/ffffff?text=${encodeURIComponent(productName.substring(0, 20) + '...')}`;
+                // Create a placeholder image URL using the visual search term for high relevance
+                const placeholderText = searchImageUrl.substring(0, 30);
+                const placeholderImageUrl = `https://placehold.co/400x250/6366f1/ffffff?text=${encodeURIComponent(placeholderText.split(' ').join('+'))}`;
 
                 const cardHtml = `
                     <div class="card p-6 rounded-2xl shadow-lg flex flex-col space-y-4">
@@ -415,7 +422,7 @@
             // Check for API Key (prevents unnecessary failed requests)
             if (!apiKey || apiKey === "YOUR_KEY_HERE" || apiKey.length < 5) {
                 console.error("API Key is missing or invalid. Please insert your key into the code.");
-                errorMsg.textContent = "Error: API Key is missing. Check the console for details.";
+                errorMsg.textContent = "Error: API key is missing (403 Forbidden). Please insert your key on GitHub and commit.";
                 errorMsg.classList.remove('hidden');
                 loadingSpinner.classList.add('hidden');
                 return;
@@ -444,7 +451,7 @@
 
                     if (!response.ok) {
                         if (response.status === 403) {
-                            throw new Error(`API request failed with status: 403. Check your API key and billing status.`);
+                            throw new Error(`API request failed with status: 403 Forbidden. Check your API key and billing status.`);
                         }
                         throw new Error(`API request failed with status: ${response.status}`);
                     }
