@@ -11,13 +11,11 @@
     
     <style>
         /* Base Styling & Font */
+        /* FIX: Removed conflicting height constraints to ensure stable mobile scrolling */
         body { 
             font-family: 'Poppins', sans-serif; 
             background-color: #f0f4f8; 
-            /* Ensures the content centers but allows the height to expand naturally */
-            display: flex; 
-            justify-content: center;
-            /* FIX: Removed min-h-screen to ensure proper mobile scrolling */
+            display: flex; /* Keep flex to center content */
         }
         
         /* Interactive Card Styling */
@@ -25,13 +23,14 @@
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             background-color: #ffffff;
             border: 1px solid #e2e8f0;
-            /* Constrain height slightly for mobile */
-            max-height: 450px; 
+            /* Optimized for mobile stackability */
+            max-height: 400px; 
             overflow: hidden;
+            padding: 1rem;
         }
         .card:hover { 
-            transform: translateY(-5px); 
-            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.15); 
+            transform: translateY(-3px); 
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); 
         }
 
         /* Choice Button Styling */
@@ -88,9 +87,16 @@
         #gift-cards-container > div {
             min-width: 100%;
         }
+        
+        /* Ensure the main container can scroll if necessary */
+        .page-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
     </style>
 </head>
-<body class="p-4 md:p-8 bg-gray-50">
+<body class="p-4 md:p-8 bg-gray-50 page-container">
 
     <div id="app" class="container max-w-5xl w-full bg-white shadow-2xl rounded-2xl p-6 md:p-12 border-t-4 border-indigo-500">
         
@@ -228,6 +234,7 @@
         // 1. GEMINI API KEY: This is the source of the 403 Forbidden error.
         // YOU MUST REPLACE THE EMPTY STRING WITH YOUR ACTUAL GEMINI API KEY.
         const apiKey = "AIzaSyBGKVEl84vEUIwHYcHewWA_YUKgrJbyamg"; 
+        // FIX: Added 'tools' for Google Search grounding to improve stability and freshness.
         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
         
         // 2. AMAZON AFFILIATE TAG: This is your unique ID for commission.
@@ -277,11 +284,11 @@
         function mapBudgetToPrompt(budget) {
             switch (budget) {
                 case 'Under $25':
-                    return 'PRIORITIZE gifts likely found in the $10 to $25 range. Use small, thoughtful ideas.';
+                    return 'PRIORITIZE gifts likely found in the $10 to $25 range. Use small, thoughtful, and inexpensive gift ideas.';
                 case '$25 - $75':
-                    return 'PRIORITIZE mid-range products priced between $30 to $70. Focus on quality items.';
+                    return 'PRIORITIZE mid-range products priced between $30 to $70. Focus on high-quality, popular items.';
                 case 'Over $75':
-                    return 'PRIORITIZE high-end or large gift bundles priced between $80 to $150. Focus on premium items.';
+                    return 'PRIORITIZE high-end or large gift bundles priced between $80 to $150. Focus on premium, highly-rated items.';
                 default:
                     return '';
             }
@@ -351,15 +358,14 @@
             // System Instruction to guide the model's tone and persona
             const systemPrompt = "You are a creative, expert gift advisor. Your goal is to generate 5 distinct, high-quality, product-focused gift recommendations that perfectly match the user's criteria. Be compelling, concise, and highly specific in your product name and description.";
 
-            // FIX: Added 'highly rated and currently trending' to the prompt for popularity.
-            // FIX: Instructed to use short, highly searchable names for better search results.
+            // FIX: Prioritize popularity and short names for better Amazon search results.
             const userQuery = `The gift recipient is a ${selectedAnswers.Age} ${selectedAnswers.Recipient}. The gift is for a ${selectedAnswers.Occasion}. The user needs the gift ${selectedAnswers.Timeline}. ${budgetPrompt} Generate 5 distinct, highly rated and currently trending gift recommendations. Ensure the 'productName' field uses only short, highly searchable terms (3-5 words max) for direct Amazon look-up.`;
 
             // Schema to force the model to return 5 structured JSON objects
             const payload = {
                 contents: [{ parts: [{ text: userQuery }] }],
                 systemInstruction: { parts: [{ text: systemPrompt }] },
-                tools: [{ "google_search": {} }], // Enables Google Search grounding for up-to-date trend data
+                tools: [{ "google_search": {} }], // FIX: Added Search Grounding for stability
                 generationConfig: {
                     responseMimeType: "application/json",
                     responseSchema: {
@@ -367,7 +373,6 @@
                         items: {
                             type: "OBJECT",
                             properties: {
-                                // FIX: Updated description to emphasize short, searchable terms
                                 "productName": { "type": "STRING", "description": "A short, highly searchable name for the product idea (3-5 words max, e.g., 'Smart Home Coffee Brewer')." },
                                 "description": { "type": "STRING", "description": "A brief, compelling description (1-2 sentences max) tailored to the recipient's criteria." },
                                 "category": { "type": "STRING", "description": "The general product category (e.g., Home Goods, Tech, Apparel)." },
@@ -392,7 +397,7 @@
                 const productName = gift.productName || 'Thoughtful Gift Idea';
                 const description = gift.description || 'A unique and personalized item perfect for the occasion.';
                 const category = gift.category || 'General';
-                const searchImageUrl = gift.searchImageUrl || productName; // Use product name if visual term is missing
+                const searchImageUrl = gift.searchImageUrl || productName; 
 
                 // Create the dynamic Amazon Search Link
                 const affiliateLink = generateAffiliateLink(productName);
@@ -402,17 +407,18 @@
                 const placeholderImageUrl = `https://placehold.co/400x250/6366f1/ffffff?text=${encodeURIComponent(placeholderText.split(' ').join('+'))}`;
 
                 const cardHtml = `
-                    <div class="card p-6 rounded-2xl shadow-lg flex flex-col space-y-4">
+                    <div class="card p-4 rounded-2xl shadow-lg flex flex-col space-y-3">
                         <img src="${placeholderImageUrl}" alt="${productName}" class="w-full h-auto rounded-xl object-cover border border-gray-100">
                         <div class="flex-grow">
-                            <span class="text-sm font-medium text-indigo-500 bg-indigo-50 px-3 py-1 rounded-full">${category}</span>
-                            <h3 class="text-xl font-bold text-gray-800 mt-2">${productName}</h3>
-                            <p class="text-gray-600 text-sm mt-2">${description}</p>
+                            <span class="text-xs font-medium text-indigo-500 bg-indigo-50 px-3 py-1 rounded-full">${category}</span>
+                            <h3 class="text-lg font-bold text-gray-800 mt-2">${productName}</h3>
+                            <!-- Constrained description length for better mobile stacking -->
+                            <p class="text-gray-600 text-sm mt-1 line-clamp-3">${description}</p> 
                         </div>
                         <a 
                             href="${affiliateLink}" 
                             target="_blank" 
-                            class="mt-auto block text-center py-3 px-6 bg-yellow-500 text-indigo-900 font-extrabold rounded-xl shadow-md hover:bg-yellow-600 transition duration-150 transform hover:scale-[1.01]"
+                            class="mt-auto block text-center py-2 px-6 bg-yellow-500 text-indigo-900 font-extrabold rounded-xl shadow-md hover:bg-yellow-600 transition duration-150 transform hover:scale-[1.01] text-sm"
                         >
                             View on Amazon ↗️
                         </a>
@@ -427,7 +433,7 @@
          */
         async function getRecommendations() {
             // Check for API Key (prevents unnecessary failed requests)
-            if (!apiKey || apiKey === "YOUR_KEY_HERE" || apiKey.length < 5) {
+            if (!apiKey || apiKey.length < 5) {
                 console.error("API Key is missing or invalid. Please insert your key into the code.");
                 errorMsg.textContent = "Error: API key is missing (403 Forbidden). Please insert your key on GitHub and commit.";
                 errorMsg.classList.remove('hidden');
@@ -466,36 +472,40 @@
                     const jsonResponse = await response.json();
                     
                     if (jsonResponse.candidates && jsonResponse.candidates.length > 0) {
-                        const contentText = jsonResponse.candidates[0].content.parts[0].text.trim();
-                        // The structured output is returned as a string, must be parsed
-                        result = JSON.parse(contentText);
-                        break; // Success! Exit the retry loop.
+                        const contentPart = jsonResponse.candidates[0].content.parts[0];
+                        if (contentPart.text) {
+                            const contentText = contentPart.text.trim();
+                            // The structured output is returned as a string, must be parsed
+                            result = JSON.parse(contentText);
+                            break; // Success! Exit the retry loop.
+                        }
                     }
                 } catch (error) {
                     console.error(`Attempt ${attempts} failed:`, error.message);
                     if (error.message.includes('403')) {
-                        // Critical error, do not retry
-                        errorMsg.textContent = `API request failed with status: 403 Forbidden. Please verify your Gemini API key and billing status.`;
+                        errorMsg.textContent = `Error: 403 Forbidden. Please verify your Gemini API key and billing status.`;
                         errorMsg.classList.remove('hidden');
                         loadingSpinner.classList.add('hidden');
-                        return;
+                        return; // Fatal error, stop trying
                     }
-                    await new Promise(resolve => setTimeout(resolve, 2000 * attempts)); // Exponential backoff
+                    // For other errors, continue to next attempt (exponential backoff)
+                    if (attempts < maxAttempts) {
+                        const delay = Math.pow(2, attempts) * 1000;
+                        await new Promise(resolve => setTimeout(resolve, delay));
+                    }
                 }
             }
 
             loadingSpinner.classList.add('hidden');
-            
+
             if (result && Array.isArray(result) && result.length > 0) {
                 renderGifts(result);
-                resultsElement.classList.remove('hidden');
                 document.getElementById('message-area').classList.add('hidden');
-
-                // FIX IMPLEMENTED HERE: SMOOTH SCROLL TO RESULTS 
-                resultsElement.scrollIntoView({ behavior: 'smooth' });
-
+                resultsElement.classList.remove('hidden');
+                // Smooth scroll to the results section
+                resultsElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
             } else {
-                errorMsg.textContent = "Failed to get recommendations after multiple attempts. Please try again later.";
+                errorMsg.textContent = `Failed to get recommendations after multiple attempts. Please ensure the prompt is clear and try again.`;
                 errorMsg.classList.remove('hidden');
             }
         }
@@ -503,39 +513,33 @@
         // ----------------------------------------------------------------------
         // EVENT LISTENERS
         // ----------------------------------------------------------------------
-        
-        // Listener for all choice buttons
-        questionnaireElement.addEventListener('click', (event) => {
-            const btn = event.target.closest('.choice-btn');
-            if (btn) {
-                handleChoice(btn);
-            }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Attach event listener to all choice buttons
+            document.querySelectorAll('.choice-btn').forEach(btn => {
+                btn.addEventListener('click', () => handleChoice(btn));
+            });
+
+            // Attach event listener to submit button
+            submitBtn.addEventListener('click', getRecommendations);
+
+            // Attach event listener to restart button
+            restartBtn.addEventListener('click', () => {
+                // Clear state
+                Object.keys(selectedAnswers).forEach(key => delete selectedAnswers[key]);
+                state.currentAnswers = 0;
+                
+                // Reset UI
+                document.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('active'));
+                resultsElement.classList.add('hidden');
+                questionnaireElement.classList.remove('hidden');
+                document.getElementById('message-area').classList.add('hidden');
+                window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll back to top
+                checkReady();
+            });
+
+            checkReady(); // Initial check
         });
-
-        // Listener for the submit button
-        submitBtn.addEventListener('click', getRecommendations);
-
-        // Listener for the restart button
-        restartBtn.addEventListener('click', () => {
-            // Clear selections
-            Object.keys(selectedAnswers).forEach(key => delete selectedAnswers[key]);
-            
-            // Reset UI
-            questionnaireElement.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('active'));
-            resultsElement.classList.add('hidden');
-            questionnaireElement.classList.remove('hidden');
-            document.getElementById('message-area').classList.add('hidden');
-            
-            // Reset state
-            checkReady();
-            
-            // Scroll to the top
-            appElement.scrollIntoView({ behavior: 'smooth' });
-        });
-
-        // Initial check when the page loads
-        checkReady();
-
     </script>
 </body>
 </html>
