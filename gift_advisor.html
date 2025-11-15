@@ -18,6 +18,9 @@
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             background-color: #ffffff;
             border: 1px solid #e2e8f0;
+            /* Constrain height slightly for mobile */
+            max-height: 450px; 
+            overflow: hidden;
         }
         .card:hover { 
             transform: translateY(-5px); 
@@ -73,6 +76,10 @@
             0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
             40% { transform: translateY(-10px); }
             60% { transform: translateY(-5px); }
+        }
+        /* Fix for mobile card stacking */
+        #gift-cards-container > div {
+            min-width: 100%;
         }
     </style>
 </head>
@@ -177,7 +184,8 @@
                 You received **5 unique recommendations**. Click "View on Amazon" to search for the exact product described!
             </p>
             
-            <div id="gift-cards-container" class="space-y-6 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-6 md:space-y-0">
+            <!-- FIX: Added grid-cols-1 default for perfect mobile stacking -->
+            <div id="gift-cards-container" class="space-y-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 md:gap-6 md:space-y-0">
                 <!-- Gift cards will be inserted here -->
             </div>
 
@@ -216,12 +224,9 @@
         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
         
         // 2. AMAZON AFFILIATE TAG: This is your unique ID for commission.
-        // The URL will look like amazon.com/s?k=ProductName&tag=giftwithai-21
         const affiliateTag = "giftwithai-21"; 
 
         // 3. MANDATORY QUESTION DEFINITIONS
-        // Defines which questions must be answered before submission is enabled.
-        // Total mandatory questions is now 5.
         const mandatoryKeys = ['Recipient', 'Budget', 'Age', 'Occasion', 'Timeline'];
         const totalMandatory = mandatoryKeys.length; // This is 5
 
@@ -339,7 +344,9 @@
             // System Instruction to guide the model's tone and persona
             const systemPrompt = "You are a creative, expert gift advisor. Your goal is to generate 5 distinct, high-quality, product-focused gift recommendations that perfectly match the user's criteria. Be compelling, concise, and highly specific in your product name and description.";
 
-            const userQuery = `The gift recipient is a ${selectedAnswers.Age} ${selectedAnswers.Recipient}. The gift is for a ${selectedAnswers.Occasion}. The user needs the gift ${selectedAnswers.Timeline}. ${budgetPrompt} Generate 5 distinct, high-quality gift recommendations and provide a detailed visual search term for each product so an image can be found.`;
+            // FIX: Added 'highly rated and currently trending' to the prompt for popularity.
+            // FIX: Instructed to use short, highly searchable names for better search results.
+            const userQuery = `The gift recipient is a ${selectedAnswers.Age} ${selectedAnswers.Recipient}. The gift is for a ${selectedAnswers.Occasion}. The user needs the gift ${selectedAnswers.Timeline}. ${budgetPrompt} Generate 5 distinct, highly rated and currently trending gift recommendations. Ensure the 'productName' field uses only short, highly searchable terms (3-5 words max) for direct Amazon look-up.`;
 
             // Schema to force the model to return 5 structured JSON objects
             const payload = {
@@ -352,8 +359,9 @@
                         items: {
                             type: "OBJECT",
                             properties: {
-                                "productName": { "type": "STRING", "description": "A creative, concise name for the product idea (e.g., 'The Smart Brew Coffee Mug')." },
-                                "description": { "type": "STRING", "description": "A brief, compelling description (2-3 sentences max) tailored to the recipient's criteria." },
+                                // FIX: Updated description to emphasize short, searchable terms
+                                "productName": { "type": "STRING", "description": "A short, highly searchable name for the product idea (3-5 words max, e.g., 'Smart Home Coffee Brewer')." },
+                                "description": { "type": "STRING", "description": "A brief, compelling description (1-2 sentences max) tailored to the recipient's criteria." },
                                 "category": { "type": "STRING", "description": "The general product category (e.g., Home Goods, Tech, Apparel)." },
                                 "searchImageUrl": { "type": "STRING", "description": "A highly specific, visual search term (e.g., 'Sleek matte black smart coffee mug with wooden handle') suitable for an image search engine." },
                             },
@@ -390,8 +398,8 @@
                         <img src="${placeholderImageUrl}" alt="${productName}" class="w-full h-auto rounded-xl object-cover border border-gray-100">
                         <div class="flex-grow">
                             <span class="text-sm font-medium text-indigo-500 bg-indigo-50 px-3 py-1 rounded-full">${category}</span>
-                            <h3 class="text-2xl font-bold text-gray-800 mt-2">${productName}</h3>
-                            <p class="text-gray-600 mt-2">${description}</p>
+                            <h3 class="text-xl font-bold text-gray-800 mt-2">${productName}</h3>
+                            <p class="text-gray-600 text-sm mt-2">${description}</p>
                         </div>
                         <a 
                             href="${affiliateLink}" 
@@ -475,7 +483,7 @@
                 resultsElement.classList.remove('hidden');
                 document.getElementById('message-area').classList.add('hidden');
 
-                // *** FIX IMPLEMENTED HERE: SMOOTH SCROLL TO RESULTS ***
+                // FIX IMPLEMENTED HERE: SMOOTH SCROLL TO RESULTS 
                 resultsElement.scrollIntoView({ behavior: 'smooth' });
 
             } else {
