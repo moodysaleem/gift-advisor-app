@@ -375,10 +375,8 @@
                             properties: {
                                 "productName": { "type": "STRING", "description": "A short, highly searchable name for the product idea (3-5 words max, e.g., 'Smart Home Coffee Brewer')." },
                                 "description": { "type": "STRING", "description": "A brief, compelling description (1-2 sentences max) tailored to the recipient's criteria." },
-                                "category": { "type": "STRING", "description": "The general product category (e.g., Home Goods, Tech, Apparel)." },
-                                "searchImageUrl": { "type": "STRING", "description": "A highly specific, visual search term (e.g., 'Sleek matte black smart coffee mug with wooden handle') suitable for an image search engine." },
                             },
-                            required: ["productName", "description", "category", "searchImageUrl"]
+                            required: ["productName", "description"] // Simplified schema
                         }
                     }
                 }
@@ -396,21 +394,18 @@
             gifts.forEach(gift => {
                 const productName = gift.productName || 'Thoughtful Gift Idea';
                 const description = gift.description || 'A unique and personalized item perfect for the occasion.';
-                const category = gift.category || 'General';
-                const searchImageUrl = gift.searchImageUrl || productName; 
-
+                
                 // Create the dynamic Amazon Search Link
                 const affiliateLink = generateAffiliateLink(productName);
                 
-                // Create a placeholder image URL using the visual search term for high relevance
-                const placeholderText = searchImageUrl.substring(0, 30);
+                // Create a placeholder image URL using the product name
+                const placeholderText = productName.substring(0, 30);
                 const placeholderImageUrl = `https://placehold.co/400x250/6366f1/ffffff?text=${encodeURIComponent(placeholderText.split(' ').join('+'))}`;
 
                 const cardHtml = `
                     <div class="card p-4 rounded-2xl shadow-lg flex flex-col space-y-3">
                         <img src="${placeholderImageUrl}" alt="${productName}" class="w-full h-auto rounded-xl object-cover border border-gray-100">
                         <div class="flex-grow">
-                            <span class="text-xs font-medium text-indigo-500 bg-indigo-50 px-3 py-1 rounded-full">${category}</span>
                             <h3 class="text-lg font-bold text-gray-800 mt-2">${productName}</h3>
                             <!-- Constrained description length for better mobile stacking -->
                             <p class="text-gray-600 text-sm mt-1 line-clamp-3">${description}</p> 
