@@ -516,8 +516,10 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             // Attach event listener to all choice buttons
-            document.querySelectorAll('.choice-btn').forEach(btn => {
-                btn.addEventListener('click', () => handleChoice(btn));
+            document.querySelectorAll('.question-grid').forEach(grid => {
+                grid.querySelectorAll('.choice-btn').forEach(btn => {
+                    btn.addEventListener('click', () => handleChoice(btn));
+                });
             });
 
             // Attach event listener to submit button
@@ -543,4 +545,3 @@
     </script>
 </body>
 </html>
-
