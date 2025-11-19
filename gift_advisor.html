@@ -104,7 +104,7 @@
             <h1 class="text-4xl md:text-5xl font-extrabold text-indigo-700">
                 The Gift Genie <span class="animated-emoji">🧞‍♂️</span>
             </h1>
-            <p class="text-gray-600 mt-2 text-lg">Answer 5 simple questions for 5 personalized recommendations.</p>
+            <p class="text-gray-600 mt-2 text-lg">Answer 5 simple questions for 3 personalized recommendations.</p>
         </header>
 
         <!-- Progress Bar -->
@@ -191,10 +191,10 @@
 
         <!-- Results Section (Initially Hidden) -->
         <div id="results" class="hidden">
-            <h2 class="text-3xl font-extrabold text-indigo-700 text-center mb-6">Your 5 Personalized Gift Ideas</h2>
+            <h2 class="text-3xl font-extrabold text-indigo-700 text-center mb-6">Your 3 Personalized Gift Ideas</h2>
             
             <p class="text-center text-gray-600 mb-8 p-3 bg-yellow-50 rounded-lg border border-yellow-200">
-                You received **5 unique recommendations**. Click "View on Amazon" to search for the exact product described!
+                You received **3 unique recommendations**. Click "View on Amazon" to search for the exact product described!
             </p>
             
             <!-- FIX: Added grid-cols-1 default for perfect mobile stacking -->
@@ -220,7 +220,7 @@
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
-                <p class="mt-3 text-indigo-600 font-semibold">Generating 5 personalized gift ideas now...</p>
+                <p class="mt-3 text-indigo-600 font-semibold">Generating 3 personalized gift ideas now...</p>
             </div>
         </div>
 
@@ -243,6 +243,7 @@
         // 3. MANDATORY QUESTION DEFINITIONS
         const mandatoryKeys = ['Recipient', 'Budget', 'Age', 'Occasion', 'Timeline'];
         const totalMandatory = mandatoryKeys.length; // This is 5
+        const numRecommendations = 3; // FIX: Reduced output to 3 items for stability
 
         // ----------------------------------------------------------------------
         // STATE AND ELEMENTS
@@ -317,7 +318,7 @@
                 submitBtn.disabled = false;
                 submitBtn.classList.remove('bg-gray-400', 'text-gray-700', 'cursor-not-allowed');
                 submitBtn.classList.add('bg-yellow-500', 'text-indigo-900', 'hover:bg-yellow-600');
-                submitBtn.textContent = 'Generate 5 Gift Ideas!';
+                submitBtn.textContent = `Generate ${numRecommendations} Gift Ideas!`;
             } else {
                 submitBtn.disabled = true;
                 submitBtn.classList.add('bg-gray-400', 'text-gray-700', 'cursor-not-allowed');
@@ -356,12 +357,13 @@
             const budgetPrompt = selectedAnswers.Budget ? mapBudgetToPrompt(selectedAnswers.Budget) : '';
 
             // System Instruction to guide the model's tone and persona
-            const systemPrompt = "You are a creative, expert gift advisor. Your goal is to generate 5 distinct, high-quality, product-focused gift recommendations that perfectly match the user's criteria. Be compelling, concise, and highly specific in your product name and description.";
+            const systemPrompt = "You are a creative, expert gift advisor. Your goal is to generate 3 distinct, high-quality, product-focused gift recommendations that perfectly match the user's criteria. Be compelling, concise, and highly specific in your product name and description.";
 
             // FIX: Prioritize popularity and short names for better Amazon search results.
-            const userQuery = `The gift recipient is a ${selectedAnswers.Age} ${selectedAnswers.Recipient}. The gift is for a ${selectedAnswers.Occasion}. The user needs the gift ${selectedAnswers.Timeline}. ${budgetPrompt} Generate 5 distinct, highly rated and currently trending gift recommendations. Ensure the 'productName' field uses only short, highly searchable terms (3-5 words max) for direct Amazon look-up.`;
+            // FIX: Updated query to request 3 suggestions
+            const userQuery = `The gift recipient is a ${selectedAnswers.Age} ${selectedAnswers.Recipient}. The gift is for a ${selectedAnswers.Occasion}. The user needs the gift ${selectedAnswers.Timeline}. ${budgetPrompt} Generate ${numRecommendations} distinct, highly rated and currently trending gift recommendations. Ensure the 'productName' field uses only short, highly searchable terms (3-5 words max) for direct Amazon look-up.`;
 
-            // Schema to force the model to return 5 structured JSON objects
+            // Schema to force the model to return 3 structured JSON objects
             const payload = {
                 contents: [{ parts: [{ text: userQuery }] }],
                 systemInstruction: { parts: [{ text: systemPrompt }] },
@@ -377,7 +379,10 @@
                                 "description": { "type": "STRING", "description": "A brief, compelling description (1-2 sentences max) tailored to the recipient's criteria." },
                             },
                             required: ["productName", "description"] // Simplified schema
-                        }
+                        },
+                        // Ensure it only returns 3 items
+                        minItems: numRecommendations, 
+                        maxItems: numRecommendations
                     }
                 }
             };
@@ -385,7 +390,7 @@
         }
 
         /**
-         * Renders the 5 gift ideas onto the page as cards.
+         * Renders the 3 gift ideas onto the page as cards.
          * @param {Array<object>} gifts The array of gift objects from the API.
          */
         function renderGifts(gifts) {
