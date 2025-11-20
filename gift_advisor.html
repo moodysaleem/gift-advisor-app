@@ -10,7 +10,7 @@
     
     <style>
         body { font-family: 'Poppins', sans-serif; background-color: #f0f4f8; display: flex; justify-content: center; min-height: 100vh; align-items: flex-start; }
-        .card { transition: transform 0.3s ease, box-shadow 0.3s ease; background-color: #ffffff; border: 1px solid #e2e8f0; max-height: 450px; overflow: hidden; padding: 1rem; }
+        .card { transition: transform 0.3s ease, box-shadow 0.3s ease; background-color: #ffffff; border: 1px solid #e2e8f0; padding: 1rem; }
         .card:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); }
         .choice-btn { border: 2px solid #cbd5e1; transition: all 0.2s ease; font-weight: 600; color: #4a5568; background-color: #ffffff; }
         .choice-btn:hover { border-color: #6366f1; background-color: #f0f5ff; }
@@ -18,10 +18,9 @@
         .loading-ring { border: 4px solid rgba(255, 255, 255, 0.3); border-top: 4px solid #ffffff; border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; display: inline-block; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .question-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; }
-        .animated-emoji { display: inline-block; animation: bounce 2s infinite ease-in-out; transform-origin: bottom; }
-        @keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-10px); } 60% { transform: translateY(-5px); } }
-        #gift-cards-container > div { min-width: 100%; }
         .page-container { width: 100%; padding: 1rem; display: flex; justify-content: center; }
+        /* Image styling fix */
+        .card img { width: 100%; height: 200px; object-fit: cover; border-radius: 0.5rem; margin-bottom: 1rem; }
     </style>
 </head>
 <body class="page-container">
@@ -41,15 +40,18 @@
         </div>
         
         <div id="questionnaire" class="space-y-8">
+            <!-- Animation -->
             <div class="flex flex-col md:flex-row items-center justify-center bg-purple-50 p-4 rounded-lg shadow-inner mb-6">
                 <lottie-player src="https://lottie.host/85a6a611-3069-450f-a36c-9c748c03c51f/k3aA12hM67.json" background="transparent" speed="1" style="width: 100px; height: 100px;" loop autoplay class="mr-4 mb-4 md:mb-0"></lottie-player>
                 <p class="text-lg font-semibold text-purple-800 text-center md:text-left">Unleash the magic of AI to discover the perfect gift! ✨</p>
             </div>
 
+            <!-- Disclaimer -->
             <div class="p-4 bg-indigo-50 border-l-4 border-indigo-400 rounded-lg">
                 <p class="text-sm text-indigo-700 font-medium">Disclaimer: This tool uses AI to suggest gift ideas based on your input. All links are dynamic search links and contain your provided **Amazon Affiliate tag**.</p>
             </div>
 
+            <!-- QUESTIONS -->
             <h2 class="text-xl font-bold text-gray-700 border-b pb-2 border-gray-200">1. Who is the gift for?</h2>
             <div class="question-grid" data-key="Recipient">
                 <button data-answer="Family Member" class="choice-btn p-4 rounded-xl shadow-sm">Family Member</button>
@@ -108,7 +110,7 @@
         </div>
 
         <div id="message-area" class="mt-8 text-center hidden">
-            <p id="error-message" class="text-red-500 font-bold text-lg hidden"></p>
+            <p id="error-message" class="text-red-500 font-bold text-lg hidden bg-red-50 p-4 rounded border border-red-200"></p>
             <div id="loading-spinner" class="hidden">
                 <svg class="animate-spin h-8 w-8 text-indigo-500 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -121,8 +123,11 @@
     </div>
 
     <script type="module">
-        // 1. CLOUDFLARE WORKER URL
-        // I have pre-filled this with the URL you provided:
+        // ==============================================
+        // CONFIGURATION
+        // ==============================================
+        
+        // 1. CLOUDFLARE WORKER URL (Your URL is pre-filled)
         const workerUrl = "https://bold-lake-a224.moodysaleem.workers.dev"; 
         
         // 2. AMAZON AFFILIATE TAG
@@ -131,10 +136,9 @@
         const mandatoryKeys = ['Recipient', 'Gender', 'Budget', 'Age', 'Occasion', 'Timeline'];
         const totalMandatory = mandatoryKeys.length; 
         const numRecommendations = 3; 
-
         const selectedAnswers = {};
-        const state = { currentAnswers: 0 };
         
+        // DOM Elements
         const appElement = document.getElementById('app');
         const questionnaireElement = document.getElementById('questionnaire');
         const resultsElement = document.getElementById('results');
@@ -146,40 +150,26 @@
         const progressBar = document.getElementById('progress-bar');
         const progressText = document.getElementById('progress-text');
         
+        // ==============================================
+        // LOGIC
+        // ==============================================
+
         function generateAffiliateLink(productName) {
             const encodedName = encodeURIComponent(productName);
             return `https://www.amazon.com/s?k=${encodedName}&tag=${affiliateTag}`;
         }
 
-        function mapBudgetToPrompt(budget) {
-            switch (budget) {
-                case 'Under $25': return 'PRIORITIZE gifts $10-$25. Use small, thoughtful ideas.';
-                case '$25 - $75': return 'PRIORITIZE products $30-$70. Focus on high-quality, popular items.';
-                case 'Over $75': return 'PRIORITIZE bundles $80-$150. Focus on premium, highly-rated items.';
-                default: return '';
-            }
-        }
-
         function updateProgressBar() {
             const answeredMandatory = mandatoryKeys.filter(key => selectedAnswers[key]).length;
             const percentage = (answeredMandatory / totalMandatory) * 100;
-            state.currentAnswers = answeredMandatory;
             progressText.textContent = `Progress: ${answeredMandatory}/${totalMandatory} Questions Answered`;
             progressBar.style.width = `${percentage}%`;
-        }
-        
-        function checkReady() {
-            updateProgressBar();
-            if (state.currentAnswers === totalMandatory) {
+            
+            if (answeredMandatory === totalMandatory) {
                 submitBtn.disabled = false;
                 submitBtn.classList.remove('bg-gray-400', 'text-gray-700', 'cursor-not-allowed');
                 submitBtn.classList.add('bg-yellow-500', 'text-indigo-900', 'hover:bg-yellow-600');
                 submitBtn.textContent = `Generate ${numRecommendations} Gift Ideas!`;
-            } else {
-                submitBtn.disabled = true;
-                submitBtn.classList.add('bg-gray-400', 'text-gray-700', 'cursor-not-allowed');
-                submitBtn.classList.remove('bg-yellow-500', 'text-indigo-900', 'hover:bg-yellow-600');
-                submitBtn.textContent = `Answer ${totalMandatory - state.currentAnswers} Mandatory Questions`;
             }
         }
 
@@ -189,33 +179,18 @@
             btn.parentElement.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             selectedAnswers[key] = answer;
-            checkReady();
+            updateProgressBar();
         }
 
         function buildPayload() {
-            const budgetPrompt = selectedAnswers.Budget ? mapBudgetToPrompt(selectedAnswers.Budget) : '';
-            const systemPrompt = "You are a creative, expert gift advisor. Generate 3 distinct, high-quality, product-focused gift recommendations. Be compelling, concise, and highly specific.";
-            const userQuery = `The gift recipient is a ${selectedAnswers.Age} ${selectedAnswers.Gender} ${selectedAnswers.Recipient}. Occasion: ${selectedAnswers.Occasion}. Timeline: ${selectedAnswers.Timeline}. ${budgetPrompt} Generate ${numRecommendations} distinct, highly rated and currently trending gift recommendations. Ensure 'productName' is short (3-5 words max) for Amazon search.`;
+            const userQuery = `The gift recipient is a ${selectedAnswers.Age} ${selectedAnswers.Gender} ${selectedAnswers.Recipient}. Occasion: ${selectedAnswers.Occasion}. Timeline: ${selectedAnswers.Timeline}. Budget: ${selectedAnswers.Budget}. Generate 3 distinct, high-quality, product-focused gift recommendations. Return ONLY a JSON array. Each object must have 'productName' and 'description'. No markdown.`;
 
             return {
                 contents: [{ parts: [{ text: userQuery }] }],
-                systemInstruction: { parts: [{ text: systemPrompt }] },
-                // REMOVED GOOGLE SEARCH TOOLS TO FIX 400 ERROR
+                // Important: Snake Case for REST API compatibility
+                system_instruction: { parts: [{ text: "You are a creative gift advisor. You MUST return a raw JSON array of 3 objects. Do not use Markdown code blocks. Each object must have 'productName' and 'description'." }] },
                 generationConfig: {
-                    responseMimeType: "application/json",
-                    responseSchema: {
-                        type: "ARRAY",
-                        items: {
-                            type: "OBJECT",
-                            properties: {
-                                "productName": { "type": "STRING", "description": "Short searchable product name." },
-                                "description": { "type": "STRING", "description": "Brief, compelling description." },
-                            },
-                            required: ["productName", "description"]
-                        },
-                        minItems: numRecommendations, 
-                        maxItems: numRecommendations
-                    }
+                    responseMimeType: "application/json" // Supported by Flash, cleaner than Schema
                 }
             };
         }
@@ -230,8 +205,8 @@
                 const placeholderImageUrl = `https://placehold.co/400x250/6366f1/ffffff?text=${encodeURIComponent(placeholderText.split(' ').join('+'))}`;
 
                 const cardHtml = `
-                    <div class="card p-4 rounded-2xl shadow-lg flex flex-col space-y-3">
-                        <img src="${placeholderImageUrl}" alt="${productName}" class="w-full h-auto rounded-xl object-cover border border-gray-100">
+                    <div class="card flex flex-col space-y-3">
+                        <img src="${placeholderImageUrl}" alt="${productName}">
                         <div class="flex-grow">
                             <h3 class="text-lg font-bold text-gray-800 mt-2">${productName}</h3>
                             <p class="text-gray-600 text-sm mt-1 line-clamp-3">${description}</p> 
@@ -247,7 +222,7 @@
 
         async function getRecommendations() {
             if (!workerUrl || workerUrl.includes("YOUR_CLOUDFLARE")) {
-                errorMsg.textContent = "Error: Worker URL is missing on GitHub.";
+                errorMsg.textContent = "Error: Worker URL is missing. Please update the code on GitHub.";
                 errorMsg.classList.remove('hidden');
                 return;
             }
@@ -259,60 +234,53 @@
             loadingSpinner.classList.remove('hidden');
 
             const payload = buildPayload();
-            let attempts = 0;
-            const maxAttempts = 2; 
-            let result = null;
+            
+            try {
+                const response = await fetch(workerUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
 
-            while (attempts < maxAttempts) {
-                attempts++;
-                try {
-                    const response = await fetch(workerUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-
-                    if (!response.ok) {
-                        let errorDetails = response.status;
-                        try {
-                            const errJson = await response.json();
-                            if (errJson.error) {
-                                if (typeof errJson.error === 'object') {
-                                    errorDetails = JSON.stringify(errJson.error);
-                                } else {
-                                    errorDetails = errJson.error;
-                                }
-                            }
-                        } catch (e) {}
-                        throw new Error(`Server Error: ${errorDetails}`);
-                    }
-
-                    const jsonResponse = await response.json();
-                    if (jsonResponse.candidates && jsonResponse.candidates.length > 0) {
-                        const contentPart = jsonResponse.candidates[0].content.parts[0];
-                        if (contentPart.text) {
-                            result = JSON.parse(contentPart.text.trim());
-                            break; 
-                        }
-                    }
-                } catch (error) {
-                    console.error(`Attempt ${attempts} failed:`, error.message);
-                    if (attempts === maxAttempts) {
-                        errorMsg.textContent = `Error: ${error.message}. Please try again.`;
-                    }
-                    await new Promise(resolve => setTimeout(resolve, 1500));
+                // Parsing the response
+                const jsonResponse = await response.json();
+                
+                // If the Worker forwarded an error from Google
+                if (jsonResponse.error) {
+                    throw new Error(`API Error: ${JSON.stringify(jsonResponse.error)}`);
                 }
-            }
 
-            loadingSpinner.classList.add('hidden');
+                // Check if we have candidates
+                if (jsonResponse.candidates && jsonResponse.candidates.length > 0) {
+                    const contentText = jsonResponse.candidates[0].content.parts[0].text;
+                    
+                    // ROBUST PARSING: Strip Markdown if present
+                    const cleanJson = contentText.replace(/```json/g, '').replace(/```/g, '').trim();
+                    const gifts = JSON.parse(cleanJson);
+                    
+                    if (Array.isArray(gifts)) {
+                        renderGifts(gifts);
+                        document.getElementById('message-area').classList.add('hidden');
+                        resultsElement.classList.remove('hidden');
+                        resultsElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    } else {
+                        throw new Error("AI response was not an array.");
+                    }
+                } else {
+                    throw new Error("No candidates returned from AI.");
+                }
 
-            if (result && Array.isArray(result) && result.length > 0) {
-                renderGifts(result);
-                document.getElementById('message-area').classList.add('hidden');
-                resultsElement.classList.remove('hidden');
-                resultsElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            } else {
+            } catch (error) {
+                console.error(error);
+                errorMsg.textContent = `Something went wrong: ${error.message}`;
                 errorMsg.classList.remove('hidden');
+                loadingSpinner.classList.add('hidden');
+                
+                // Allow retry after 3 seconds
+                setTimeout(() => {
+                    questionnaireElement.classList.remove('hidden');
+                    document.getElementById('message-area').classList.add('hidden');
+                }, 5000);
             }
         }
 
@@ -325,15 +293,17 @@
             submitBtn.addEventListener('click', getRecommendations);
             restartBtn.addEventListener('click', () => {
                 Object.keys(selectedAnswers).forEach(key => delete selectedAnswers[key]);
-                state.currentAnswers = 0;
                 document.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('active'));
                 resultsElement.classList.add('hidden');
                 questionnaireElement.classList.remove('hidden');
                 document.getElementById('message-area').classList.add('hidden');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
-                checkReady();
+                updateProgressBar();
+                submitBtn.disabled = true;
+                submitBtn.classList.add('bg-gray-400', 'text-gray-700', 'cursor-not-allowed');
+                submitBtn.classList.remove('bg-yellow-500', 'text-indigo-900', 'hover:bg-yellow-600');
+                submitBtn.textContent = "Answer 6 Mandatory Questions";
             });
-            checkReady(); 
         });
     </script>
 </body>
