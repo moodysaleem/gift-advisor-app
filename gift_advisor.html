@@ -17,7 +17,7 @@
             display: flex; 
             justify-content: center;
             min-height: 100vh; 
-            align-items: flex-start; /* Critical for mobile scrolling */
+            align-items: flex-start; 
         }
         
         /* Interactive Card Styling */
@@ -25,7 +25,7 @@
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             background-color: #ffffff;
             border: 1px solid #e2e8f0;
-            /* Removing fixed height constraints to allow content to flow */
+            max-height: 450px; 
             overflow: hidden;
             padding: 1rem;
         }
@@ -84,7 +84,6 @@
             40% { transform: translateY(-10px); }
             60% { transform: translateY(-5px); }
         }
-        
         /* Fix for mobile card stacking */
         #gift-cards-container > div {
             min-width: 100%;
@@ -237,16 +236,17 @@
 
     <script type="module">
         // ----------------------------------------------------------------------
-        // CONFIGURATION SECTION
+        // CRITICAL CONFIGURATION SECTION
         // ----------------------------------------------------------------------
         
-        // 1. CLOUDFLARE WORKER URL (PRE-FILLED)
+        // 1. CLOUDFLARE WORKER URL
+        // This is pre-filled with your specific Worker URL
         const workerUrl = "https://bold-lake-a224.moodysaleem.workers.dev"; 
         
         // 2. AMAZON AFFILIATE TAG
         const affiliateTag = "giftwithai-21"; 
 
-        // 3. MANDATORY QUESTION DEFINITIONS
+        // 3. CONFIG
         const mandatoryKeys = ['Recipient', 'Gender', 'Budget', 'Age', 'Occasion', 'Timeline'];
         const totalMandatory = mandatoryKeys.length; // 6
         const numRecommendations = 3; 
