@@ -16,6 +16,9 @@
             font-family: 'Poppins', sans-serif; 
             background-color: #f0f4f8; 
             display: flex; /* Keep flex to center content */
+            justify-content: center;
+            min-height: 100vh; /* Ensure full height */
+            align-items: flex-start; /* Allow scrolling from top */
         }
         
         /* Interactive Card Styling */
@@ -23,8 +26,7 @@
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             background-color: #ffffff;
             border: 1px solid #e2e8f0;
-            /* Optimized for mobile stackability */
-            max-height: 400px; 
+            max-height: 450px; 
             overflow: hidden;
             padding: 1rem;
         }
@@ -88,20 +90,21 @@
             min-width: 100%;
         }
         
-        /* Ensure the main container can scroll if necessary */
+        /* Page Container Wrapper */
         .page-container {
             width: 100%;
+            padding: 1rem; 
             display: flex;
             justify-content: center;
         }
     </style>
 </head>
-<body class="p-4 md:p-8 bg-gray-50 page-container">
+<body class="page-container">
 
-    <div id="app" class="container max-w-5xl w-full bg-white shadow-2xl rounded-2xl p-6 md:p-12 border-t-4 border-indigo-500">
+    <div id="app" class="container max-w-5xl w-full bg-white shadow-2xl rounded-2xl p-6 md:p-12 border-t-4 border-indigo-500 my-8">
         
         <header class="text-center mb-10">
-            <h1 class="text-4xl md:text-5xl font-extrabold text-indigo-700">
+            <h1 class="text-3xl md:text-5xl font-extrabold text-indigo-700">
                 The Gift Genie <span class="animated-emoji">🧞‍♂️</span>
             </h1>
             <p class="text-gray-600 mt-2 text-lg">Answer 5 simple questions for 3 personalized recommendations.</p>
@@ -118,7 +121,6 @@
         <div id="questionnaire" class="space-y-8">
             
             <div class="flex flex-col md:flex-row items-center justify-center bg-purple-50 p-4 rounded-lg shadow-inner mb-6">
-                <!-- Smart, elegant figure animation -->
                 <lottie-player 
                     src="https://lottie.host/85a6a611-3069-450f-a36c-9c748c03c51f/k3aA12hM67.json" 
                     background="transparent" 
@@ -197,7 +199,6 @@
                 You received **3 unique recommendations**. Click "View on Amazon" to search for the exact product described!
             </p>
             
-            <!-- FIX: Added grid-cols-1 default for perfect mobile stacking -->
             <div id="gift-cards-container" class="space-y-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 md:gap-6 md:space-y-0">
                 <!-- Gift cards will be inserted here -->
             </div>
@@ -231,11 +232,9 @@
         // CRITICAL CONFIGURATION SECTION
         // ----------------------------------------------------------------------
         
-        // 1. GEMINI API KEY: This is the source of the 403 Forbidden error.
-        // YOU MUST REPLACE THE EMPTY STRING WITH YOUR ACTUAL GEMINI API KEY.
-        const apiKey = "AIzaSyAu64RX6rCibRlHrwQKD687WgJuBBO8mdQ"; 
-        // FIX: Added 'tools' for Google Search grounding to improve stability and freshness.
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+        // 1. CLOUDFLARE WORKER URL
+        // REPLACE THIS WITH YOUR ACTUAL WORKER URL
+        const workerUrl = "YOUR_CLOUDFLARE_WORKER_URL"; 
         
         // 2. AMAZON AFFILIATE TAG: This is your unique ID for commission.
         const affiliateTag = "giftwithai-21"; 
@@ -243,7 +242,7 @@
         // 3. MANDATORY QUESTION DEFINITIONS
         const mandatoryKeys = ['Recipient', 'Budget', 'Age', 'Occasion', 'Timeline'];
         const totalMandatory = mandatoryKeys.length; // This is 5
-        const numRecommendations = 3; // FIX: Reduced output to 3 items for stability
+        const numRecommendations = 3; // 3 Items for reliability
 
         // ----------------------------------------------------------------------
         // STATE AND ELEMENTS
@@ -266,40 +265,21 @@
         // UTILITY FUNCTIONS
         // ----------------------------------------------------------------------
 
-        /**
-         * Generates the dynamic Amazon affiliate search link.
-         * @param {string} productName The name of the product returned by the AI.
-         * @returns {string} The complete affiliate search URL.
-         */
         function generateAffiliateLink(productName) {
             const encodedName = encodeURIComponent(productName);
-            // Uses the standard search structure for maximum relevance
             return `https://www.amazon.com/s?k=${encodedName}&tag=${affiliateTag}`;
         }
 
-        /**
-         * Maps the budget string to a specific, detailed prompt instruction.
-         * @param {string} budget The budget selected by the user.
-         * @returns {string} Detailed instruction for the AI.
-         */
         function mapBudgetToPrompt(budget) {
             switch (budget) {
-                case 'Under $25':
-                    return 'PRIORITIZE gifts likely found in the $10 to $25 range. Use small, thoughtful, and inexpensive gift ideas.';
-                case '$25 - $75':
-                    return 'PRIORITIZE mid-range products priced between $30 to $70. Focus on high-quality, popular items.';
-                case 'Over $75':
-                    return 'PRIORITIZE high-end or large gift bundles priced between $80 to $150. Focus on premium, highly-rated items.';
-                default:
-                    return '';
+                case 'Under $25': return 'PRIORITIZE gifts $10-$25. Use small, thoughtful ideas.';
+                case '$25 - $75': return 'PRIORITIZE products $30-$70. Focus on high-quality, popular items.';
+                case 'Over $75': return 'PRIORITIZE bundles $80-$150. Focus on premium, highly-rated items.';
+                default: return '';
             }
         }
 
-        /**
-         * Updates the UI to show the current progress through mandatory questions.
-         */
         function updateProgressBar() {
-            // Checks how many of the 5 mandatory keys have answers
             const answeredMandatory = mandatoryKeys.filter(key => selectedAnswers[key]).length;
             const percentage = (answeredMandatory / totalMandatory) * 100;
 
@@ -308,9 +288,6 @@
             progressBar.style.width = `${percentage}%`;
         }
         
-        /**
-         * Checks if all mandatory questions have been answered and updates the button.
-         */
         function checkReady() {
             updateProgressBar();
 
@@ -327,47 +304,24 @@
             }
         }
 
-        /**
-         * Handles user clicking a choice button.
-         * @param {HTMLElement} btn The button element clicked.
-         */
         function handleChoice(btn) {
             const key = btn.parentElement.dataset.key;
             const answer = btn.dataset.answer;
-
-            // Clear previous active state for this question
-            btn.parentElement.querySelectorAll('.choice-btn').forEach(b => {
-                b.classList.remove('active');
-            });
-
-            // Set active state for the clicked button
+            btn.parentElement.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-
-            // Save the answer
             selectedAnswers[key] = answer;
-            
             checkReady();
         }
 
-        /**
-         * Builds the structured JSON request payload for the Gemini API.
-         * @returns {object} The complete payload.
-         */
         function buildPayload() {
             const budgetPrompt = selectedAnswers.Budget ? mapBudgetToPrompt(selectedAnswers.Budget) : '';
+            const systemPrompt = "You are a creative, expert gift advisor. Generate 3 distinct, high-quality, product-focused gift recommendations. Be compelling, concise, and highly specific.";
+            const userQuery = `The gift recipient is a ${selectedAnswers.Age} ${selectedAnswers.Recipient}. Occasion: ${selectedAnswers.Occasion}. Timeline: ${selectedAnswers.Timeline}. ${budgetPrompt} Generate ${numRecommendations} distinct, highly rated and currently trending gift recommendations. Ensure 'productName' is short (3-5 words max) for Amazon search.`;
 
-            // System Instruction to guide the model's tone and persona
-            const systemPrompt = "You are a creative, expert gift advisor. Your goal is to generate 3 distinct, high-quality, product-focused gift recommendations that perfectly match the user's criteria. Be compelling, concise, and highly specific in your product name and description.";
-
-            // FIX: Prioritize popularity and short names for better Amazon search results.
-            // FIX: Updated query to request 3 suggestions
-            const userQuery = `The gift recipient is a ${selectedAnswers.Age} ${selectedAnswers.Recipient}. The gift is for a ${selectedAnswers.Occasion}. The user needs the gift ${selectedAnswers.Timeline}. ${budgetPrompt} Generate ${numRecommendations} distinct, highly rated and currently trending gift recommendations. Ensure the 'productName' field uses only short, highly searchable terms (3-5 words max) for direct Amazon look-up.`;
-
-            // Schema to force the model to return 3 structured JSON objects
-            const payload = {
+            return {
                 contents: [{ parts: [{ text: userQuery }] }],
                 systemInstruction: { parts: [{ text: systemPrompt }] },
-                tools: [{ "google_search": {} }], // FIX: Added Search Grounding for stability
+                tools: [{ "google_search": {} }], 
                 generationConfig: {
                     responseMimeType: "application/json",
                     responseSchema: {
@@ -375,35 +329,24 @@
                         items: {
                             type: "OBJECT",
                             properties: {
-                                "productName": { "type": "STRING", "description": "A short, highly searchable name for the product idea (3-5 words max, e.g., 'Smart Home Coffee Brewer')." },
-                                "description": { "type": "STRING", "description": "A brief, compelling description (1-2 sentences max) tailored to the recipient's criteria." },
+                                "productName": { "type": "STRING", "description": "Short searchable product name." },
+                                "description": { "type": "STRING", "description": "Brief, compelling description." },
                             },
-                            required: ["productName", "description"] // Simplified schema
+                            required: ["productName", "description"]
                         },
-                        // Ensure it only returns 3 items
                         minItems: numRecommendations, 
                         maxItems: numRecommendations
                     }
                 }
             };
-            return payload;
         }
 
-        /**
-         * Renders the 3 gift ideas onto the page as cards.
-         * @param {Array<object>} gifts The array of gift objects from the API.
-         */
         function renderGifts(gifts) {
             cardsContainer.innerHTML = '';
-            
             gifts.forEach(gift => {
-                const productName = gift.productName || 'Thoughtful Gift Idea';
-                const description = gift.description || 'A unique and personalized item perfect for the occasion.';
-                
-                // Create the dynamic Amazon Search Link
+                const productName = gift.productName || 'Gift Idea';
+                const description = gift.description || 'A great gift idea.';
                 const affiliateLink = generateAffiliateLink(productName);
-                
-                // Create a placeholder image URL using the product name
                 const placeholderText = productName.substring(0, 30);
                 const placeholderImageUrl = `https://placehold.co/400x250/6366f1/ffffff?text=${encodeURIComponent(placeholderText.split(' ').join('+'))}`;
 
@@ -412,14 +355,9 @@
                         <img src="${placeholderImageUrl}" alt="${productName}" class="w-full h-auto rounded-xl object-cover border border-gray-100">
                         <div class="flex-grow">
                             <h3 class="text-lg font-bold text-gray-800 mt-2">${productName}</h3>
-                            <!-- Constrained description length for better mobile stacking -->
                             <p class="text-gray-600 text-sm mt-1 line-clamp-3">${description}</p> 
                         </div>
-                        <a 
-                            href="${affiliateLink}" 
-                            target="_blank" 
-                            class="mt-auto block text-center py-2 px-6 bg-yellow-500 text-indigo-900 font-extrabold rounded-xl shadow-md hover:bg-yellow-600 transition duration-150 transform hover:scale-[1.01] text-sm"
-                        >
+                        <a href="${affiliateLink}" target="_blank" class="mt-auto block text-center py-2 px-6 bg-yellow-500 text-indigo-900 font-extrabold rounded-xl shadow-md hover:bg-yellow-600 transition duration-150 transform hover:scale-[1.01] text-sm">
                             View on Amazon ↗️
                         </a>
                     </div>
@@ -428,20 +366,13 @@
             });
         }
 
-        /**
-         * Main function to call the Gemini API.
-         */
         async function getRecommendations() {
-            // Check for API Key (prevents unnecessary failed requests)
-            if (!apiKey || apiKey.length < 5) {
-                console.error("API Key is missing or invalid. Please insert your key into the code.");
-                errorMsg.textContent = "Error: API key is missing (403 Forbidden). Please insert your key on GitHub and commit.";
+            if (!workerUrl || workerUrl === "YOUR_CLOUDFLARE_WORKER_URL") {
+                errorMsg.textContent = "Error: Worker URL is missing. Please update the code on GitHub.";
                 errorMsg.classList.remove('hidden');
-                loadingSpinner.classList.add('hidden');
                 return;
             }
             
-            // Hide questionnaire, show loading
             questionnaireElement.classList.add('hidden');
             resultsElement.classList.add('hidden');
             document.getElementById('message-area').classList.remove('hidden');
@@ -456,17 +387,14 @@
             while (attempts < maxAttempts) {
                 attempts++;
                 try {
-                    const response = await fetch(apiUrl, {
+                    const response = await fetch(workerUrl, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(payload)
                     });
 
                     if (!response.ok) {
-                        if (response.status === 403) {
-                            throw new Error(`API request failed with status: 403 Forbidden. Check your API key and billing status.`);
-                        }
-                        throw new Error(`API request failed with status: ${response.status}`);
+                        throw new Error(`Request failed with status: ${response.status}`);
                     }
 
                     const jsonResponse = await response.json();
@@ -474,24 +402,14 @@
                     if (jsonResponse.candidates && jsonResponse.candidates.length > 0) {
                         const contentPart = jsonResponse.candidates[0].content.parts[0];
                         if (contentPart.text) {
-                            const contentText = contentPart.text.trim();
-                            // The structured output is returned as a string, must be parsed
-                            result = JSON.parse(contentText);
-                            break; // Success! Exit the retry loop.
+                            result = JSON.parse(contentPart.text.trim());
+                            break; 
                         }
                     }
                 } catch (error) {
                     console.error(`Attempt ${attempts} failed:`, error.message);
-                    if (error.message.includes('403')) {
-                        errorMsg.textContent = `Error: 403 Forbidden. Please verify your Gemini API key and billing status.`;
-                        errorMsg.classList.remove('hidden');
-                        loadingSpinner.classList.add('hidden');
-                        return; // Fatal error, stop trying
-                    }
-                    // For other errors, continue to next attempt (exponential backoff)
                     if (attempts < maxAttempts) {
-                        const delay = Math.pow(2, attempts) * 1000;
-                        await new Promise(resolve => setTimeout(resolve, delay));
+                        await new Promise(resolve => setTimeout(resolve, 2000));
                     }
                 }
             }
@@ -502,45 +420,31 @@
                 renderGifts(result);
                 document.getElementById('message-area').classList.add('hidden');
                 resultsElement.classList.remove('hidden');
-                // Smooth scroll to the results section
                 resultsElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
             } else {
-                errorMsg.textContent = `Failed to get recommendations after multiple attempts. Please ensure the prompt is clear and try again.`;
+                errorMsg.textContent = `Failed to get recommendations. Please try again.`;
                 errorMsg.classList.remove('hidden');
             }
         }
 
-        // ----------------------------------------------------------------------
-        // EVENT LISTENERS
-        // ----------------------------------------------------------------------
-
         document.addEventListener('DOMContentLoaded', () => {
-            // Attach event listener to all choice buttons
             document.querySelectorAll('.question-grid').forEach(grid => {
                 grid.querySelectorAll('.choice-btn').forEach(btn => {
                     btn.addEventListener('click', () => handleChoice(btn));
                 });
             });
-
-            // Attach event listener to submit button
             submitBtn.addEventListener('click', getRecommendations);
-
-            // Attach event listener to restart button
             restartBtn.addEventListener('click', () => {
-                // Clear state
                 Object.keys(selectedAnswers).forEach(key => delete selectedAnswers[key]);
                 state.currentAnswers = 0;
-                
-                // Reset UI
                 document.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('active'));
                 resultsElement.classList.add('hidden');
                 questionnaireElement.classList.remove('hidden');
                 document.getElementById('message-area').classList.add('hidden');
-                window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll back to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
                 checkReady();
             });
-
-            checkReady(); // Initial check
+            checkReady(); 
         });
     </script>
 </body>
