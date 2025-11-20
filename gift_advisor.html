@@ -18,8 +18,6 @@
         .loading-ring { border: 4px solid rgba(255, 255, 255, 0.3); border-top: 4px solid #ffffff; border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; display: inline-block; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .question-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; }
-        .animated-emoji { display: inline-block; animation: bounce 2s infinite ease-in-out; transform-origin: bottom; }
-        @keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-10px); } 60% { transform: translateY(-5px); } }
         #gift-cards-container > div { min-width: 100%; }
         .page-container { width: 100%; padding: 1rem; display: flex; justify-content: center; }
     </style>
@@ -29,9 +27,7 @@
     <div id="app" class="container max-w-5xl w-full bg-white shadow-2xl rounded-2xl p-6 md:p-12 border-t-4 border-indigo-500 my-8">
         
         <header class="text-center mb-10">
-            <h1 class="text-3xl md:text-5xl font-extrabold text-indigo-700">
-                The Gift Genie <span class="animated-emoji">🧞‍♂️</span>
-            </h1>
+            <h1 class="text-3xl md:text-5xl font-extrabold text-indigo-700">The Gift Genie 🧞‍♂️</h1>
             <p class="text-gray-600 mt-2 text-lg">Answer 6 simple questions for 3 personalized recommendations.</p>
         </header>
 
@@ -47,6 +43,7 @@
                 <lottie-player src="https://lottie.host/85a6a611-3069-450f-a36c-9c748c03c51f/k3aA12hM67.json" background="transparent" speed="1" style="width: 100px; height: 100px;" loop autoplay class="mr-4 mb-4 md:mb-0"></lottie-player>
                 <p class="text-lg font-semibold text-purple-800 text-center md:text-left">Unleash the magic of AI to discover the perfect gift! ✨</p>
             </div>
+
             <div class="p-4 bg-indigo-50 border-l-4 border-indigo-400 rounded-lg">
                 <p class="text-sm text-indigo-700 font-medium">Disclaimer: This tool uses AI to suggest gift ideas based on your input. All links are dynamic search links and contain your provided **Amazon Affiliate tag**.</p>
             </div>
@@ -109,7 +106,7 @@
         </div>
 
         <div id="message-area" class="mt-8 text-center hidden">
-            <p id="error-message" class="text-red-500 font-bold text-lg hidden"></p> <!-- Made error bold and visible -->
+            <p id="error-message" class="text-red-500 font-bold text-lg hidden"></p>
             <div id="loading-spinner" class="hidden">
                 <svg class="animate-spin h-8 w-8 text-indigo-500 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -122,7 +119,7 @@
     </div>
 
     <script type="module">
-        // 1. CLOUDFLARE WORKER URL
+        // 1. CLOUDFLARE WORKER URL (Your URL is pre-filled)
         const workerUrl = "https://bold-lake-a224.moodysaleem.workers.dev"; 
         
         // 2. AMAZON AFFILIATE TAG
@@ -131,7 +128,6 @@
         const mandatoryKeys = ['Recipient', 'Gender', 'Budget', 'Age', 'Occasion', 'Timeline'];
         const totalMandatory = mandatoryKeys.length; 
         const numRecommendations = 3; 
-
         const selectedAnswers = {};
         const state = { currentAnswers: 0 };
         
@@ -200,7 +196,7 @@
             return {
                 contents: [{ parts: [{ text: userQuery }] }],
                 systemInstruction: { parts: [{ text: systemPrompt }] },
-                // Removed Google Search tool to prevent 400 errors on Flash model
+                tools: [{ "google_search": {} }], 
                 generationConfig: {
                     responseMimeType: "application/json",
                     responseSchema: {
@@ -260,7 +256,7 @@
 
             const payload = buildPayload();
             let attempts = 0;
-            const maxAttempts = 2; // Reduced attempts for faster fail feedback
+            const maxAttempts = 2; 
             let result = null;
 
             while (attempts < maxAttempts) {
@@ -272,13 +268,19 @@
                         body: JSON.stringify(payload)
                     });
 
-                    // Debugging: If not OK, throw the specific status
                     if (!response.ok) {
-                        // Try to parse error from worker if available
+                        // UPDATED ERROR LOGGING TO SEE THE REAL MESSAGE
                         let errorDetails = response.status;
                         try {
                             const errJson = await response.json();
-                            if (errJson.error) errorDetails = errJson.error;
+                            if (errJson.error) {
+                                // Handle object errors by stringifying them
+                                if (typeof errJson.error === 'object') {
+                                    errorDetails = JSON.stringify(errJson.error);
+                                } else {
+                                    errorDetails = errJson.error;
+                                }
+                            }
                         } catch (e) {}
                         throw new Error(`Server Error: ${errorDetails}`);
                     }
@@ -293,7 +295,6 @@
                     }
                 } catch (error) {
                     console.error(`Attempt ${attempts} failed:`, error.message);
-                    // Show actual error message on screen
                     if (attempts === maxAttempts) {
                         errorMsg.textContent = `Error: ${error.message}. Please try again.`;
                     }
