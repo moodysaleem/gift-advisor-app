@@ -119,8 +119,8 @@
     </div>
 
     <script type="module">
-        // 1. CLOUDFLARE WORKER URL (Your URL is pre-filled)
-        const workerUrl = "https://bold-lake-a224.moodysaleem.workers.dev"; 
+        // 1. CLOUDFLARE WORKER URL
+        const workerUrl = "YOUR_CLOUDFLARE_WORKER_URL"; // <--- REPLACE WITH: https://bold-lake-a224.moodysaleem.workers.dev
         
         // 2. AMAZON AFFILIATE TAG
         const affiliateTag = "giftwithai-21"; 
@@ -196,7 +196,7 @@
             return {
                 contents: [{ parts: [{ text: userQuery }] }],
                 systemInstruction: { parts: [{ text: systemPrompt }] },
-                tools: [{ "google_search": {} }], 
+                // REMOVED google_search tool to fix 400 error
                 generationConfig: {
                     responseMimeType: "application/json",
                     responseSchema: {
@@ -269,12 +269,10 @@
                     });
 
                     if (!response.ok) {
-                        // UPDATED ERROR LOGGING TO SEE THE REAL MESSAGE
                         let errorDetails = response.status;
                         try {
                             const errJson = await response.json();
                             if (errJson.error) {
-                                // Handle object errors by stringifying them
                                 if (typeof errJson.error === 'object') {
                                     errorDetails = JSON.stringify(errJson.error);
                                 } else {
