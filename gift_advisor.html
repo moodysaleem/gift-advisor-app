@@ -374,7 +374,7 @@
         }
 
         async function getRecommendations() {
-            if (!workerUrl || workerUrl.includes("YOUR_CLOUDFLARE_WORKER_URL")) {
+            if (!workerUrl || workerUrl.includes("https://bold-lake-a224.moodysaleem.workers.dev")) {
                 errorMsg.textContent = "Error: Worker URL is missing. Please update the code on GitHub.";
                 errorMsg.classList.remove('hidden');
                 return;
@@ -455,3 +455,4 @@
     </script>
 </body>
 </html>
+
