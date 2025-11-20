@@ -107,12 +107,12 @@
             <h1 class="text-3xl md:text-5xl font-extrabold text-indigo-700">
                 The Gift Genie <span class="animated-emoji">🧞‍♂️</span>
             </h1>
-            <p class="text-gray-600 mt-2 text-lg">Answer 5 simple questions for 3 personalized recommendations.</p>
+            <p class="text-gray-600 mt-2 text-lg">Answer 6 simple questions for 3 personalized recommendations.</p>
         </header>
 
         <!-- Progress Bar -->
         <div id="progress-container" class="mb-8">
-            <h2 id="progress-text" class="text-sm font-semibold text-indigo-700 mb-2">Progress: 0/5 Questions Answered</h2>
+            <h2 id="progress-text" class="text-sm font-semibold text-indigo-700 mb-2">Progress: 0/6 Questions Answered</h2>
             <div class="w-full bg-gray-200 rounded-full h-2.5">
                 <div id="progress-bar" class="bg-indigo-500 h-2.5 rounded-full transition-all duration-500" style="width: 0%;"></div>
             </div>
@@ -148,17 +148,25 @@
                 <button data-answer="Coworker/Acquaintance" class="choice-btn p-4 rounded-xl shadow-sm">Coworker/Acquaintance</button>
                 <button data-answer="Partner/Spouse" class="choice-btn p-4 rounded-xl shadow-sm">Partner/Spouse</button>
             </div>
+
+             <!-- Q2: Gender (MANDATORY) -->
+             <h2 class="text-xl font-bold text-gray-700 border-b pb-2 border-gray-200">2. What is the recipient's gender?</h2>
+             <div class="question-grid" data-key="Gender">
+                 <button data-answer="Male" class="choice-btn p-4 rounded-xl shadow-sm">Male</button>
+                 <button data-answer="Female" class="choice-btn p-4 rounded-xl shadow-sm">Female</button>
+                 <button data-answer="Any/Generic" class="choice-btn p-4 rounded-xl shadow-sm">Any/Generic</button>
+             </div>
             
-            <!-- Q2: Budget (MANDATORY) -->
-            <h2 class="text-xl font-bold text-gray-700 border-b pb-2 border-gray-200">2. What is your approximate budget?</h2>
+            <!-- Q3: Budget (MANDATORY) -->
+            <h2 class="text-xl font-bold text-gray-700 border-b pb-2 border-gray-200">3. What is your approximate budget?</h2>
             <div class="question-grid" data-key="Budget">
                 <button data-answer="Under $25" class="choice-btn p-4 rounded-xl shadow-sm">Under $25</button>
                 <button data-answer="$25 - $75" class="choice-btn p-4 rounded-xl shadow-sm">$25 - $75</button>
                 <button data-answer="Over $75" class="choice-btn p-4 rounded-xl shadow-sm">Over $75</button>
             </div>
 
-            <!-- Q3: Age (MANDATORY) -->
-            <h2 class="text-xl font-bold text-gray-700 border-b pb-2 border-gray-200">3. What is the recipient's approximate age group?</h2>
+            <!-- Q4: Age (MANDATORY) -->
+            <h2 class="text-xl font-bold text-gray-700 border-b pb-2 border-gray-200">4. What is the recipient's approximate age group?</h2>
             <div class="question-grid" data-key="Age">
                 <button data-answer="Child (under 13)" class="choice-btn p-4 rounded-xl shadow-sm">Child (under 13)</button>
                 <button data-answer="Teen (13-19)" class="choice-btn p-4 rounded-xl shadow-sm">Teen (13-19)</button>
@@ -166,8 +174,8 @@
                 <button data-answer="Senior (55+)" class="choice-btn p-4 rounded-xl shadow-sm">Senior (55+)</button>
             </div>
 
-            <!-- Q4: Occasion (MANDATORY) -->
-            <h2 class="text-xl font-bold text-gray-700 border-b pb-2 border-gray-200">4. What is the occasion?</h2>
+            <!-- Q5: Occasion (MANDATORY) -->
+            <h2 class="text-xl font-bold text-gray-700 border-b pb-2 border-gray-200">5. What is the occasion?</h2>
             <div class="question-grid" data-key="Occasion">
                 <button data-answer="Birthday" class="choice-btn p-4 rounded-xl shadow-sm">Birthday</button>
                 <button data-answer="Holiday/Christmas" class="choice-btn p-4 rounded-xl shadow-sm">Holiday/Christmas</button>
@@ -175,8 +183,8 @@
                 <button data-answer="Just Because/Thank You" class="choice-btn p-4 rounded-xl shadow-sm">Just Because/Thank You</button>
             </div>
 
-            <!-- Q5: Timeline (MANDATORY) -->
-            <h2 class="text-xl font-bold text-gray-700 border-b pb-2 border-gray-200">5. How quickly do you need this gift?</h2>
+            <!-- Q6: Timeline (MANDATORY) -->
+            <h2 class="text-xl font-bold text-gray-700 border-b pb-2 border-gray-200">6. How quickly do you need this gift?</h2>
             <div class="question-grid" data-key="Timeline">
                 <button data-answer="Immediate (1-3 days)" class="choice-btn p-4 rounded-xl shadow-sm">Immediate (1-3 days)</button>
                 <button data-answer="Standard (4-7 days)" class="choice-btn p-4 rounded-xl shadow-sm">Standard (4-7 days)</button>
@@ -187,11 +195,10 @@
             <button id="submit-btn" disabled 
                     class="w-full text-lg md:text-xl p-4 mt-8 rounded-xl shadow-md transition duration-200 
                            bg-gray-400 text-gray-700 font-extrabold cursor-not-allowed">
-                Answer 5 Mandatory Questions
+                Answer 6 Mandatory Questions
             </button>
         </div>
 
-        <!-- Results Section (Initially Hidden) -->
         <div id="results" class="hidden">
             <h2 class="text-3xl font-extrabold text-indigo-700 text-center mb-6">Your 3 Personalized Gift Ideas</h2>
             
@@ -203,7 +210,6 @@
                 <!-- Gift cards will be inserted here -->
             </div>
 
-            <!-- Run Again Button -->
             <div class="mt-10 text-center">
                 <button id="restart-btn" 
                         class="text-lg py-3 px-8 rounded-xl shadow-md bg-indigo-500 text-white font-bold 
@@ -213,7 +219,6 @@
             </div>
         </div>
 
-        <!-- Error/Loading Messages -->
         <div id="message-area" class="mt-8 text-center hidden">
             <p id="error-message" class="text-red-500 font-semibold hidden"></p>
             <div id="loading-spinner" class="hidden">
@@ -240,8 +245,8 @@
         const affiliateTag = "giftwithai-21"; 
 
         // 3. CONFIG
-        const mandatoryKeys = ['Recipient', 'Budget', 'Age', 'Occasion', 'Timeline'];
-        const totalMandatory = mandatoryKeys.length; // 5
+        const mandatoryKeys = ['Recipient', 'Gender', 'Budget', 'Age', 'Occasion', 'Timeline'];
+        const totalMandatory = mandatoryKeys.length; // This is now 6
         const numRecommendations = 3; 
 
         // ----------------------------------------------------------------------
@@ -316,7 +321,9 @@
         function buildPayload() {
             const budgetPrompt = selectedAnswers.Budget ? mapBudgetToPrompt(selectedAnswers.Budget) : '';
             const systemPrompt = "You are a creative, expert gift advisor. Generate 3 distinct, high-quality, product-focused gift recommendations. Be compelling, concise, and highly specific.";
-            const userQuery = `The gift recipient is a ${selectedAnswers.Age} ${selectedAnswers.Recipient}. Occasion: ${selectedAnswers.Occasion}. Timeline: ${selectedAnswers.Timeline}. ${budgetPrompt} Generate ${numRecommendations} distinct, highly rated and currently trending gift recommendations. Ensure 'productName' is short (3-5 words max) for Amazon search.`;
+            
+            // Includes Gender in the prompt
+            const userQuery = `The gift recipient is a ${selectedAnswers.Age} ${selectedAnswers.Gender} ${selectedAnswers.Recipient}. Occasion: ${selectedAnswers.Occasion}. Timeline: ${selectedAnswers.Timeline}. ${budgetPrompt} Generate ${numRecommendations} distinct, highly rated and currently trending gift recommendations. Ensure 'productName' is short (3-5 words max) for Amazon search.`;
 
             return {
                 contents: [{ parts: [{ text: userQuery }] }],
@@ -398,7 +405,6 @@
                     }
 
                     const jsonResponse = await response.json();
-                    
                     if (jsonResponse.candidates && jsonResponse.candidates.length > 0) {
                         const contentPart = jsonResponse.candidates[0].content.parts[0];
                         if (contentPart.text) {
