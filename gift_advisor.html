@@ -1,59 +1,459 @@
-/**
- * Cloudflare Worker Proxy for Gemini API
- * Uses Gemini 1.5 Flash (Stable)
- */
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Gift Advisor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lottie player for the subtle animation -->
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Base Styling & Font */
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background-color: #f0f4f8; 
+            display: flex; 
+            justify-content: center;
+            min-height: 100vh; 
+            align-items: flex-start; /* Critical for mobile scrolling */
+        }
+        
+        /* Interactive Card Styling */
+        .card { 
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            /* Removing fixed height constraints to allow content to flow */
+            overflow: hidden;
+            padding: 1rem;
+        }
+        .card:hover { 
+            transform: translateY(-3px); 
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); 
+        }
 
-// 1. PASTE YOUR GEMINI API KEY HERE
-const GEMINI_API_KEY = "YOUR_GEMINI_API_KEY"; 
+        /* Choice Button Styling */
+        .choice-btn {
+            border: 2px solid #cbd5e1;
+            transition: all 0.2s ease;
+            font-weight: 600;
+            color: #4a5568;
+            background-color: #ffffff;
+        }
+        .choice-btn:hover {
+            border-color: #6366f1; /* Indigo-500 hover */
+            background-color: #f0f5ff;
+        }
+        /* Active/Selected Button Styling */
+        .choice-btn.active {
+            background-color: #6366f1; /* Indigo-500 active */
+            color: white;
+            border-color: #6366f1;
+            box-shadow: 0 4px 6px rgba(99, 102, 241, 0.4);
+        }
+        
+        /* Loading Indicator */
+        .loading-ring { 
+            border: 4px solid rgba(255, 255, 255, 0.3); 
+            border-top: 4px solid #ffffff; 
+            border-radius: 50%; 
+            width: 20px; 
+            height: 20px; 
+            animation: spin 1s linear infinite; 
+            display: inline-block; 
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        /* Responsive Grid for Questions */
+        .question-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
 
-// 2. Stable Model URL (Gemini 1.5 Flash)
-const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent";
+        /* Header Emoji Animation */
+        .animated-emoji {
+            display: inline-block;
+            animation: bounce 2s infinite ease-in-out;
+            transform-origin: bottom;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+        
+        /* Fix for mobile card stacking */
+        #gift-cards-container > div {
+            min-width: 100%;
+        }
+        
+        /* Page Container Wrapper */
+        .page-container {
+            width: 100%;
+            padding: 1rem; 
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body class="page-container">
 
-addEventListener('fetch', event => {
-  event.respondWith(handleRequest(event.request));
-});
+    <div id="app" class="container max-w-5xl w-full bg-white shadow-2xl rounded-2xl p-6 md:p-12 border-t-4 border-indigo-500 my-8">
+        
+        <header class="text-center mb-10">
+            <h1 class="text-3xl md:text-5xl font-extrabold text-indigo-700">
+                The Gift Genie <span class="animated-emoji">🧞‍♂️</span>
+            </h1>
+            <p class="text-gray-600 mt-2 text-lg">Answer 6 simple questions for 3 personalized recommendations.</p>
+        </header>
 
-async function handleRequest(request) {
-  const corsHeaders = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type',
-    'Access-Control-Max-Age': '86400', 
-  };
+        <!-- Progress Bar -->
+        <div id="progress-container" class="mb-8">
+            <h2 id="progress-text" class="text-sm font-semibold text-indigo-700 mb-2">Progress: 0/6 Questions Answered</h2>
+            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                <div id="progress-bar" class="bg-indigo-500 h-2.5 rounded-full transition-all duration-500" style="width: 0%;"></div>
+            </div>
+        </div>
+        
+        <div id="questionnaire" class="space-y-8">
+            
+            <div class="flex flex-col md:flex-row items-center justify-center bg-purple-50 p-4 rounded-lg shadow-inner mb-6">
+                <lottie-player 
+                    src="https://lottie.host/85a6a611-3069-450f-a36c-9c748c03c51f/k3aA12hM67.json" 
+                    background="transparent" 
+                    speed="1" 
+                    style="width: 100px; height: 100px;" 
+                    loop autoplay
+                    class="mr-4 mb-4 md:mb-0"
+                ></lottie-player>
+                <p class="text-lg font-semibold text-purple-800 text-center md:text-left">
+                    Unleash the magic of AI to discover the perfect gift! ✨
+                </p>
+            </div>
 
-  if (request.method === 'OPTIONS') {
-    return new Response(null, { status: 204, headers: corsHeaders });
-  }
+            <div class="p-4 bg-indigo-50 border-l-4 border-indigo-400 rounded-lg">
+                <p class="text-sm text-indigo-700 font-medium">
+                    Disclaimer: This tool uses AI to suggest gift ideas based on your input. All links are dynamic search links and contain your provided **Amazon Affiliate tag**.
+                </p>
+            </div>
 
-  if (request.method !== 'POST') {
-    return new Response('Method Not Allowed', { status: 405, headers: corsHeaders });
-  }
+            <!-- Q1: Recipient (MANDATORY) -->
+            <h2 class="text-xl font-bold text-gray-700 border-b pb-2 border-gray-200">1. Who is the gift for?</h2>
+            <div class="question-grid" data-key="Recipient">
+                <button data-answer="Family Member" class="choice-btn p-4 rounded-xl shadow-sm">Family Member</button>
+                <button data-answer="Close Friend" class="choice-btn p-4 rounded-xl shadow-sm">Close Friend</button>
+                <button data-answer="Coworker/Acquaintance" class="choice-btn p-4 rounded-xl shadow-sm">Coworker/Acquaintance</button>
+                <button data-answer="Partner/Spouse" class="choice-btn p-4 rounded-xl shadow-sm">Partner/Spouse</button>
+            </div>
 
-  let payload;
-  try {
-    payload = await request.json();
-  } catch (e) {
-    return new Response('Invalid JSON', { status: 400, headers: corsHeaders });
-  }
+             <!-- Q2: Gender (MANDATORY) -->
+             <h2 class="text-xl font-bold text-gray-700 border-b pb-2 border-gray-200">2. What is the recipient's gender?</h2>
+             <div class="question-grid" data-key="Gender">
+                 <button data-answer="Male" class="choice-btn p-4 rounded-xl shadow-sm">Male</button>
+                 <button data-answer="Female" class="choice-btn p-4 rounded-xl shadow-sm">Female</button>
+                 <button data-answer="Any/Generic" class="choice-btn p-4 rounded-xl shadow-sm">Any/Generic</button>
+             </div>
+            
+            <!-- Q3: Budget (MANDATORY) -->
+            <h2 class="text-xl font-bold text-gray-700 border-b pb-2 border-gray-200">3. What is your approximate budget?</h2>
+            <div class="question-grid" data-key="Budget">
+                <button data-answer="Under $25" class="choice-btn p-4 rounded-xl shadow-sm">Under $25</button>
+                <button data-answer="$25 - $75" class="choice-btn p-4 rounded-xl shadow-sm">$25 - $75</button>
+                <button data-answer="Over $75" class="choice-btn p-4 rounded-xl shadow-sm">Over $75</button>
+            </div>
 
-  try {
-    const geminiRequest = new Request(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    });
+            <!-- Q4: Age (MANDATORY) -->
+            <h2 class="text-xl font-bold text-gray-700 border-b pb-2 border-gray-200">4. What is the recipient's approximate age group?</h2>
+            <div class="question-grid" data-key="Age">
+                <button data-answer="Child (under 13)" class="choice-btn p-4 rounded-xl shadow-sm">Child (under 13)</button>
+                <button data-answer="Teen (13-19)" class="choice-btn p-4 rounded-xl shadow-sm">Teen (13-19)</button>
+                <button data-answer="Adult (20-55)" class="choice-btn p-4 rounded-xl shadow-sm">Adult (20-55)</button>
+                <button data-answer="Senior (55+)" class="choice-btn p-4 rounded-xl shadow-sm">Senior (55+)</button>
+            </div>
 
-    const response = await fetch(geminiRequest);
-    const data = await response.json();
+            <!-- Q5: Occasion (MANDATORY) -->
+            <h2 class="text-xl font-bold text-gray-700 border-b pb-2 border-gray-200">5. What is the occasion?</h2>
+            <div class="question-grid" data-key="Occasion">
+                <button data-answer="Birthday" class="choice-btn p-4 rounded-xl shadow-sm">Birthday</button>
+                <button data-answer="Holiday/Christmas" class="choice-btn p-4 rounded-xl shadow-sm">Holiday/Christmas</button>
+                <button data-answer="Anniversary/Milestone" class="choice-btn p-4 rounded-xl shadow-sm">Anniversary/Milestone</button>
+                <button data-answer="Just Because/Thank You" class="choice-btn p-4 rounded-xl shadow-sm">Just Because/Thank You</button>
+            </div>
 
-    return new Response(JSON.stringify(data), {
-      status: response.status,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    });
-  } catch (error) {
-    return new Response(JSON.stringify({ error: error.message }), { 
-        status: 500, 
-        headers: corsHeaders 
-    });
-  }
-}
+            <!-- Q6: Timeline (MANDATORY) -->
+            <h2 class="text-xl font-bold text-gray-700 border-b pb-2 border-gray-200">6. How quickly do you need this gift?</h2>
+            <div class="question-grid" data-key="Timeline">
+                <button data-answer="Immediate (1-3 days)" class="choice-btn p-4 rounded-xl shadow-sm">Immediate (1-3 days)</button>
+                <button data-answer="Standard (4-7 days)" class="choice-btn p-4 rounded-xl shadow-sm">Standard (4-7 days)</button>
+                <button data-answer="Flexible (2+ weeks)" class="choice-btn p-4 rounded-xl shadow-sm">Flexible (2+ weeks)</button>
+            </div>
+
+            <!-- Submit Button -->
+            <button id="submit-btn" disabled 
+                    class="w-full text-lg md:text-xl p-4 mt-8 rounded-xl shadow-md transition duration-200 
+                           bg-gray-400 text-gray-700 font-extrabold cursor-not-allowed">
+                Answer 6 Mandatory Questions
+            </button>
+        </div>
+
+        <!-- Results Section (Initially Hidden) -->
+        <div id="results" class="hidden">
+            <h2 class="text-3xl font-extrabold text-indigo-700 text-center mb-6">Your 3 Personalized Gift Ideas</h2>
+            
+            <p class="text-center text-gray-600 mb-8 p-3 bg-yellow-50 rounded-lg border border-yellow-200">
+                You received **3 unique recommendations**. Click "View on Amazon" to search for the exact product described!
+            </p>
+            
+            <div id="gift-cards-container" class="space-y-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 md:gap-6 md:space-y-0">
+                <!-- Gift cards will be inserted here -->
+            </div>
+
+            <!-- Run Again Button -->
+            <div class="mt-10 text-center">
+                <button id="restart-btn" 
+                        class="text-lg py-3 px-8 rounded-xl shadow-md bg-indigo-500 text-white font-bold 
+                               hover:bg-indigo-600 transition duration-200">
+                    Find a Gift for Another Person 🔄
+                </button>
+            </div>
+        </div>
+
+        <!-- Error/Loading Messages -->
+        <div id="message-area" class="mt-8 text-center hidden">
+            <p id="error-message" class="text-red-500 font-semibold hidden"></p>
+            <div id="loading-spinner" class="hidden">
+                <svg class="animate-spin h-8 w-8 text-indigo-500 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <p class="mt-3 text-indigo-600 font-semibold">Generating 3 personalized gift ideas now...</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script type="module">
+        // ----------------------------------------------------------------------
+        // CONFIGURATION SECTION
+        // ----------------------------------------------------------------------
+        
+        // 1. CLOUDFLARE WORKER URL (PRE-FILLED)
+        const workerUrl = "https://bold-lake-a224.moodysaleem.workers.dev"; 
+        
+        // 2. AMAZON AFFILIATE TAG
+        const affiliateTag = "giftwithai-21"; 
+
+        // 3. MANDATORY QUESTION DEFINITIONS
+        const mandatoryKeys = ['Recipient', 'Gender', 'Budget', 'Age', 'Occasion', 'Timeline'];
+        const totalMandatory = mandatoryKeys.length; // 6
+        const numRecommendations = 3; 
+
+        // ----------------------------------------------------------------------
+        // STATE AND ELEMENTS
+        // ----------------------------------------------------------------------
+        const selectedAnswers = {};
+        const state = { currentAnswers: 0 };
+        
+        const appElement = document.getElementById('app');
+        const questionnaireElement = document.getElementById('questionnaire');
+        const resultsElement = document.getElementById('results');
+        const submitBtn = document.getElementById('submit-btn');
+        const restartBtn = document.getElementById('restart-btn');
+        const cardsContainer = document.getElementById('gift-cards-container');
+        const loadingSpinner = document.getElementById('loading-spinner');
+        const errorMsg = document.getElementById('error-message');
+        const progressBar = document.getElementById('progress-bar');
+        const progressText = document.getElementById('progress-text');
+        
+        // ----------------------------------------------------------------------
+        // UTILITY FUNCTIONS
+        // ----------------------------------------------------------------------
+
+        function generateAffiliateLink(productName) {
+            const encodedName = encodeURIComponent(productName);
+            return `https://www.amazon.com/s?k=${encodedName}&tag=${affiliateTag}`;
+        }
+
+        function mapBudgetToPrompt(budget) {
+            switch (budget) {
+                case 'Under $25': return 'PRIORITIZE gifts $10-$25. Use small, thoughtful ideas.';
+                case '$25 - $75': return 'PRIORITIZE products $30-$70. Focus on high-quality, popular items.';
+                case 'Over $75': return 'PRIORITIZE bundles $80-$150. Focus on premium, highly-rated items.';
+                default: return '';
+            }
+        }
+
+        function updateProgressBar() {
+            const answeredMandatory = mandatoryKeys.filter(key => selectedAnswers[key]).length;
+            const percentage = (answeredMandatory / totalMandatory) * 100;
+
+            state.currentAnswers = answeredMandatory;
+            progressText.textContent = `Progress: ${answeredMandatory}/${totalMandatory} Questions Answered`;
+            progressBar.style.width = `${percentage}%`;
+        }
+        
+        function checkReady() {
+            updateProgressBar();
+
+            if (state.currentAnswers === totalMandatory) {
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('bg-gray-400', 'text-gray-700', 'cursor-not-allowed');
+                submitBtn.classList.add('bg-yellow-500', 'text-indigo-900', 'hover:bg-yellow-600');
+                submitBtn.textContent = `Generate ${numRecommendations} Gift Ideas!`;
+            } else {
+                submitBtn.disabled = true;
+                submitBtn.classList.add('bg-gray-400', 'text-gray-700', 'cursor-not-allowed');
+                submitBtn.classList.remove('bg-yellow-500', 'text-indigo-900', 'hover:bg-yellow-600');
+                submitBtn.textContent = `Answer ${totalMandatory - state.currentAnswers} Mandatory Questions`;
+            }
+        }
+
+        function handleChoice(btn) {
+            const key = btn.parentElement.dataset.key;
+            const answer = btn.dataset.answer;
+            btn.parentElement.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            selectedAnswers[key] = answer;
+            checkReady();
+        }
+
+        function buildPayload() {
+            const budgetPrompt = selectedAnswers.Budget ? mapBudgetToPrompt(selectedAnswers.Budget) : '';
+            const systemPrompt = "You are a creative, expert gift advisor. Generate 3 distinct, high-quality, product-focused gift recommendations. Be compelling, concise, and highly specific.";
+            
+            // Includes Gender in the prompt
+            const userQuery = `The gift recipient is a ${selectedAnswers.Age} ${selectedAnswers.Gender} ${selectedAnswers.Recipient}. Occasion: ${selectedAnswers.Occasion}. Timeline: ${selectedAnswers.Timeline}. ${budgetPrompt} Generate ${numRecommendations} distinct, highly rated and currently trending gift recommendations. Ensure 'productName' is short (3-5 words max) for Amazon search.`;
+
+            return {
+                contents: [{ parts: [{ text: userQuery }] }],
+                systemInstruction: { parts: [{ text: systemPrompt }] },
+                // Removed tools for stability with 1.5 Flash
+                generationConfig: {
+                    responseMimeType: "application/json",
+                    responseSchema: {
+                        type: "ARRAY",
+                        items: {
+                            type: "OBJECT",
+                            properties: {
+                                "productName": { "type": "STRING", "description": "Short searchable product name." },
+                                "description": { "type": "STRING", "description": "Brief, compelling description." },
+                            },
+                            required: ["productName", "description"]
+                        },
+                        minItems: numRecommendations, 
+                        maxItems: numRecommendations
+                    }
+                }
+            };
+        }
+
+        function renderGifts(gifts) {
+            cardsContainer.innerHTML = '';
+            gifts.forEach(gift => {
+                const productName = gift.productName || 'Gift Idea';
+                const description = gift.description || 'A great gift idea.';
+                const affiliateLink = generateAffiliateLink(productName);
+                const placeholderText = productName.substring(0, 30);
+                const placeholderImageUrl = `https://placehold.co/400x250/6366f1/ffffff?text=${encodeURIComponent(placeholderText.split(' ').join('+'))}`;
+
+                const cardHtml = `
+                    <div class="card p-4 rounded-2xl shadow-lg flex flex-col space-y-3">
+                        <img src="${placeholderImageUrl}" alt="${productName}" class="w-full h-auto rounded-xl object-cover border border-gray-100">
+                        <div class="flex-grow">
+                            <h3 class="text-lg font-bold text-gray-800 mt-2">${productName}</h3>
+                            <p class="text-gray-600 text-sm mt-1 line-clamp-3">${description}</p> 
+                        </div>
+                        <a href="${affiliateLink}" target="_blank" class="mt-auto block text-center py-2 px-6 bg-yellow-500 text-indigo-900 font-extrabold rounded-xl shadow-md hover:bg-yellow-600 transition duration-150 transform hover:scale-[1.01] text-sm">
+                            View on Amazon ↗️
+                        </a>
+                    </div>
+                `;
+                cardsContainer.innerHTML += cardHtml;
+            });
+        }
+
+        async function getRecommendations() {
+            if (!workerUrl || workerUrl.includes("YOUR_CLOUDFLARE")) {
+                errorMsg.textContent = "Error: Worker URL is missing. Please update the code on GitHub.";
+                errorMsg.classList.remove('hidden');
+                return;
+            }
+            
+            questionnaireElement.classList.add('hidden');
+            resultsElement.classList.add('hidden');
+            document.getElementById('message-area').classList.remove('hidden');
+            errorMsg.classList.add('hidden');
+            loadingSpinner.classList.remove('hidden');
+
+            const payload = buildPayload();
+            let attempts = 0;
+            const maxAttempts = 3;
+            let result = null;
+
+            while (attempts < maxAttempts) {
+                attempts++;
+                try {
+                    const response = await fetch(workerUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`Request failed with status: ${response.status}`);
+                    }
+
+                    const jsonResponse = await response.json();
+                    if (jsonResponse.candidates && jsonResponse.candidates.length > 0) {
+                        const contentPart = jsonResponse.candidates[0].content.parts[0];
+                        if (contentPart.text) {
+                            result = JSON.parse(contentPart.text.trim());
+                            break; 
+                        }
+                    }
+                } catch (error) {
+                    console.error(`Attempt ${attempts} failed:`, error.message);
+                    if (attempts < maxAttempts) {
+                        await new Promise(resolve => setTimeout(resolve, 2000));
+                    }
+                }
+            }
+
+            loadingSpinner.classList.add('hidden');
+
+            if (result && Array.isArray(result) && result.length > 0) {
+                renderGifts(result);
+                document.getElementById('message-area').classList.add('hidden');
+                resultsElement.classList.remove('hidden');
+                resultsElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } else {
+                errorMsg.textContent = `Failed to get recommendations. Please try again.`;
+                errorMsg.classList.remove('hidden');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.question-grid').forEach(grid => {
+                grid.querySelectorAll('.choice-btn').forEach(btn => {
+                    btn.addEventListener('click', () => handleChoice(btn));
+                });
+            });
+            submitBtn.addEventListener('click', getRecommendations);
+            restartBtn.addEventListener('click', () => {
+                Object.keys(selectedAnswers).forEach(key => delete selectedAnswers[key]);
+                state.currentAnswers = 0;
+                document.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('active'));
+                resultsElement.classList.add('hidden');
+                questionnaireElement.classList.remove('hidden');
+                document.getElementById('message-area').classList.add('hidden');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                checkReady();
+            });
+            checkReady(); 
+        });
+    </script>
+</body>
+</html>
