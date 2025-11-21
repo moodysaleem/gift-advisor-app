@@ -86,7 +86,8 @@
         <button data-answer="Flexible (2+ weeks)" class="choice-btn p-4 rounded-xl">Flexible (2+ weeks)</button>
       </div>
 
-      <button id="submit-btn" disabled class="w-full text-lg p-4 mt-2 rounded-xl bg-gray-400 text-gray-700 font-extrabold cursor-not-allowed">Answer 6 Mandatory Questions</button>
+      <!-- explicit type="button" prevents accidental form submit / reload -->
+      <button id="submit-btn" type="button" disabled class="w-full text-lg p-4 mt-2 rounded-xl bg-gray-400 text-gray-700 font-extrabold cursor-not-allowed">Answer 6 Mandatory Questions</button>
     </div>
 
     <div id="message-area" class="mt-6 text-center hidden">
@@ -102,7 +103,7 @@
       <h2 class="text-2xl font-extrabold text-indigo-700 text-center mb-4">Your 3 Personalized Gift Ideas</h2>
       <div id="gift-cards" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
       <div class="mt-6 text-center">
-        <button id="restart-btn" class="py-2 px-6 rounded-xl bg-indigo-500 text-white font-bold hover:bg-indigo-600">Find a Gift for Another Person 🔄</button>
+        <button id="restart-btn" type="button" class="py-2 px-6 rounded-xl bg-indigo-500 text-white font-bold hover:bg-indigo-600">Find a Gift for Another Person 🔄</button>
       </div>
     </div>
   </div>
@@ -218,6 +219,7 @@
     }
 
     async function getRecommendations() {
+      console.log('getRecommendations() called');
       if (!workerUrl || workerUrl.includes('WORKER_URL')) {
         errorMsgEl.textContent = 'Worker URL not configured. Edit the script and set workerUrl to your Cloudflare Worker URL.';
         errorMsgEl.classList.remove('hidden');
@@ -233,6 +235,7 @@
       rawResponseEl.textContent = '';
 
       const payload = buildPayload();
+      console.log('Payload to send:', payload);
 
       try {
         const resp = await fetch(workerUrl, {
@@ -241,14 +244,20 @@
           body: JSON.stringify(payload)
         });
 
+        console.log('Worker responded, status:', resp.status);
         const ct = resp.headers.get('content-type') || '';
         const text = await resp.text();
+        console.log('Worker response content-type:', ct);
+        console.log('Worker response body (truncated 2000 chars):', text && text.slice ? text.slice(0,2000) : text);
 
         // Try parse JSON from worker (worker forwards Gemini response)
         let parsed = null;
         try { parsed = JSON.parse(text); } catch (e) { /* not JSON */ }
 
         if (parsed && parsed.error) {
+          // show raw error for debugging
+          rawResponseEl.textContent = JSON.stringify(parsed, null, 2);
+          rawResponseEl.classList.remove('hidden');
           throw new Error(JSON.stringify(parsed.error));
         }
 
@@ -286,7 +295,7 @@
         resultsEl.classList.remove('hidden');
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } catch (err) {
-        console.error(err);
+        console.error('getRecommendations error:', err);
         loadingEl.classList.add('hidden');
         errorMsgEl.textContent = `Something went wrong: ${err.message}`;
         errorMsgEl.classList.remove('hidden');
