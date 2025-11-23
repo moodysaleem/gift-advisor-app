@@ -5,27 +5,27 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>AI Gift Advisor</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     body { font-family: 'Poppins', sans-serif; background-color: #f0f4f8; display: flex; justify-content: center; min-height: 100vh; align-items: flex-start; padding: 24px; }
-    .card { transition: transform 0.3s ease, box-shadow 0.3s ease; background-color: #ffffff; border: 1px solid #e2e8f0; padding: 1rem; border-radius: 12px; }
-    .card:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.08); }
-    .choice-btn { border: 2px solid #cbd5e1; transition: all 0.2s ease; font-weight: 600; color: #4a5568; background-color: #ffffff; }
+    .card { transition: transform 0.18s ease, box-shadow 0.18s ease; background-color: #ffffff; border: 1px solid #e2e8f0; padding: 1rem; border-radius: 12px; }
+    .choice-btn { border: 2px solid #cbd5e1; transition: all 0.15s ease; font-weight: 600; color: #4a5568; background-color: #ffffff; }
     .choice-btn:hover { border-color: #6366f1; background-color: #f0f5ff; }
-    .choice-btn.active { background-color: #6366f1; color: white; border-color: #6366f1; box-shadow: 0 4px 6px rgba(99,102,241,0.32); }
-    .question-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px,1fr)); gap: 1rem; }
+    .choice-btn.active { background-color: #6366f1; color: white; border-color: #6366f1; box-shadow: 0 4px 6px rgba(99,102,241,0.12); }
+    .question-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px,1fr)); gap: 0.75rem; }
     .page-container { width: 100%; max-width: 1100px; }
-    .card img { width: 100%; height: 200px; object-fit: cover; border-radius: 0.5rem; margin-bottom: 1rem; }
+    .card img { width: 100%; height: 200px; object-fit: cover; border-radius: 0.5rem; margin-bottom: 0.75rem; }
     .hidden { display: none !important; }
-    pre { white-space: pre-wrap; word-break: break-word; background:#fff; padding:8px; border-radius:6px; border:1px solid #e6e6e6; max-height:360px; overflow:auto; }
-    @keyframes spin { to { transform: rotate(360deg); } }
+    .badge { display:inline-block; padding:6px 10px; border-radius:999px; font-size:12px; font-weight:700; }
+    .badge-catalog { background: #e6fffa; color:#065f46; }
+    .badge-fallback { background: #fff7ed; color:#92400e; }
   </style>
 </head>
 <body>
   <div id="app" class="page-container card">
     <header class="text-center mb-6">
       <h1 class="text-3xl md:text-4xl font-extrabold text-indigo-700">The Gift Genie 🧞‍♂️</h1>
-      <p class="text-gray-600 mt-1">Answer 6 quick questions and get 3 personalized gift suggestions.</p>
+      <p class="text-gray-600 mt-1">Quick, thoughtful gift ideas — now with a curated product catalog for accurate images, prices and availability.</p>
     </header>
 
     <div id="progress" class="mb-6">
@@ -38,53 +38,63 @@
     </div>
 
     <div id="questionnaire" class="space-y-6">
-      <div class="p-4 bg-indigo-50 rounded-md">
-        <p class="text-sm text-indigo-700">Disclaimer: Recommendations are AI-generated. Links use your Amazon affiliate tag.</p>
+      <div class="p-3 bg-indigo-50 rounded-md">
+        <p class="text-sm text-indigo-700">Disclaimer: Recommendations are curated. Links use your Amazon affiliate tag.</p>
       </div>
 
       <h2 class="text-lg font-bold text-gray-700">1. Who is the gift for?</h2>
       <div class="question-grid" data-key="Recipient">
-        <button data-answer="Family Member" class="choice-btn p-4 rounded-xl" type="button">Family Member</button>
-        <button data-answer="Close Friend" class="choice-btn p-4 rounded-xl" type="button">Close Friend</button>
-        <button data-answer="Coworker/Acquaintance" class="choice-btn p-4 rounded-xl" type="button">Coworker/Acquaintance</button>
-        <button data-answer="Partner/Spouse" class="choice-btn p-4 rounded-xl" type="button">Partner/Spouse</button>
+        <button data-answer="Family Member" class="choice-btn p-3 rounded-xl" type="button">Family Member</button>
+        <button data-answer="Close Friend" class="choice-btn p-3 rounded-xl" type="button">Close Friend</button>
+        <button data-answer="Coworker/Acquaintance" class="choice-btn p-3 rounded-xl" type="button">Coworker/Acquaintance</button>
+        <button data-answer="Partner/Spouse" class="choice-btn p-3 rounded-xl" type="button">Partner/Spouse</button>
       </div>
 
       <h2 class="text-lg font-bold text-gray-700">2. Recipient's gender</h2>
       <div class="question-grid" data-key="Gender">
-        <button data-answer="Male" class="choice-btn p-4 rounded-xl" type="button">Male</button>
-        <button data-answer="Female" class="choice-btn p-4 rounded-xl" type="button">Female</button>
-        <button data-answer="Any/Generic" class="choice-btn p-4 rounded-xl" type="button">Any/Generic</button>
+        <button data-answer="Male" class="choice-btn p-3 rounded-xl" type="button">Male</button>
+        <button data-answer="Female" class="choice-btn p-3 rounded-xl" type="button">Female</button>
+        <button data-answer="Any/Generic" class="choice-btn p-3 rounded-xl" type="button">Any/Generic</button>
       </div>
 
       <h2 class="text-lg font-bold text-gray-700">3. Budget</h2>
       <div class="question-grid" data-key="Budget">
-        <button data-answer="Under $25" class="choice-btn p-4 rounded-xl" type="button">Under $25</button>
-        <button data-answer="$25 - $75" class="choice-btn p-4 rounded-xl" type="button">$25 - $75</button>
-        <button data-answer="Over $75" class="choice-btn p-4 rounded-xl" type="button">Over $75</button>
+        <button data-answer="Under $25" class="choice-btn p-3 rounded-xl" type="button">Under $25</button>
+        <button data-answer="$25 - $75" class="choice-btn p-3 rounded-xl" type="button">$25 - $75</button>
+        <button data-answer="Over $75" class="choice-btn p-3 rounded-xl" type="button">Over $75</button>
       </div>
 
-      <h2 class="text-lg font-bold text-gray-700">4. Recipient's age group</h2>
+      <h2 class="text-lg font-bold text-gray-700">4. Age group</h2>
       <div class="question-grid" data-key="Age">
-        <button data-answer="Child (under 13)" class="choice-btn p-4 rounded-xl" type="button">Child (under 13)</button>
-        <button data-answer="Teen (13-19)" class="choice-btn p-4 rounded-xl" type="button">Teen (13-19)</button>
-        <button data-answer="Adult (20-55)" class="choice-btn p-4 rounded-xl" type="button">Adult (20-55)</button>
-        <button data-answer="Senior (55+)" class="choice-btn p-4 rounded-xl" type="button">Senior (55+)</button>
+        <button data-answer="Child (under 13)" class="choice-btn p-3 rounded-xl" type="button">Child (under 13)</button>
+        <button data-answer="Teen (13-19)" class="choice-btn p-3 rounded-xl" type="button">Teen (13-19)</button>
+        <button data-answer="Adult (20-55)" class="choice-btn p-3 rounded-xl" type="button">Adult (20-55)</button>
+        <button data-answer="Senior (55+)" class="choice-btn p-3 rounded-xl" type="button">Senior (55+)</button>
       </div>
 
       <h2 class="text-lg font-bold text-gray-700">5. Occasion</h2>
       <div class="question-grid" data-key="Occasion">
-        <button data-answer="Birthday" class="choice-btn p-4 rounded-xl" type="button">Birthday</button>
-        <button data-answer="Holiday/Christmas" class="choice-btn p-4 rounded-xl" type="button">Holiday/Christmas</button>
-        <button data-answer="Anniversary/Milestone" class="choice-btn p-4 rounded-xl" type="button">Anniversary/Milestone</button>
-        <button data-answer="Just Because/Thank You" class="choice-btn p-4 rounded-xl" type="button">Just Because/Thank You</button>
+        <button data-answer="Birthday" class="choice-btn p-3 rounded-xl" type="button">Birthday</button>
+        <button data-answer="Holiday/Christmas" class="choice-btn p-3 rounded-xl" type="button">Holiday/Christmas</button>
+        <button data-answer="Anniversary/Milestone" class="choice-btn p-3 rounded-xl" type="button">Anniversary/Milestone</button>
+        <button data-answer="Just Because" class="choice-btn p-3 rounded-xl" type="button">Just Because</button>
       </div>
 
       <h2 class="text-lg font-bold text-gray-700">6. Timeline</h2>
       <div class="question-grid" data-key="Timeline">
-        <button data-answer="Immediate (1-3 days)" class="choice-btn p-4 rounded-xl" type="button">Immediate (1-3 days)</button>
-        <button data-answer="Standard (4-7 days)" class="choice-btn p-4 rounded-xl" type="button">Standard (4-7 days)</button>
-        <button data-answer="Flexible (2+ weeks)" class="choice-btn p-4 rounded-xl" type="button">Flexible (2+ weeks)</button>
+        <button data-answer="Immediate (1-3 days)" class="choice-btn p-3 rounded-xl" type="button">Immediate (1-3 days)</button>
+        <button data-answer="Standard (4-7 days)" class="choice-btn p-3 rounded-xl" type="button">Standard (4-7 days)</button>
+        <button data-answer="Flexible (2+ weeks)" class="choice-btn p-3 rounded-xl" type="button">Flexible (2+ weeks)</button>
+      </div>
+
+      <h2 class="text-lg font-bold text-gray-700">Optional: Interests (choose any)</h2>
+      <div class="question-grid" data-key="Interests">
+        <button data-answer="STEM" class="choice-btn p-3 rounded-xl" type="button">STEM</button>
+        <button data-answer="Arts & Crafts" class="choice-btn p-3 rounded-xl" type="button">Arts & Crafts</button>
+        <button data-answer="Sports" class="choice-btn p-3 rounded-xl" type="button">Sports</button>
+        <button data-answer="Tech & Gadgets" class="choice-btn p-3 rounded-xl" type="button">Tech & Gadgets</button>
+        <button data-answer="Books" class="choice-btn p-3 rounded-xl" type="button">Books</button>
+        <button data-answer="Pets" class="choice-btn p-3 rounded-xl" type="button">Pets</button>
       </div>
 
       <button id="submit-btn" type="button" disabled class="w-full text-lg p-4 mt-2 rounded-xl bg-gray-400 text-gray-700 font-extrabold cursor-not-allowed">Answer 6 Mandatory Questions</button>
@@ -109,13 +119,13 @@
   </div>
 
   <script>
-    // ====== CONFIG ======
-    const workerUrl = "https://bold-lake-a224.moodysaleem.workers.dev/"; // set to your deployed worker URL
+    // ===== CONFIG =====
+    const workerUrl = "https://bold-lake-a224.moodysaleem.workers.dev/"; // your worker URL
     const affiliateTag = "giftwithai-21";
-
     const mandatoryKeys = ['Recipient','Gender','Budget','Age','Occasion','Timeline'];
     const numRecommendations = 3;
-    window.selectedAnswers = {}; // expose for debugging
+    window.selectedAnswers = {};
+    const selectedInterests = new Set();
 
     // DOM refs
     const questionnaireEl = document.getElementById('questionnaire');
@@ -148,58 +158,55 @@
     function handleChoice(btn) {
       const key = btn.parentElement.dataset.key;
       const value = btn.dataset.answer;
+      // single-select grids
       btn.parentElement.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       window.selectedAnswers[key] = value;
       updateProgress();
     }
 
-    function generateAffiliateLink(name) {
-      return `https://www.amazon.com/s?k=${encodeURIComponent(name)}&tag=${affiliateTag}`;
+    function handleInterestToggle(btn) {
+      const value = btn.dataset.answer;
+      if (btn.classList.contains('active')) {
+        btn.classList.remove('active');
+        selectedInterests.delete(value);
+      } else {
+        btn.classList.add('active');
+        selectedInterests.add(value);
+      }
     }
 
-    // Build a simple worker-friendly payload
+    function generateAffiliateLink(name, asin) {
+      const base = asin ? `https://www.amazon.com/dp/${asin}` : `https://www.amazon.com/s?k=${encodeURIComponent(name)}`;
+      return `${base}?tag=${affiliateTag}`;
+    }
+
     function buildPayloadForWorker() {
-      const userQuery = `The gift recipient is a ${window.selectedAnswers.Age} ${window.selectedAnswers.Gender} ${window.selectedAnswers.Recipient}. Occasion: ${window.selectedAnswers.Occasion}. Timeline: ${window.selectedAnswers.Timeline}. Budget: ${window.selectedAnswers.Budget}. Generate ${numRecommendations} distinct, high-quality, product-focused gift recommendations. Return ONLY a raw JSON array. Each object must have 'productName' and 'description'. No markdown or code fences.`;
-      const systemInstruction = "You are a creative gift advisor. Always return ONLY a raw JSON array of 3 objects. Each object must have productName (string) and description (string).";
-      return { userQuery, systemInstruction };
+      const userQuery = `The gift recipient is a ${window.selectedAnswers.Age} ${window.selectedAnswers.Gender} ${window.selectedAnswers.Recipient}. Occasion: ${window.selectedAnswers.Occasion}. Timeline: ${window.selectedAnswers.Timeline}. Budget: ${window.selectedAnswers.Budget}. Interests: ${Array.from(selectedInterests).join(', ')}.`;
+      const systemInstruction = "Catalog lookup: return top matching products as JSON array of objects with productName, description, image, price (optional), asin (optional), affiliateUrl.";
+      return { userQuery, systemInstruction, answers: window.selectedAnswers, interests: Array.from(selectedInterests), numRecommendations };
     }
 
-    // Extract model text from common worker responses (OpenAI or Gemini passthroughs)
-    function extractModelTextFromWorkerResp(json) {
-      if (!json) return null;
-      if (json.outputText) return json.outputText;
-      if (json.openai && json.openai.choices && json.openai.choices.length) {
-        if (json.openai.choices[0].message && json.openai.choices[0].message.content) return json.openai.choices[0].message.content;
-        if (json.openai.choices[0].text) return json.openai.choices[0].text;
-      }
-      // For Gemini passthroughs we may get raw JSON string directly
-      if (typeof json === 'string') return json;
-      if (json.candidates && Array.isArray(json.candidates) && json.candidates[0]) {
-        // common gemini candidate extraction
-        const c = json.candidates[0];
-        if (c.output) return c.output;
-        if (c.content && Array.isArray(c.content.parts) && c.content.parts[0] && c.content.parts[0].text) return c.content.parts[0].text;
-      }
-      if (json.output) return json.output;
-      if (json.text) return json.text;
-      return null;
-    }
-
-    function renderResults(items) {
+    function renderResults(items, source = 'catalog') {
       giftCardsEl.innerHTML = '';
       items.forEach(item => {
-        const title = item.productName || 'Gift Idea';
-        const desc = item.description || 'A thoughtful gift idea.';
-        const url = generateAffiliateLink(title);
-        const placeholder = `https://placehold.co/400x250/6366f1/ffffff?text=${encodeURIComponent((title||'').slice(0,30)).replace(/%20/g,'+')}`;
+        const title = item.productName || item.title || 'Gift Idea';
+        const desc = item.description || item.summary || 'A thoughtful gift idea.';
+        const url = item.affiliateUrl || generateAffiliateLink(title, item.asin);
+        const image = item.image || `https://placehold.co/400x250/6366f1/ffffff?text=${encodeURIComponent(title.slice(0,30))}`;
+        const badge = source === 'fallback' ? `<span class="badge badge-fallback">Fallback</span>` : `<span class="badge badge-catalog">Catalog</span>`;
+        const price = item.price ? `<div class="text-indigo-900 font-bold mt-2">${item.price}</div>` : '';
         const card = document.createElement('div');
         card.className = 'card';
         card.innerHTML = `
-          <img src="${placeholder}" alt="${title}">
-          <h3 class="text-lg font-bold text-gray-800 mt-2">${title}</h3>
+          <img src="${image}" alt="${title}" loading="lazy">
+          <div class="flex items-center justify-between">
+            <h3 class="text-lg font-bold text-gray-800 mt-2">${title}</h3>
+            ${badge}
+          </div>
           <p class="text-gray-600 text-sm mt-1">${desc}</p>
-          <a href="${url}" target="_blank" class="inline-block mt-3 py-2 px-4 bg-yellow-500 text-indigo-900 font-extrabold rounded-xl">View on Amazon ↗️</a>
+          ${price}
+          <a href="${url}" target="_blank" rel="noopener" class="inline-block mt-3 py-2 px-4 bg-yellow-500 text-indigo-900 font-extrabold rounded-xl">View on Amazon ↗️</a>
         `;
         giftCardsEl.appendChild(card);
       });
@@ -223,68 +230,40 @@
           body: JSON.stringify(payload)
         });
 
-        const ct = resp.headers.get('content-type') || '';
         const text = await resp.text();
-        console.log('Worker response content-type:', ct);
-        console.log('Worker response body (truncated):', text && text.slice ? text.slice(0,2000) : text);
-
         let parsed = null;
         try { parsed = JSON.parse(text); } catch (e) { parsed = null; }
 
         if (!parsed) {
           rawResponseEl.textContent = text;
           rawResponseEl.classList.remove('hidden');
-          loadingEl.classList.add('hidden');
           errorMsgEl.classList.remove('hidden');
           errorMsgEl.textContent = 'Worker returned non-JSON response; see raw output below.';
+          loadingEl.classList.add('hidden');
           return;
         }
 
-        // If worker returned an error object, show it persistently
         if (parsed.error) {
           rawResponseEl.textContent = JSON.stringify(parsed, null, 2);
           rawResponseEl.classList.remove('hidden');
-          loadingEl.classList.add('hidden');
           errorMsgEl.classList.remove('hidden');
-          errorMsgEl.textContent = 'Worker returned an error — see details below.';
+          errorMsgEl.textContent = 'Error from worker — see details below.';
+          loadingEl.classList.add('hidden');
           return;
         }
 
-        const modelText = extractModelTextFromWorkerResp(parsed) || parsed.output || (typeof parsed === 'string' ? parsed : null);
-
-        if (!modelText) {
+        const items = parsed.items || JSON.parse(parsed.outputText || '[]') || [];
+        const source = parsed.source || (parsed.fallback ? 'fallback' : 'catalog');
+        if (!items || items.length === 0) {
           rawResponseEl.textContent = JSON.stringify(parsed, null, 2);
           rawResponseEl.classList.remove('hidden');
           loadingEl.classList.add('hidden');
           errorMsgEl.classList.remove('hidden');
-          errorMsgEl.textContent = 'Could not find model output in response. See raw output below.';
+          errorMsgEl.textContent = 'No suggestions found. See raw output.';
           return;
         }
 
-        const cleaned = modelText.replace(/```json/g,'').replace(/```/g,'').trim();
-
-        let gifts;
-        try {
-          gifts = JSON.parse(cleaned);
-        } catch (parseErr) {
-          rawResponseEl.textContent = modelText;
-          rawResponseEl.classList.remove('hidden');
-          loadingEl.classList.add('hidden');
-          errorMsgEl.classList.remove('hidden');
-          errorMsgEl.textContent = 'Failed to parse JSON from model output. See raw output below.';
-          return;
-        }
-
-        if (!Array.isArray(gifts)) {
-          rawResponseEl.textContent = JSON.stringify(gifts, null, 2);
-          rawResponseEl.classList.remove('hidden');
-          loadingEl.classList.add('hidden');
-          errorMsgEl.classList.remove('hidden');
-          errorMsgEl.textContent = 'Model returned JSON but it was not an array.';
-          return;
-        }
-
-        renderResults(gifts);
+        renderResults(items, source);
         loadingEl.classList.add('hidden');
         resultsEl.classList.remove('hidden');
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -298,18 +277,21 @@
       }
     }
 
-    // Wire up UI listeners
+    // UI wiring
     document.addEventListener('DOMContentLoaded', () => {
       document.querySelectorAll('.question-grid').forEach(grid => {
+        const key = grid.dataset.key;
         grid.querySelectorAll('.choice-btn').forEach(btn => {
-          btn.addEventListener('click', () => handleChoice(btn));
+          btn.addEventListener('click', () => {
+            if (key === 'Interests') return handleInterestToggle(btn);
+            handleChoice(btn);
+          });
         });
       });
-
       submitBtn.addEventListener('click', getRecommendations);
-
       document.getElementById('restart-btn').addEventListener('click', () => {
         Object.keys(window.selectedAnswers).forEach(k => delete window.selectedAnswers[k]);
+        selectedInterests.clear();
         document.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('active'));
         resultsEl.classList.add('hidden');
         questionnaireEl.classList.remove('hidden');
@@ -317,11 +299,6 @@
         errorMsgEl.classList.add('hidden');
         loadingEl.classList.add('hidden');
         updateProgress();
-        submitBtn.disabled = true;
-        submitBtn.classList.add('bg-gray-400','text-gray-700','cursor-not-allowed');
-        submitBtn.classList.remove('bg-yellow-400','text-indigo-900');
-        submitBtn.textContent = 'Answer 6 Mandatory Questions';
-        window.scrollTo({ top: 0, behavior: 'smooth' });
       });
     });
   </script>
