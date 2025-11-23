@@ -115,7 +115,7 @@
 
     const mandatoryKeys = ['Recipient','Gender','Budget','Age','Occasion','Timeline'];
     const numRecommendations = 3;
-    const selectedAnswers = {};
+    window.selectedAnswers = {}; // expose for console tests
 
     // DOM refs
     const questionnaireEl = document.getElementById('questionnaire');
@@ -129,7 +129,7 @@
     const progressText = document.getElementById('progress-text');
 
     function updateProgress() {
-      const answered = mandatoryKeys.filter(k => selectedAnswers[k]).length;
+      const answered = mandatoryKeys.filter(k => window.selectedAnswers[k]).length;
       progressText.textContent = `Progress: ${answered}/${mandatoryKeys.length} Questions Answered`;
       progressBar.style.width = `${(answered / mandatoryKeys.length) * 100}%`;
       if (answered === mandatoryKeys.length) {
@@ -137,6 +137,11 @@
         submitBtn.classList.remove('bg-gray-400','text-gray-700','cursor-not-allowed');
         submitBtn.classList.add('bg-yellow-400','text-indigo-900');
         submitBtn.textContent = `Generate ${numRecommendations} Gift Ideas!`;
+      } else {
+        submitBtn.disabled = true;
+        submitBtn.classList.add('bg-gray-400','text-gray-700','cursor-not-allowed');
+        submitBtn.classList.remove('bg-yellow-400','text-indigo-900');
+        submitBtn.textContent = 'Answer 6 Mandatory Questions';
       }
     }
 
@@ -145,7 +150,7 @@
       const value = btn.dataset.answer;
       btn.parentElement.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      selectedAnswers[key] = value;
+      window.selectedAnswers[key] = value;
       updateProgress();
     }
 
@@ -153,8 +158,31 @@
       return `https://www.amazon.com/s?k=${encodeURIComponent(name)}&tag=${affiliateTag}`;
     }
 
-    // Use camelCase payload shape (systemInstruction & generationConfig)
-   function buildPayload() { const userQuery = The gift recipient is a ${selectedAnswers.Age} ${selectedAnswers.Gender} ${selectedAnswers.Recipient}. Occasion: ${selectedAnswers.Occasion}. Timeline: ${selectedAnswers.Timeline}. Budget: ${selectedAnswers.Budget}. Generate ${numRecommendations} distinct, high-quality, product-focused gift recommendations. Return ONLY a raw JSON array. Each object must have 'productName' and 'description'. No markdown or code fences.; return { contents: [ { parts: [ { text: userQuery } ] } ], system_instruction: { parts: [ { text: "You are a creative gift advisor. Always return ONLY a raw JSON array of 3 objects. Each object must have productName (string) and description (string)." } ] }, generation_config: { response_mime_type: "application/json", temperature: 0.25, max_output_tokens: 512, candidate_count: 1 } }; }
+    // Use snake_case payload shape (the variant your worker/Gemini expects)
+    function buildPayload() {
+      const userQuery = `The gift recipient is a ${window.selectedAnswers.Age} ${window.selectedAnswers.Gender} ${window.selectedAnswers.Recipient}. Occasion: ${window.selectedAnswers.Occasion}. Timeline: ${window.selectedAnswers.Timeline}. Budget: ${window.selectedAnswers.Budget}. Generate ${numRecommendations} distinct, high-quality, product-focused gift recommendations. Return ONLY a raw JSON array. Each object must have 'productName' and 'description'. No markdown or code fences.`;
+      return {
+        contents: [
+          {
+            parts: [
+              { text: userQuery }
+            ]
+          }
+        ],
+        system_instruction: {
+          parts: [
+            { text: "You are a creative gift advisor. Always return ONLY a raw JSON array of 3 objects. Each object must have productName (string) and description (string)." }
+          ]
+        },
+        generation_config: {
+          response_mime_type: "application/json",
+          temperature: 0.25,
+          max_output_tokens: 512,
+          candidate_count: 1
+        }
+      };
+    }
+
     // Extract model text from common Gemini shapes
     function extractModelText(json) {
       try {
@@ -270,6 +298,7 @@
         errorMsgEl.textContent = `Something went wrong: ${err.message}`;
         errorMsgEl.classList.remove('hidden');
 
+        // Keep the user on the questionnaire after showing the error briefly
         setTimeout(() => {
           questionnaireEl.classList.remove('hidden');
           errorMsgEl.classList.add('hidden');
@@ -277,18 +306,20 @@
       }
     }
 
-    // Wire up UI
+    // Wire up UI listeners (safe: run on DOMContentLoaded)
     document.addEventListener('DOMContentLoaded', () => {
+      // Attach choice handlers
       document.querySelectorAll('.question-grid').forEach(grid => {
         grid.querySelectorAll('.choice-btn').forEach(btn => {
           btn.addEventListener('click', () => handleChoice(btn));
         });
       });
 
+      // Hook submit & restart
       submitBtn.addEventListener('click', getRecommendations);
 
       document.getElementById('restart-btn').addEventListener('click', () => {
-        Object.keys(selectedAnswers).forEach(k => delete selectedAnswers[k]);
+        Object.keys(window.selectedAnswers).forEach(k => delete window.selectedAnswers[k]);
         document.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('active'));
         resultsEl.classList.add('hidden');
         questionnaireEl.classList.remove('hidden');
@@ -304,4 +335,3 @@
   </script>
 </body>
 </html>
-
