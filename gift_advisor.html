@@ -9,6 +9,7 @@
   <style>
     body { font-family: 'Poppins', sans-serif; background-color: #f0f4f8; display: flex; justify-content: center; min-height: 100vh; align-items: flex-start; padding: 24px; }
     .card { transition: transform 0.18s ease, box-shadow 0.18s ease; background-color: #ffffff; border: 1px solid #e2e8f0; padding: 1rem; border-radius: 12px; }
+    .card:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.06); }
     .choice-btn { border: 2px solid #cbd5e1; transition: all 0.15s ease; font-weight: 600; color: #4a5568; background-color: #ffffff; }
     .choice-btn:hover { border-color: #6366f1; background-color: #f0f5ff; }
     .choice-btn.active { background-color: #6366f1; color: white; border-color: #6366f1; box-shadow: 0 4px 6px rgba(99,102,241,0.12); }
@@ -19,13 +20,15 @@
     .badge { display:inline-block; padding:6px 10px; border-radius:999px; font-size:12px; font-weight:700; }
     .badge-catalog { background: #e6fffa; color:#065f46; }
     .badge-fallback { background: #fff7ed; color:#92400e; }
+    pre { white-space: pre-wrap; word-break: break-word; background:#fff; padding:8px; border-radius:6px; border:1px solid #e6e6e6; max-height:360px; overflow:auto; }
+    @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
   <div id="app" class="page-container card">
     <header class="text-center mb-6">
       <h1 class="text-3xl md:text-4xl font-extrabold text-indigo-700">The Gift Genie 🧞‍♂️</h1>
-      <p class="text-gray-600 mt-1">Quick, thoughtful gift ideas — now with a curated product catalog for accurate images, prices and availability.</p>
+      <p class="text-gray-600 mt-1">Quick, thoughtful gift ideas — curated catalog with affiliate links.</p>
     </header>
 
     <div id="progress" class="mb-6">
@@ -176,9 +179,32 @@
       }
     }
 
-    function generateAffiliateLink(name, asin) {
-      const base = asin ? `https://www.amazon.com/dp/${asin}` : `https://www.amazon.com/s?k=${encodeURIComponent(name)}`;
-      return `${base}?tag=${affiliateTag}`;
+    // Validate ASIN (10 alphanumeric chars)
+    function isValidAsin(s) {
+      if (!s) return false;
+      return /^[A-Z0-9]{10}$/i.test(s);
+    }
+
+    function generateAffiliateLink(name, asin, itemAffiliateUrl) {
+      const tag = affiliateTag || 'giftwithai-21';
+      // Use explicit affiliateUrl if it looks like an Amazon link and contains an ASIN or dp path
+      if (itemAffiliateUrl && typeof itemAffiliateUrl === 'string' && itemAffiliateUrl.includes('amazon.')) {
+        try {
+          const u = new URL(itemAffiliateUrl);
+          // if URL already contains tag param, preserve it; otherwise append tag param
+          if (u.searchParams.get('tag')) return itemAffiliateUrl;
+          u.searchParams.set('tag', tag);
+          return u.toString();
+        } catch (e) {
+          // fall through to fallback
+        }
+      }
+      // If ASIN is valid, link to product page with tag
+      if (asin && isValidAsin(asin)) {
+        return `https://www.amazon.com/dp/${asin}?tag=${tag}`;
+      }
+      // Otherwise fallback to a search results page (safer than a broken dp URL)
+      return `https://www.amazon.com/s?k=${encodeURIComponent(name)}&tag=${tag}`;
     }
 
     function buildPayloadForWorker() {
@@ -192,10 +218,13 @@
       items.forEach(item => {
         const title = item.productName || item.title || 'Gift Idea';
         const desc = item.description || item.summary || 'A thoughtful gift idea.';
-        const url = item.affiliateUrl || generateAffiliateLink(title, item.asin);
+        // Prefer provided affiliateUrl when it's an Amazon link (generateAffiliateLink will append tag)
+        const url = (item.affiliateUrl && item.affiliateUrl.includes('amazon.')) ? generateAffiliateLink(title, item.asin, item.affiliateUrl) : generateAffiliateLink(title, item.asin, item.affiliateUrl);
         const image = item.image || `https://placehold.co/400x250/6366f1/ffffff?text=${encodeURIComponent(title.slice(0,30))}`;
         const badge = source === 'fallback' ? `<span class="badge badge-fallback">Fallback</span>` : `<span class="badge badge-catalog">Catalog</span>`;
         const price = item.price ? `<div class="text-indigo-900 font-bold mt-2">${item.price}</div>` : '';
+        const availability = item.availability ? `<div class="text-sm text-gray-500 mt-1">${item.availability}</div>` : '';
+        const rating = item.rating ? `<div class="text-sm text-yellow-600 mt-1">★ ${item.rating}</div>` : '';
         const card = document.createElement('div');
         card.className = 'card';
         card.innerHTML = `
@@ -206,6 +235,12 @@
           </div>
           <p class="text-gray-600 text-sm mt-1">${desc}</p>
           ${price}
+          <div class="flex items-center justify-between mt-2">
+            <div>
+              ${availability}
+              ${rating}
+            </div>
+          </div>
           <a href="${url}" target="_blank" rel="noopener" class="inline-block mt-3 py-2 px-4 bg-yellow-500 text-indigo-900 font-extrabold rounded-xl">View on Amazon ↗️</a>
         `;
         giftCardsEl.appendChild(card);
