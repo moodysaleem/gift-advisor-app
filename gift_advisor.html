@@ -110,7 +110,7 @@
 
   <script>
     // ====== CONFIG ======
-    const workerUrl = "https://bold-lake-a224.moodysaleem.workers.dev/"; // your worker URL
+    const workerUrl = "https://bold-lake-a224.moodysaleem.workers.dev/"; // your worker URL (no API key here)
     const affiliateTag = "giftwithai-21";
 
     const mandatoryKeys = ['Recipient','Gender','Budget','Age','Occasion','Timeline'];
@@ -158,7 +158,7 @@
       return `https://www.amazon.com/s?k=${encodeURIComponent(name)}&tag=${affiliateTag}`;
     }
 
-    // Use snake_case payload shape (this worker/endpoint responds to snake_case)
+    // Use camelCase payload shape (this variant is expected by the Gemini endpoint you're calling)
     function buildPayload() {
       const userQuery = `The gift recipient is a ${window.selectedAnswers.Age} ${window.selectedAnswers.Gender} ${window.selectedAnswers.Recipient}. Occasion: ${window.selectedAnswers.Occasion}. Timeline: ${window.selectedAnswers.Timeline}. Budget: ${window.selectedAnswers.Budget}. Generate ${numRecommendations} distinct, high-quality, product-focused gift recommendations. Return ONLY a raw JSON array. Each object must have 'productName' and 'description'. No markdown or code fences.`;
       return {
@@ -169,21 +169,21 @@
             ]
           }
         ],
-        system_instruction: {
+        systemInstruction: {
           parts: [
             { text: "You are a creative gift advisor. Always return ONLY a raw JSON array of 3 objects. Each object must have productName (string) and description (string)." }
           ]
         },
-        generation_config: {
-          response_mime_type: "application/json",
+        generationConfig: {
+          responseMimeType: "application/json",
           temperature: 0.25,
-          max_output_tokens: 512,
-          candidate_count: 1
+          maxOutputTokens: 512,
+          candidateCount: 1
         }
       };
     }
 
-    // Extract model text from common Gemini shapes
+    // Extract model text from common Gemini response shapes
     function extractModelText(json) {
       try {
         if (!json) return null;
@@ -231,6 +231,7 @@
         return;
       }
 
+      // UI state
       questionnaireEl.classList.add('hidden');
       errorMsgEl.classList.add('hidden');
       loadingEl.classList.remove('hidden');
@@ -257,14 +258,13 @@
         let parsed = null;
         try { parsed = JSON.parse(text); } catch (e) { /* not JSON */ }
 
-        // If Gemini/Worker returned an error object, show it persistently for debugging
+        // If worker/Gemini returned an error object, show raw error persistently for debugging
         if (parsed && parsed.error) {
           rawResponseEl.textContent = JSON.stringify(parsed, null, 2);
           rawResponseEl.classList.remove('hidden');
           loadingEl.classList.add('hidden');
           errorMsgEl.textContent = 'Error from worker / model — see details below.';
           errorMsgEl.classList.remove('hidden');
-          // DO NOT auto-hide the questionnaire so you can see the error; user can restart manually
           return;
         }
 
@@ -316,16 +316,14 @@
       }
     }
 
-    // Wire up UI listeners (safe: run on DOMContentLoaded)
+    // Wire up UI listeners
     document.addEventListener('DOMContentLoaded', () => {
-      // Attach choice handlers
       document.querySelectorAll('.question-grid').forEach(grid => {
         grid.querySelectorAll('.choice-btn').forEach(btn => {
           btn.addEventListener('click', () => handleChoice(btn));
         });
       });
 
-      // Hook submit & restart
       submitBtn.addEventListener('click', getRecommendations);
 
       document.getElementById('restart-btn').addEventListener('click', () => {
