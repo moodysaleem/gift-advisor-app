@@ -154,30 +154,7 @@
     }
 
     // Use camelCase payload shape (systemInstruction & generationConfig)
-    function buildPayload() {
-      const userQuery = `The gift recipient is a ${selectedAnswers.Age} ${selectedAnswers.Gender} ${selectedAnswers.Recipient}. Occasion: ${selectedAnswers.Occasion}. Timeline: ${selectedAnswers.Timeline}. Budget: ${selectedAnswers.Budget}. Generate ${numRecommendations} distinct, high-quality, product-focused gift recommendations. Return ONLY a raw JSON array. Each object must have 'productName' and 'description'. No markdown or code fences.`;
-      return {
-        contents: [
-          {
-            parts: [
-              { text: userQuery }
-            ]
-          }
-        ],
-        systemInstruction: {
-          parts: [
-            { text: "You are a creative gift advisor. Always return ONLY a raw JSON array of 3 objects. Each object must have productName (string) and description (string)." }
-          ]
-        },
-        generationConfig: {
-          responseMimeType: "application/json",
-          temperature: 0.25,
-          maxOutputTokens: 512,
-          candidateCount: 1
-        }
-      };
-    }
-
+   function buildPayload() { const userQuery = The gift recipient is a ${selectedAnswers.Age} ${selectedAnswers.Gender} ${selectedAnswers.Recipient}. Occasion: ${selectedAnswers.Occasion}. Timeline: ${selectedAnswers.Timeline}. Budget: ${selectedAnswers.Budget}. Generate ${numRecommendations} distinct, high-quality, product-focused gift recommendations. Return ONLY a raw JSON array. Each object must have 'productName' and 'description'. No markdown or code fences.; return { contents: [ { parts: [ { text: userQuery } ] } ], system_instruction: { parts: [ { text: "You are a creative gift advisor. Always return ONLY a raw JSON array of 3 objects. Each object must have productName (string) and description (string)." } ] }, generation_config: { response_mime_type: "application/json", temperature: 0.25, max_output_tokens: 512, candidate_count: 1 } }; }
     // Extract model text from common Gemini shapes
     function extractModelText(json) {
       try {
@@ -327,3 +304,4 @@
   </script>
 </body>
 </html>
+
