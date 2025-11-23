@@ -18,6 +18,7 @@
     .card img { width: 100%; height: 200px; object-fit: cover; border-radius: 0.5rem; margin-bottom: 1rem; }
     .hidden { display: none !important; }
     pre { white-space: pre-wrap; word-break: break-word; background:#fff; padding:8px; border-radius:6px; border:1px solid #e6e6e6; max-height:240px; overflow:auto; }
+    @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
@@ -43,57 +44,56 @@
 
       <h2 class="text-lg font-bold text-gray-700">1. Who is the gift for?</h2>
       <div class="question-grid" data-key="Recipient">
-        <button data-answer="Family Member" class="choice-btn p-4 rounded-xl">Family Member</button>
-        <button data-answer="Close Friend" class="choice-btn p-4 rounded-xl">Close Friend</button>
-        <button data-answer="Coworker/Acquaintance" class="choice-btn p-4 rounded-xl">Coworker/Acquaintance</button>
-        <button data-answer="Partner/Spouse" class="choice-btn p-4 rounded-xl">Partner/Spouse</button>
+        <button data-answer="Family Member" class="choice-btn p-4 rounded-xl" type="button">Family Member</button>
+        <button data-answer="Close Friend" class="choice-btn p-4 rounded-xl" type="button">Close Friend</button>
+        <button data-answer="Coworker/Acquaintance" class="choice-btn p-4 rounded-xl" type="button">Coworker/Acquaintance</button>
+        <button data-answer="Partner/Spouse" class="choice-btn p-4 rounded-xl" type="button">Partner/Spouse</button>
       </div>
 
       <h2 class="text-lg font-bold text-gray-700">2. Recipient's gender</h2>
       <div class="question-grid" data-key="Gender">
-        <button data-answer="Male" class="choice-btn p-4 rounded-xl">Male</button>
-        <button data-answer="Female" class="choice-btn p-4 rounded-xl">Female</button>
-        <button data-answer="Any/Generic" class="choice-btn p-4 rounded-xl">Any/Generic</button>
+        <button data-answer="Male" class="choice-btn p-4 rounded-xl" type="button">Male</button>
+        <button data-answer="Female" class="choice-btn p-4 rounded-xl" type="button">Female</button>
+        <button data-answer="Any/Generic" class="choice-btn p-4 rounded-xl" type="button">Any/Generic</button>
       </div>
 
       <h2 class="text-lg font-bold text-gray-700">3. Budget</h2>
       <div class="question-grid" data-key="Budget">
-        <button data-answer="Under $25" class="choice-btn p-4 rounded-xl">Under $25</button>
-        <button data-answer="$25 - $75" class="choice-btn p-4 rounded-xl">$25 - $75</button>
-        <button data-answer="Over $75" class="choice-btn p-4 rounded-xl">Over $75</button>
+        <button data-answer="Under $25" class="choice-btn p-4 rounded-xl" type="button">Under $25</button>
+        <button data-answer="$25 - $75" class="choice-btn p-4 rounded-xl" type="button">$25 - $75</button>
+        <button data-answer="Over $75" class="choice-btn p-4 rounded-xl" type="button">Over $75</button>
       </div>
 
       <h2 class="text-lg font-bold text-gray-700">4. Recipient's age group</h2>
       <div class="question-grid" data-key="Age">
-        <button data-answer="Child (under 13)" class="choice-btn p-4 rounded-xl">Child (under 13)</button>
-        <button data-answer="Teen (13-19)" class="choice-btn p-4 rounded-xl">Teen (13-19)</button>
-        <button data-answer="Adult (20-55)" class="choice-btn p-4 rounded-xl">Adult (20-55)</button>
-        <button data-answer="Senior (55+)" class="choice-btn p-4 rounded-xl">Senior (55+)</button>
+        <button data-answer="Child (under 13)" class="choice-btn p-4 rounded-xl" type="button">Child (under 13)</button>
+        <button data-answer="Teen (13-19)" class="choice-btn p-4 rounded-xl" type="button">Teen (13-19)</button>
+        <button data-answer="Adult (20-55)" class="choice-btn p-4 rounded-xl" type="button">Adult (20-55)</button>
+        <button data-answer="Senior (55+)" class="choice-btn p-4 rounded-xl" type="button">Senior (55+)</button>
       </div>
 
       <h2 class="text-lg font-bold text-gray-700">5. Occasion</h2>
       <div class="question-grid" data-key="Occasion">
-        <button data-answer="Birthday" class="choice-btn p-4 rounded-xl">Birthday</button>
-        <button data-answer="Holiday/Christmas" class="choice-btn p-4 rounded-xl">Holiday/Christmas</button>
-        <button data-answer="Anniversary/Milestone" class="choice-btn p-4 rounded-xl">Anniversary/Milestone</button>
-        <button data-answer="Just Because/Thank You" class="choice-btn p-4 rounded-xl">Just Because/Thank You</button>
+        <button data-answer="Birthday" class="choice-btn p-4 rounded-xl" type="button">Birthday</button>
+        <button data-answer="Holiday/Christmas" class="choice-btn p-4 rounded-xl" type="button">Holiday/Christmas</button>
+        <button data-answer="Anniversary/Milestone" class="choice-btn p-4 rounded-xl" type="button">Anniversary/Milestone</button>
+        <button data-answer="Just Because/Thank You" class="choice-btn p-4 rounded-xl" type="button">Just Because/Thank You</button>
       </div>
 
       <h2 class="text-lg font-bold text-gray-700">6. Timeline</h2>
       <div class="question-grid" data-key="Timeline">
-        <button data-answer="Immediate (1-3 days)" class="choice-btn p-4 rounded-xl">Immediate (1-3 days)</button>
-        <button data-answer="Standard (4-7 days)" class="choice-btn p-4 rounded-xl">Standard (4-7 days)</button>
-        <button data-answer="Flexible (2+ weeks)" class="choice-btn p-4 rounded-xl">Flexible (2+ weeks)</button>
+        <button data-answer="Immediate (1-3 days)" class="choice-btn p-4 rounded-xl" type="button">Immediate (1-3 days)</button>
+        <button data-answer="Standard (4-7 days)" class="choice-btn p-4 rounded-xl" type="button">Standard (4-7 days)</button>
+        <button data-answer="Flexible (2+ weeks)" class="choice-btn p-4 rounded-xl" type="button">Flexible (2+ weeks)</button>
       </div>
 
-      <!-- explicit type="button" prevents accidental form submit / reload -->
       <button id="submit-btn" type="button" disabled class="w-full text-lg p-4 mt-2 rounded-xl bg-gray-400 text-gray-700 font-extrabold cursor-not-allowed">Answer 6 Mandatory Questions</button>
     </div>
 
     <div id="message-area" class="mt-6 text-center hidden">
       <p id="error-message" class="text-red-600 font-semibold hidden p-3 rounded border border-red-100 bg-red-50"></p>
       <div id="loading" class="hidden mt-3">
-        <div class="inline-block loading-ring" style="width:28px; height:28px; border:4px solid rgba(99,102,241,0.2); border-top:4px solid #6366f1; border-radius:50%; animation:spin 1s linear infinite;"></div>
+        <div class="inline-block" style="width:28px; height:28px; border:4px solid rgba(99,102,241,0.2); border-top:4px solid #6366f1; border-radius:50%; animation:spin 1s linear infinite;"></div>
         <p class="mt-2 text-indigo-700 font-semibold">Generating suggestions — this may take a few seconds...</p>
       </div>
       <pre id="raw-response" class="hidden mt-4 text-left"></pre>
@@ -109,8 +109,8 @@
   </div>
 
   <script>
-    // ====== CONFIG: Cloudflare Worker URL (already set to your worker) ======
-    const workerUrl = "https://bold-lake-a224.moodysaleem.workers.dev/"; // do not put API keys here
+    // ====== CONFIG: Cloudflare Worker URL (your worker) ======
+    const workerUrl = "https://bold-lake-a224.moodysaleem.workers.dev/"; // no API keys here
     const affiliateTag = "giftwithai-21";
 
     const mandatoryKeys = ['Recipient','Gender','Budget','Age','Occasion','Timeline'];
@@ -153,31 +153,32 @@
       return `https://www.amazon.com/s?k=${encodeURIComponent(name)}&tag=${affiliateTag}`;
     }
 
-    // buildPayload using snake_case because the deployed generateContent expects snake_case fields
-   function buildPayload() {
-  const userQuery = `The gift recipient is a ${selectedAnswers.Age} ${selectedAnswers.Gender} ${selectedAnswers.Recipient}. Occasion: ${selectedAnswers.Occasion}. Timeline: ${selectedAnswers.Timeline}. Budget: ${selectedAnswers.Budget}. Generate ${numRecommendations} distinct, high-quality, product-focused gift recommendations. Return ONLY a raw JSON array. Each object must have 'productName' and 'description'. No markdown or code fences.`;
-  return {
-    contents: [
-      {
-        parts: [
-          { text: userQuery }
-        ]
-      }
-    ],
-    system_instruction: {
-      parts: [
-        { text: "You are a creative gift advisor. Always return ONLY a raw JSON array of 3 objects. Each object must have productName (string) and description (string)." }
-      ]
-    },
-    generation_config: {
-      response_mime_type: "application/json",
-      temperature: 0.25,
-      max_output_tokens: 512,
-      candidate_count: 1
+    // Use camelCase payload shape (systemInstruction & generationConfig)
+    function buildPayload() {
+      const userQuery = `The gift recipient is a ${selectedAnswers.Age} ${selectedAnswers.Gender} ${selectedAnswers.Recipient}. Occasion: ${selectedAnswers.Occasion}. Timeline: ${selectedAnswers.Timeline}. Budget: ${selectedAnswers.Budget}. Generate ${numRecommendations} distinct, high-quality, product-focused gift recommendations. Return ONLY a raw JSON array. Each object must have 'productName' and 'description'. No markdown or code fences.`;
+      return {
+        contents: [
+          {
+            parts: [
+              { text: userQuery }
+            ]
+          }
+        ],
+        systemInstruction: {
+          parts: [
+            { text: "You are a creative gift advisor. Always return ONLY a raw JSON array of 3 objects. Each object must have productName (string) and description (string)." }
+          ]
+        },
+        generationConfig: {
+          responseMimeType: "application/json",
+          temperature: 0.25,
+          maxOutputTokens: 512,
+          candidateCount: 1
+        }
+      };
     }
-  };
-}
-    // Try to extract model text from common Gemini response shapes
+
+    // Extract model text from common Gemini shapes
     function extractModelText(json) {
       try {
         if (!json) return null;
@@ -225,7 +226,6 @@
         return;
       }
 
-      // UI: hide questionnaire, show loading area
       questionnaireEl.classList.add('hidden');
       errorMsgEl.classList.add('hidden');
       loadingEl.classList.remove('hidden');
@@ -249,28 +249,23 @@
         console.log('Worker response content-type:', ct);
         console.log('Worker response body (truncated 2000 chars):', text && text.slice ? text.slice(0,2000) : text);
 
-        // Try parse JSON from worker (worker forwards Gemini response)
         let parsed = null;
         try { parsed = JSON.parse(text); } catch (e) { /* not JSON */ }
 
         if (parsed && parsed.error) {
-          // show raw error for debugging
           rawResponseEl.textContent = JSON.stringify(parsed, null, 2);
           rawResponseEl.classList.remove('hidden');
           throw new Error(JSON.stringify(parsed.error));
         }
 
-        // Extract model text if shape matches; otherwise assume plain text response is model output
         let modelText = parsed ? extractModelText(parsed) : text;
 
         if (!modelText) {
-          // show raw for debugging
           rawResponseEl.textContent = text;
           rawResponseEl.classList.remove('hidden');
           throw new Error('Could not find model output in response. Raw response shown for debugging.');
         }
 
-        // Clean fenced code blocks and whitespace
         const cleaned = modelText.replace(/```json/g,'').replace(/```/g,'').trim();
 
         let gifts;
@@ -288,7 +283,6 @@
           throw new Error('Model returned JSON but it was not an array.');
         }
 
-        // success: render
         renderResults(gifts);
         loadingEl.classList.add('hidden');
         resultsEl.classList.remove('hidden');
@@ -299,7 +293,6 @@
         errorMsgEl.textContent = `Something went wrong: ${err.message}`;
         errorMsgEl.classList.remove('hidden');
 
-        // allow retry after short delay
         setTimeout(() => {
           questionnaireEl.classList.remove('hidden');
           errorMsgEl.classList.add('hidden');
@@ -318,7 +311,6 @@
       submitBtn.addEventListener('click', getRecommendations);
 
       document.getElementById('restart-btn').addEventListener('click', () => {
-        // Reset selections
         Object.keys(selectedAnswers).forEach(k => delete selectedAnswers[k]);
         document.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('active'));
         resultsEl.classList.add('hidden');
@@ -335,5 +327,3 @@
   </script>
 </body>
 </html>
-
-
