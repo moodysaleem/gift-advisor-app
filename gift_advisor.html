@@ -23,13 +23,15 @@
     pre { white-space: pre-wrap; word-break: break-word; background:#fff; padding:8px; border-radius:6px; border:1px solid #eef2ff; max-height:360px; overflow:auto; }
     .missing { outline: 2px dashed #f59e0b; padding: 6px; border-radius: 8px; }
     .field-hint { font-size: 13px; color:#475569; margin-top:4px; }
+    .controls { display:flex; gap:8px; align-items:center; justify-content:center; margin-top:10px; }
+    .tertiary { background: #eef2ff; color:#1e293b; padding:8px 12px; border-radius:10px; font-weight:700; }
   </style>
 </head>
 <body>
   <div id="app" class="card">
     <header class="text-center mb-4">
       <h1 class="text-3xl font-extrabold text-indigo-700">The Gift Genie 🧞‍♀️</h1>
-      <p class="small mt-1">Playful, curated gift ideas — answers + optional exact age get you smarter picks.</p>
+      <p class="small mt-1">Playful, curated gift ideas — answers + optional exact age get you smarter picks. View more if you want extra ideas.</p>
     </header>
 
     <div id="questionnaire" class="space-y-5">
@@ -121,10 +123,13 @@
     </div>
 
     <div id="results" class="hidden mt-6">
-      <h2 class="text-2xl font-extrabold text-indigo-700 text-center mb-4">Your 3 Playful Gift Ideas</h2>
+      <h2 class="text-2xl font-extrabold text-indigo-700 text-center mb-4">Your Playful Gift Ideas</h2>
       <div id="gift-cards" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-      <div class="mt-6 text-center">
-        <button id="restart-btn" type="button" class="py-2 px-6 rounded-xl bg-indigo-500 text-white font-bold hover:bg-indigo-600">Find a Gift for Another Person 🔁</button>
+
+      <div class="controls mt-4">
+        <button id="view-more-btn" class="tertiary hidden">View more ideas</button>
+        <div id="showing-count" class="small muted"></div>
+        <button id="restart-btn" class="tertiary">Find a Gift for Another Person 🔁</button>
       </div>
     </div>
   </div>
@@ -134,13 +139,15 @@
     const workerUrl = "https://bold-lake-a224.moodysaleem.workers.dev/";
     const affiliateTag = "giftwithai-21";
     const requiredKeys = ['Recipient','Gender','Budget','Occasion','Timeline']; // Age handled separately
-    const numRecommendations = 3;
-
+    const clientBatchSize = 3;        // how many cards to show per "page"
+    const clientMaxFetch = 12;        // how many items to request from worker (max to allow "view more")
     // state
     window.selectedAnswers = {};
     const selectedInterests = new Set();
+    let fetchedItems = [];           // full list returned by worker
+    let shownCount = 0;
 
-    // DOM
+    // DOM refs
     const submitBtn = document.getElementById('submit-btn');
     const missingEl = document.getElementById('missing-fields');
     const questionnaireEl = document.getElementById('questionnaire');
@@ -149,14 +156,16 @@
     const ageGroupEl = document.getElementById('age-group');
     const ageExactEl = document.getElementById('age-exact');
     const exactAgeInput = document.getElementById('exact-age');
+    const giftCardsEl = document.getElementById('gift-cards');
+    const viewMoreBtn = document.getElementById('view-more-btn');
+    const showingCountEl = document.getElementById('showing-count');
 
-    // helper: list missing fields
+    // helper: missing fields
     function getMissingFields() {
       const missing = [];
       for (const k of requiredKeys) {
         if (!window.selectedAnswers[k]) missing.push(k);
       }
-      // age
       const ageAnswered = (ageModeExact.checked ? (exactAgeInput.value !== '' && !isNaN(Number(exactAgeInput.value))) : !!window.selectedAnswers['Age']);
       if (!ageAnswered) missing.push('Age');
       return missing;
@@ -168,9 +177,8 @@
         submitBtn.disabled = false;
         submitBtn.classList.remove('bg-gray-300','text-gray-700');
         submitBtn.classList.add('bg-yellow-400','text-indigo-900');
-        submitBtn.textContent = `Generate ${numRecommendations} Gift Ideas!`;
+        submitBtn.textContent = `Generate ${clientBatchSize} Gift Ideas!`;
         missingEl.textContent = '';
-        // remove visual hints
         document.querySelectorAll('.question-grid').forEach(g => g.classList.remove('missing'));
         ageGroupEl.classList.remove('missing');
       } else {
@@ -179,23 +187,20 @@
         submitBtn.classList.remove('bg-yellow-400','text-indigo-900');
         submitBtn.textContent = 'Answer required questions';
         missingEl.textContent = 'Missing: ' + missing.join(', ');
-        // highlight missing sections
         document.querySelectorAll('.question-grid').forEach(g => {
           const key = g.dataset.key;
           if (missing.includes(key)) g.classList.add('missing'); else g.classList.remove('missing');
         });
         if (missing.includes('Age')) ageGroupEl.classList.add('missing'); else ageGroupEl.classList.remove('missing');
       }
-      // debug: print state to console for quick troubleshooting
       console.debug('selectedAnswers', window.selectedAnswers, 'interests', Array.from(selectedInterests));
     }
 
-    // wire up single-select grids
+    // wire up grids
     document.querySelectorAll('.question-grid').forEach(grid => {
       const key = grid.dataset.key;
       grid.querySelectorAll('.choice-btn').forEach(btn => {
         btn.addEventListener('click', () => {
-          // Interests is multi-select
           if (key === 'Interests') {
             const val = btn.dataset.answer;
             if (btn.classList.contains('active')) {
@@ -208,11 +213,9 @@
             updateProgress();
             return;
           }
-          // single-select
           grid.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('active'));
           btn.classList.add('active');
           window.selectedAnswers[key] = btn.dataset.answer;
-          // if Age group chosen, clear ExactAge
           if (key === 'Age') {
             delete window.selectedAnswers['ExactAge'];
             exactAgeInput.value = '';
@@ -222,11 +225,10 @@
       });
     });
 
-    // Age mode radio handlers (use click as it's reliable across browsers)
+    // age mode handlers
     ageModeGroup.addEventListener('click', () => {
       ageGroupEl.classList.remove('hidden');
       ageExactEl.classList.add('hidden');
-      // clear exact-age
       exactAgeInput.value = '';
       delete window.selectedAnswers['ExactAge'];
       updateProgress();
@@ -234,40 +236,29 @@
     ageModeExact.addEventListener('click', () => {
       ageGroupEl.classList.add('hidden');
       ageExactEl.classList.remove('hidden');
-      // clear any group selection
       document.querySelectorAll('#age-group .choice-btn').forEach(b => b.classList.remove('active'));
       delete window.selectedAnswers['Age'];
       updateProgress();
     });
-
-    // exact age input
     exactAgeInput.addEventListener('input', () => {
       const v = exactAgeInput.value.trim();
-      if (v === '') {
-        delete window.selectedAnswers['ExactAge'];
-      } else {
+      if (v === '') delete window.selectedAnswers['ExactAge'];
+      else {
         const n = Number(v);
         if (!isNaN(n) && n >= 0) window.selectedAnswers['ExactAge'] = n;
       }
       updateProgress();
     });
 
-    // Affiliate / ASIN helpers (unchanged)
-    function isValidAsin(s) {
-      if (!s) return false;
-      return /^[A-Z0-9]{10}$/i.test(s);
-    }
+    // affiliate helpers
+    function isValidAsin(s) { if (!s) return false; return /^[A-Z0-9]{10}$/i.test(s); }
     function extractAsinFromUrl(url) {
       if (!url || typeof url !== 'string') return null;
       const dpMatch = url.match(/\/dp\/([A-Z0-9]{10})/i);
       if (dpMatch) return dpMatch[1];
       const gpMatch = url.match(/\/gp\/product\/([A-Z0-9]{10})/i);
       if (gpMatch) return gpMatch[1];
-      try {
-        const u = new URL(url);
-        const q = u.searchParams.get('ASIN') || u.searchParams.get('asin') || u.searchParams.get('id');
-        if (q && isValidAsin(q)) return q;
-      } catch (e) {}
+      try { const u = new URL(url); const q = u.searchParams.get('ASIN') || u.searchParams.get('asin') || u.searchParams.get('id'); if (q && isValidAsin(q)) return q; } catch (e) {}
       return null;
     }
     function generateAffiliateLink(name, asin, itemAffiliateUrl) {
@@ -275,84 +266,88 @@
       if (itemAffiliateUrl && typeof itemAffiliateUrl === 'string' && itemAffiliateUrl.includes('amazon.')) {
         const parsedAsin = extractAsinFromUrl(itemAffiliateUrl);
         if (parsedAsin && isValidAsin(parsedAsin)) {
-          try {
-            const u = new URL(itemAffiliateUrl);
-            if (!u.searchParams.get('tag')) u.searchParams.set('tag', tag);
-            return u.toString();
-          } catch (e) {}
+          try { const u = new URL(itemAffiliateUrl); if (!u.searchParams.get('tag')) u.searchParams.set('tag', tag); return u.toString(); } catch (e) {}
         }
       }
       if (asin && isValidAsin(asin)) return `https://www.amazon.com/dp/${asin}?tag=${tag}`;
       return `https://www.amazon.com/s?k=${encodeURIComponent(name)}&tag=${tag}`;
     }
 
-    // Build payload and call worker
+    // build payload; request more items than initial batch so we can "view more"
     function buildPayloadForWorker() {
       const answers = Object.assign({}, window.selectedAnswers);
-      // set Age: prefer ExactAge -> mapped bucket -> group selected
-      if (answers.ExactAge !== undefined && answers.ExactAge !== null) {
-        answers.Age = `Exact:${answers.ExactAge}`;
-      }
+      if (answers.ExactAge !== undefined && answers.ExactAge !== null) answers.Age = `Exact:${answers.ExactAge}`;
       return {
         answers,
         interests: Array.from(selectedInterests),
-        numRecommendations
+        numRecommendations: clientMaxFetch
       };
     }
 
-    // render results (same style as before)
-    function renderResults(items, source = 'catalog') {
-      const giftCardsEl = document.getElementById('gift-cards');
-      giftCardsEl.innerHTML = '';
-      items.forEach(item => {
-        const title = item.productName || item.title || 'Lovely Gift';
-        const desc = item.description || item.summary || 'A delightful pick — playful and thoughtful.';
-        const url = generateAffiliateLink(title, item.asin, item.affiliateUrl);
-        const image = item.image || `https://placehold.co/400x250/6366f1/ffffff?text=${encodeURIComponent(title.slice(0,30))}`;
-        const badge = source === 'fallback' ? `<span class="badge badge-fallback">Fallback</span>` : `<span class="badge badge-catalog">Catalog</span>`;
-        const price = item.price ? `<div class="text-indigo-900 font-bold mt-2">${item.price}</div>` : '';
-        const availability = item.availability ? `<div class="text-sm text-gray-500 mt-1">${item.availability}</div>` : '';
-        const rating = item.rating ? `<div class="text-sm text-yellow-600 mt-1">★ ${item.rating}</div>` : '';
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.innerHTML = `
-          <img src="${image}" alt="${title}" loading="lazy">
-          <div class="flex items-center justify-between">
-            <h3 class="text-lg font-bold text-gray-800 mt-2">${title}</h3>
-            ${badge}
+    // render a single card into container
+    function createCard(item, source = 'catalog') {
+      const title = item.productName || item.title || 'Lovely Gift';
+      const desc = item.description || item.summary || 'A delightful pick — playful and thoughtful.';
+      const url = generateAffiliateLink(title, item.asin, item.affiliateUrl);
+      const image = item.image || `https://placehold.co/400x250/6366f1/ffffff?text=${encodeURIComponent(title.slice(0,30))}`;
+      const badge = source === 'fallback' ? `<span class="badge badge-fallback">Fallback</span>` : `<span class="badge badge-catalog">Catalog</span>`;
+      const price = item.price ? `<div class="text-indigo-900 font-bold mt-2">${item.price}</div>` : '';
+      const availability = item.availability ? `<div class="text-sm text-gray-500 mt-1">${item.availability}</div>` : '';
+      const rating = item.rating ? `<div class="text-sm text-yellow-600 mt-1">★ ${item.rating}</div>` : '';
+      const div = document.createElement('div');
+      div.className = 'card';
+      div.innerHTML = `
+        <img src="${image}" alt="${title}" loading="lazy">
+        <div class="flex items-center justify-between">
+          <h3 class="text-lg font-bold text-gray-800 mt-2">${title}</h3>
+          ${badge}
+        </div>
+        <p class="text-gray-600 text-sm mt-1">${desc}</p>
+        ${price}
+        <div class="flex items-center justify-between mt-2">
+          <div>
+            ${availability}
+            ${rating}
           </div>
-          <p class="text-gray-600 text-sm mt-1">${desc}</p>
-          ${price}
-          <div class="flex items-center justify-between mt-2">
-            <div>
-              ${availability}
-              ${rating}
-            </div>
-          </div>
-          <a href="${url}" target="_blank" rel="noopener" class="inline-block mt-3 py-2 px-4 bg-yellow-500 text-indigo-900 font-extrabold rounded-xl">View on Amazon ↗️</a>
-        `;
-        giftCardsEl.appendChild(card);
-      });
+        </div>
+        <a href="${url}" target="_blank" rel="noopener" class="inline-block mt-3 py-2 px-4 bg-yellow-500 text-indigo-900 font-extrabold rounded-xl">View on Amazon ↗️</a>
+      `;
+      return div;
     }
 
+    // show next batch from fetchedItems
+    function showNextBatch() {
+      const remaining = fetchedItems.length - shownCount;
+      if (remaining <= 0) {
+        viewMoreBtn.classList.add('hidden');
+        showingCountEl.textContent = `Showing ${shownCount} of ${fetchedItems.length}`;
+        return;
+      }
+      const take = Math.min(clientBatchSize, remaining);
+      const slice = fetchedItems.slice(shownCount, shownCount + take);
+      slice.forEach(it => giftCardsEl.appendChild(createCard(it, 'catalog')));
+      shownCount += take;
+      showingCountEl.textContent = `Showing ${shownCount} of ${fetchedItems.length}`;
+      if (shownCount >= fetchedItems.length) viewMoreBtn.classList.add('hidden'); else viewMoreBtn.classList.remove('hidden');
+    }
+
+    // perform request and populate first batch
     async function getRecommendations() {
-      // UI
       questionnaireEl.classList.add('hidden');
       document.getElementById('message-area').classList.remove('hidden');
       document.getElementById('loading').classList.remove('hidden');
       document.getElementById('raw-response').classList.add('hidden');
+      fetchedItems = [];
+      shownCount = 0;
+      giftCardsEl.innerHTML = '';
+      showingCountEl.textContent = '';
 
       const payload = buildPayloadForWorker();
       try {
-        const resp = await fetch(workerUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
+        const resp = await fetch(workerUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
         const text = await resp.text();
         let parsed = null;
         try { parsed = JSON.parse(text); } catch (e) { parsed = null; }
-
         if (!parsed) {
           document.getElementById('raw-response').textContent = text;
           document.getElementById('raw-response').classList.remove('hidden');
@@ -365,19 +360,14 @@
           document.getElementById('loading').classList.add('hidden');
           return;
         }
+        // worker returns 'items' - take up to clientMaxFetch
         const items = parsed.items || JSON.parse(parsed.outputText || '[]') || [];
-        const source = parsed.source || (parsed.fallback ? 'fallback' : 'catalog');
-        if (!items || items.length === 0) {
-          document.getElementById('raw-response').textContent = JSON.stringify(parsed, null, 2);
-          document.getElementById('raw-response').classList.remove('hidden');
-          document.getElementById('loading').classList.add('hidden');
-          return;
-        }
+        fetchedItems = items.slice(0, clientMaxFetch);
         document.getElementById('loading').classList.add('hidden');
         document.getElementById('message-area').classList.add('hidden');
         document.getElementById('results').classList.remove('hidden');
-        renderResults(items, source);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        // show initial batch
+        showNextBatch();
       } catch (err) {
         console.error(err);
         document.getElementById('raw-response').textContent = String(err);
@@ -386,32 +376,32 @@
       }
     }
 
-    // start listeners
-    document.addEventListener('DOMContentLoaded', () => {
-      // initial progress state
+    // restart: clear everything
+    function restartFlow() {
+      Object.keys(window.selectedAnswers).forEach(k => delete window.selectedAnswers[k]);
+      selectedInterests.clear();
+      exactAgeInput.value = '';
+      document.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('results').classList.add('hidden');
+      document.getElementById('questionnaire').classList.remove('hidden');
+      document.getElementById('message-area').classList.add('hidden');
+      fetchedItems = [];
+      shownCount = 0;
+      giftCardsEl.innerHTML = '';
+      viewMoreBtn.classList.add('hidden');
+      showingCountEl.textContent = '';
       updateProgress();
+    }
 
-      // attach submit/restart
+    // attach listeners
+    document.addEventListener('DOMContentLoaded', () => {
+      updateProgress();
       submitBtn.addEventListener('click', getRecommendations);
-      document.getElementById('restart-btn').addEventListener('click', () => {
-        // clear state
-        Object.keys(window.selectedAnswers).forEach(k => delete window.selectedAnswers[k]);
-        selectedInterests.clear();
-        exactAgeInput.value = '';
-        document.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById('results').classList.add('hidden');
-        document.getElementById('questionnaire').classList.remove('hidden');
-        document.getElementById('message-area').classList.add('hidden');
-        updateProgress();
-      });
+      viewMoreBtn.addEventListener('click', showNextBatch);
+      document.getElementById('restart-btn').addEventListener('click', restartFlow);
 
-      // make Enter key in exact-age act as done
-      exactAgeInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-          e.preventDefault();
-          updateProgress();
-        }
-      });
+      // allow Enter key on exact age to trigger update
+      exactAgeInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); updateProgress(); } });
     });
   </script>
 </body>
