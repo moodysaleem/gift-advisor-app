@@ -158,7 +158,7 @@
       return `https://www.amazon.com/s?k=${encodeURIComponent(name)}&tag=${affiliateTag}`;
     }
 
-    // Use snake_case payload shape (the variant your worker/Gemini expects)
+    // Use camelCase payload shape (the variant your worker/Gemini expects)
     function buildPayload() {
       const userQuery = `The gift recipient is a ${window.selectedAnswers.Age} ${window.selectedAnswers.Gender} ${window.selectedAnswers.Recipient}. Occasion: ${window.selectedAnswers.Occasion}. Timeline: ${window.selectedAnswers.Timeline}. Budget: ${window.selectedAnswers.Budget}. Generate ${numRecommendations} distinct, high-quality, product-focused gift recommendations. Return ONLY a raw JSON array. Each object must have 'productName' and 'description'. No markdown or code fences.`;
       return {
@@ -169,16 +169,16 @@
             ]
           }
         ],
-        system_instruction: {
+        systemInstruction: {
           parts: [
             { text: "You are a creative gift advisor. Always return ONLY a raw JSON array of 3 objects. Each object must have productName (string) and description (string)." }
           ]
         },
-        generation_config: {
-          response_mime_type: "application/json",
+        generationConfig: {
+          responseMimeType: "application/json",
           temperature: 0.25,
-          max_output_tokens: 512,
-          candidate_count: 1
+          maxOutputTokens: 512,
+          candidateCount: 1
         }
       };
     }
