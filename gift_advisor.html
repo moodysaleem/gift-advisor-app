@@ -17,7 +17,7 @@
     .page-container { width: 100%; max-width: 1100px; }
     .card img { width: 100%; height: 200px; object-fit: cover; border-radius: 0.5rem; margin-bottom: 1rem; }
     .hidden { display: none !important; }
-    pre { white-space: pre-wrap; word-break: break-word; background:#fff; padding:8px; border-radius:6px; border:1px solid #e6e6e6; max-height:240px; overflow:auto; }
+    pre { white-space: pre-wrap; word-break: break-word; background:#fff; padding:8px; border-radius:6px; border:1px solid #e6e6e6; max-height:360px; overflow:auto; }
     @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
@@ -109,8 +109,8 @@
   </div>
 
   <script>
-    // ====== CONFIG: Cloudflare Worker URL (your worker) ======
-    const workerUrl = "https://bold-lake-a224.moodysaleem.workers.dev/"; // no API keys here
+    // ====== CONFIG ======
+    const workerUrl = "https://bold-lake-a224.moodysaleem.workers.dev/"; // your worker URL
     const affiliateTag = "giftwithai-21";
 
     const mandatoryKeys = ['Recipient','Gender','Budget','Age','Occasion','Timeline'];
@@ -158,7 +158,7 @@
       return `https://www.amazon.com/s?k=${encodeURIComponent(name)}&tag=${affiliateTag}`;
     }
 
-    // Use camelCase payload shape (the variant your worker/Gemini expects)
+    // Use snake_case payload shape (this worker/endpoint responds to snake_case)
     function buildPayload() {
       const userQuery = `The gift recipient is a ${window.selectedAnswers.Age} ${window.selectedAnswers.Gender} ${window.selectedAnswers.Recipient}. Occasion: ${window.selectedAnswers.Occasion}. Timeline: ${window.selectedAnswers.Timeline}. Budget: ${window.selectedAnswers.Budget}. Generate ${numRecommendations} distinct, high-quality, product-focused gift recommendations. Return ONLY a raw JSON array. Each object must have 'productName' and 'description'. No markdown or code fences.`;
       return {
@@ -169,16 +169,16 @@
             ]
           }
         ],
-        systemInstruction: {
+        system_instruction: {
           parts: [
             { text: "You are a creative gift advisor. Always return ONLY a raw JSON array of 3 objects. Each object must have productName (string) and description (string)." }
           ]
         },
-        generationConfig: {
-          responseMimeType: "application/json",
+        generation_config: {
+          response_mime_type: "application/json",
           temperature: 0.25,
-          maxOutputTokens: 512,
-          candidateCount: 1
+          max_output_tokens: 512,
+          candidate_count: 1
         }
       };
     }
@@ -257,10 +257,15 @@
         let parsed = null;
         try { parsed = JSON.parse(text); } catch (e) { /* not JSON */ }
 
+        // If Gemini/Worker returned an error object, show it persistently for debugging
         if (parsed && parsed.error) {
           rawResponseEl.textContent = JSON.stringify(parsed, null, 2);
           rawResponseEl.classList.remove('hidden');
-          throw new Error(JSON.stringify(parsed.error));
+          loadingEl.classList.add('hidden');
+          errorMsgEl.textContent = 'Error from worker / model — see details below.';
+          errorMsgEl.classList.remove('hidden');
+          // DO NOT auto-hide the questionnaire so you can see the error; user can restart manually
+          return;
         }
 
         let modelText = parsed ? extractModelText(parsed) : text;
@@ -268,7 +273,10 @@
         if (!modelText) {
           rawResponseEl.textContent = text;
           rawResponseEl.classList.remove('hidden');
-          throw new Error('Could not find model output in response. Raw response shown for debugging.');
+          loadingEl.classList.add('hidden');
+          errorMsgEl.textContent = 'Could not find model output in response. See raw output below.';
+          errorMsgEl.classList.remove('hidden');
+          return;
         }
 
         const cleaned = modelText.replace(/```json/g,'').replace(/```/g,'').trim();
@@ -279,13 +287,19 @@
         } catch (parseErr) {
           rawResponseEl.textContent = modelText;
           rawResponseEl.classList.remove('hidden');
-          throw new Error('Failed to parse JSON from model output. Raw output shown below.');
+          loadingEl.classList.add('hidden');
+          errorMsgEl.textContent = 'Failed to parse JSON from model output. See raw output below.';
+          errorMsgEl.classList.remove('hidden');
+          return;
         }
 
         if (!Array.isArray(gifts)) {
           rawResponseEl.textContent = JSON.stringify(gifts, null, 2);
           rawResponseEl.classList.remove('hidden');
-          throw new Error('Model returned JSON but it was not an array.');
+          loadingEl.classList.add('hidden');
+          errorMsgEl.textContent = 'Model returned JSON but it was not an array.';
+          errorMsgEl.classList.remove('hidden');
+          return;
         }
 
         renderResults(gifts);
@@ -295,14 +309,10 @@
       } catch (err) {
         console.error('getRecommendations error:', err);
         loadingEl.classList.add('hidden');
+        rawResponseEl.textContent = err.message || String(err);
+        rawResponseEl.classList.remove('hidden');
         errorMsgEl.textContent = `Something went wrong: ${err.message}`;
         errorMsgEl.classList.remove('hidden');
-
-        // Keep the user on the questionnaire after showing the error briefly
-        setTimeout(() => {
-          questionnaireEl.classList.remove('hidden');
-          errorMsgEl.classList.add('hidden');
-        }, 3000);
       }
     }
 
@@ -324,6 +334,8 @@
         resultsEl.classList.add('hidden');
         questionnaireEl.classList.remove('hidden');
         rawResponseEl.classList.add('hidden');
+        errorMsgEl.classList.add('hidden');
+        loadingEl.classList.add('hidden');
         updateProgress();
         submitBtn.disabled = true;
         submitBtn.classList.add('bg-gray-400','text-gray-700','cursor-not-allowed');
