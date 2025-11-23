@@ -9,6 +9,7 @@
   <style>
     body { font-family: 'Poppins', sans-serif; background-color: #f0f4f8; display: flex; justify-content: center; min-height: 100vh; align-items: flex-start; padding: 24px; }
     .card { transition: transform 0.3s ease, box-shadow 0.3s ease; background-color: #ffffff; border: 1px solid #e2e8f0; padding: 1rem; border-radius: 12px; }
+    .card:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.08); }
     .choice-btn { border: 2px solid #cbd5e1; transition: all 0.2s ease; font-weight: 600; color: #4a5568; background-color: #ffffff; }
     .choice-btn:hover { border-color: #6366f1; background-color: #f0f5ff; }
     .choice-btn.active { background-color: #6366f1; color: white; border-color: #6366f1; box-shadow: 0 4px 6px rgba(99,102,241,0.32); }
@@ -109,12 +110,12 @@
 
   <script>
     // ====== CONFIG ======
-    // Set this to your deployed Cloudflare Worker URL (no API key in the browser)
-    const workerUrl = "https://bold-lake-a224.moodysaleem.workers.dev/";
+    const workerUrl = "https://bold-lake-a224.moodysaleem.workers.dev/"; // set to your deployed worker URL
+    const affiliateTag = "giftwithai-21";
 
     const mandatoryKeys = ['Recipient','Gender','Budget','Age','Occasion','Timeline'];
     const numRecommendations = 3;
-    window.selectedAnswers = {}; // exposed for debugging
+    window.selectedAnswers = {}; // expose for debugging
 
     // DOM refs
     const questionnaireEl = document.getElementById('questionnaire');
@@ -154,23 +155,34 @@
     }
 
     function generateAffiliateLink(name) {
-      return `https://www.amazon.com/s?k=${encodeURIComponent(name)}&tag=giftwithai-21`;
+      return `https://www.amazon.com/s?k=${encodeURIComponent(name)}&tag=${affiliateTag}`;
     }
 
-    // Build a small, simple payload for the worker (avoid naming/casing confusion)
+    // Build a simple worker-friendly payload
     function buildPayloadForWorker() {
       const userQuery = `The gift recipient is a ${window.selectedAnswers.Age} ${window.selectedAnswers.Gender} ${window.selectedAnswers.Recipient}. Occasion: ${window.selectedAnswers.Occasion}. Timeline: ${window.selectedAnswers.Timeline}. Budget: ${window.selectedAnswers.Budget}. Generate ${numRecommendations} distinct, high-quality, product-focused gift recommendations. Return ONLY a raw JSON array. Each object must have 'productName' and 'description'. No markdown or code fences.`;
       const systemInstruction = "You are a creative gift advisor. Always return ONLY a raw JSON array of 3 objects. Each object must have productName (string) and description (string).";
       return { userQuery, systemInstruction };
     }
 
+    // Extract model text from common worker responses (OpenAI or Gemini passthroughs)
     function extractModelTextFromWorkerResp(json) {
-      // worker returns { outputText } or full OpenAI response shape.
       if (!json) return null;
       if (json.outputText) return json.outputText;
-      if (json.choices && json.choices.length && json.choices[0].message) return json.choices[0].message.content;
-      if (json.choices && json.choices.length && json.choices[0].text) return json.choices[0].text;
-      if (json.result && typeof json.result === 'string') return json.result;
+      if (json.openai && json.openai.choices && json.openai.choices.length) {
+        if (json.openai.choices[0].message && json.openai.choices[0].message.content) return json.openai.choices[0].message.content;
+        if (json.openai.choices[0].text) return json.openai.choices[0].text;
+      }
+      // For Gemini passthroughs we may get raw JSON string directly
+      if (typeof json === 'string') return json;
+      if (json.candidates && Array.isArray(json.candidates) && json.candidates[0]) {
+        // common gemini candidate extraction
+        const c = json.candidates[0];
+        if (c.output) return c.output;
+        if (c.content && Array.isArray(c.content.parts) && c.content.parts[0] && c.content.parts[0].text) return c.content.parts[0].text;
+      }
+      if (json.output) return json.output;
+      if (json.text) return json.text;
       return null;
     }
 
@@ -220,16 +232,21 @@
         try { parsed = JSON.parse(text); } catch (e) { parsed = null; }
 
         if (!parsed) {
-          throw new Error('Worker returned non-JSON response. See console for raw output.');
+          rawResponseEl.textContent = text;
+          rawResponseEl.classList.remove('hidden');
+          loadingEl.classList.add('hidden');
+          errorMsgEl.classList.remove('hidden');
+          errorMsgEl.textContent = 'Worker returned non-JSON response; see raw output below.';
+          return;
         }
 
-        // show worker/OpenAI errors (persist) to help debugging
+        // If worker returned an error object, show it persistently
         if (parsed.error) {
           rawResponseEl.textContent = JSON.stringify(parsed, null, 2);
           rawResponseEl.classList.remove('hidden');
-          errorMsgEl.classList.remove('hidden');
-          errorMsgEl.textContent = 'Error from worker / OpenAI. See details below.';
           loadingEl.classList.add('hidden');
+          errorMsgEl.classList.remove('hidden');
+          errorMsgEl.textContent = 'Worker returned an error — see details below.';
           return;
         }
 
