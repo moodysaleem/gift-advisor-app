@@ -3,49 +3,39 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>AI Gift Advisor</title>
+  <title>The Gift Genie — Smart & Playful Gift Suggestions</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Poppins', sans-serif; background-color: #f0f4f8; display: flex; justify-content: center; min-height: 100vh; align-items: flex-start; padding: 24px; }
-    .card { transition: transform 0.18s ease, box-shadow 0.18s ease; background-color: #ffffff; border: 1px solid #e2e8f0; padding: 1rem; border-radius: 12px; }
-    .card:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.06); }
-    .choice-btn { border: 2px solid #cbd5e1; transition: all 0.15s ease; font-weight: 600; color: #4a5568; background-color: #ffffff; }
-    .choice-btn:hover { border-color: #6366f1; background-color: #f0f5ff; }
-    .choice-btn.active { background-color: #6366f1; color: white; border-color: #6366f1; box-shadow: 0 4px 6px rgba(99,102,241,0.12); }
-    .question-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px,1fr)); gap: 0.75rem; }
-    .page-container { width: 100%; max-width: 1100px; }
-    .card img { width: 100%; height: 200px; object-fit: cover; border-radius: 0.5rem; margin-bottom: 0.75rem; }
-    .hidden { display: none !important; }
+    body { font-family: 'Poppins', sans-serif; background-color: #f0f6ff; display: flex; justify-content: center; min-height: 100vh; align-items: flex-start; padding: 28px; }
+    .card { transition: transform 0.18s ease, box-shadow 0.18s ease; background-color: #ffffff; border: 1px solid #e6eefc; padding: 1.1rem; border-radius: 14px; width:100%; max-width:1100px; }
+    .choice-btn { border: 2px solid #dbeafe; transition: all 0.12s ease; font-weight: 700; color: #0f172a; background-color: #ffffff; }
+    .choice-btn:hover { border-color: #6366f1; background-color: #f8fafc; }
+    .choice-btn.active { background-color: #6366f1; color: white; border-color: #6366f1; box-shadow: 0 6px 18px rgba(99,102,241,0.12); }
+    .question-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); gap: 0.6rem; }
     .badge { display:inline-block; padding:6px 10px; border-radius:999px; font-size:12px; font-weight:700; }
-    .badge-catalog { background: #e6fffa; color:#065f46; }
+    .badge-catalog { background: #ecfeff; color:#065f46; }
     .badge-fallback { background: #fff7ed; color:#92400e; }
-    pre { white-space: pre-wrap; word-break: break-word; background:#fff; padding:8px; border-radius:6px; border:1px solid #e6e6e6; max-height:360px; overflow:auto; }
-    @keyframes spin { to { transform: rotate(360deg); } }
+    .small { font-size: 13px; color: #475569; }
+    button#submit-btn:disabled { opacity: 0.65; cursor: not-allowed; }
+    .card img { width: 100%; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 0.75rem; }
+    .muted { color:#64748b; }
+    pre { white-space: pre-wrap; word-break: break-word; background:#fff; padding:8px; border-radius:6px; border:1px solid #eef2ff; max-height:360px; overflow:auto; }
   </style>
 </head>
 <body>
-  <div id="app" class="page-container card">
-    <header class="text-center mb-6">
-      <h1 class="text-3xl md:text-4xl font-extrabold text-indigo-700">The Gift Genie 🧞‍♂️</h1>
-      <p class="text-gray-600 mt-1">Quick, thoughtful gift ideas — curated catalog with affiliate links.</p>
+  <div id="app" class="card">
+    <header class="text-center mb-4">
+      <h1 class="text-3xl font-extrabold text-indigo-700">The Gift Genie 🧞‍♀️</h1>
+      <p class="small mt-1">Playful, curated gift ideas — answers + optional exact age get you smarter picks. No boring lists.</p>
     </header>
 
-    <div id="progress" class="mb-6">
-      <div class="flex items-center justify-between mb-2">
-        <div id="progress-text" class="text-sm font-semibold text-indigo-700">Progress: 0/6 Questions Answered</div>
-      </div>
-      <div class="w-full bg-gray-200 rounded-full h-2.5">
-        <div id="progress-bar" class="bg-indigo-500 h-2.5 rounded-full transition-all duration-500" style="width:0%"></div>
-      </div>
-    </div>
-
-    <div id="questionnaire" class="space-y-6">
-      <div class="p-3 bg-indigo-50 rounded-md">
-        <p class="text-sm text-indigo-700">Disclaimer: Recommendations are curated. Links use your Amazon affiliate tag.</p>
+    <div id="questionnaire" class="space-y-5">
+      <div class="p-3 bg-indigo-50 rounded-md small">
+        <strong>Note:</strong> We use a curated catalog and safe Amazon links. Replace catalog entries with your real product pages when available.
       </div>
 
-      <h2 class="text-lg font-bold text-gray-700">1. Who is the gift for?</h2>
+      <h2 class="text-lg font-bold text-gray-800">1. Who is the gift for?</h2>
       <div class="question-grid" data-key="Recipient">
         <button data-answer="Family Member" class="choice-btn p-3 rounded-xl" type="button">Family Member</button>
         <button data-answer="Close Friend" class="choice-btn p-3 rounded-xl" type="button">Close Friend</button>
@@ -53,29 +43,42 @@
         <button data-answer="Partner/Spouse" class="choice-btn p-3 rounded-xl" type="button">Partner/Spouse</button>
       </div>
 
-      <h2 class="text-lg font-bold text-gray-700">2. Recipient's gender</h2>
+      <h2 class="text-lg font-bold text-gray-800">2. Recipient's gender</h2>
       <div class="question-grid" data-key="Gender">
         <button data-answer="Male" class="choice-btn p-3 rounded-xl" type="button">Male</button>
         <button data-answer="Female" class="choice-btn p-3 rounded-xl" type="button">Female</button>
         <button data-answer="Any/Generic" class="choice-btn p-3 rounded-xl" type="button">Any/Generic</button>
       </div>
 
-      <h2 class="text-lg font-bold text-gray-700">3. Budget</h2>
+      <h2 class="text-lg font-bold text-gray-800">3. Budget</h2>
       <div class="question-grid" data-key="Budget">
         <button data-answer="Under $25" class="choice-btn p-3 rounded-xl" type="button">Under $25</button>
         <button data-answer="$25 - $75" class="choice-btn p-3 rounded-xl" type="button">$25 - $75</button>
         <button data-answer="Over $75" class="choice-btn p-3 rounded-xl" type="button">Over $75</button>
       </div>
 
-      <h2 class="text-lg font-bold text-gray-700">4. Age group</h2>
-      <div class="question-grid" data-key="Age">
-        <button data-answer="Child (under 13)" class="choice-btn p-3 rounded-xl" type="button">Child (under 13)</button>
+      <h2 class="text-lg font-bold text-gray-800">4. Age (choose a mode)</h2>
+      <div class="flex gap-3 items-center">
+        <label class="small"><input id="ageModeGroup" type="radio" name="ageMode" checked> Choose age group</label>
+        <label class="small"><input id="ageModeExact" type="radio" name="ageMode"> Enter exact age</label>
+      </div>
+
+      <div id="age-group" class="question-grid" data-key="Age">
+        <button data-answer="Toddler (1-3)" class="choice-btn p-3 rounded-xl" type="button">Toddler (1-3)</button>
+        <button data-answer="Preschool (4-6)" class="choice-btn p-3 rounded-xl" type="button">Preschool (4-6)</button>
+        <button data-answer="Kid (7-9)" class="choice-btn p-3 rounded-xl" type="button">Kid (7-9)</button>
+        <button data-answer="Tween (10-12)" class="choice-btn p-3 rounded-xl" type="button">Tween (10-12)</button>
         <button data-answer="Teen (13-19)" class="choice-btn p-3 rounded-xl" type="button">Teen (13-19)</button>
         <button data-answer="Adult (20-55)" class="choice-btn p-3 rounded-xl" type="button">Adult (20-55)</button>
         <button data-answer="Senior (55+)" class="choice-btn p-3 rounded-xl" type="button">Senior (55+)</button>
       </div>
 
-      <h2 class="text-lg font-bold text-gray-700">5. Occasion</h2>
+      <div id="age-exact" class="hidden">
+        <label class="small">Enter recipient's age (years)</label>
+        <input id="exact-age" type="number" min="0" max="120" placeholder="e.g. 3 or 27" class="p-3 rounded-xl border border-slate-200 w-full" />
+      </div>
+
+      <h2 class="text-lg font-bold text-gray-800">5. Occasion</h2>
       <div class="question-grid" data-key="Occasion">
         <button data-answer="Birthday" class="choice-btn p-3 rounded-xl" type="button">Birthday</button>
         <button data-answer="Holiday/Christmas" class="choice-btn p-3 rounded-xl" type="button">Holiday/Christmas</button>
@@ -83,14 +86,14 @@
         <button data-answer="Just Because" class="choice-btn p-3 rounded-xl" type="button">Just Because</button>
       </div>
 
-      <h2 class="text-lg font-bold text-gray-700">6. Timeline</h2>
+      <h2 class="text-lg font-bold text-gray-800">6. Timeline</h2>
       <div class="question-grid" data-key="Timeline">
         <button data-answer="Immediate (1-3 days)" class="choice-btn p-3 rounded-xl" type="button">Immediate (1-3 days)</button>
         <button data-answer="Standard (4-7 days)" class="choice-btn p-3 rounded-xl" type="button">Standard (4-7 days)</button>
         <button data-answer="Flexible (2+ weeks)" class="choice-btn p-3 rounded-xl" type="button">Flexible (2+ weeks)</button>
       </div>
 
-      <h2 class="text-lg font-bold text-gray-700">Optional: Interests (choose any)</h2>
+      <h2 class="text-lg font-bold text-gray-800">Optional: Interests (multi-select)</h2>
       <div class="question-grid" data-key="Interests">
         <button data-answer="STEM" class="choice-btn p-3 rounded-xl" type="button">STEM</button>
         <button data-answer="Arts & Crafts" class="choice-btn p-3 rounded-xl" type="button">Arts & Crafts</button>
@@ -100,33 +103,34 @@
         <button data-answer="Pets" class="choice-btn p-3 rounded-xl" type="button">Pets</button>
       </div>
 
-      <button id="submit-btn" type="button" disabled class="w-full text-lg p-4 mt-2 rounded-xl bg-gray-400 text-gray-700 font-extrabold cursor-not-allowed">Answer 6 Mandatory Questions</button>
+      <button id="submit-btn" type="button" disabled class="w-full text-lg p-4 mt-2 rounded-xl bg-gray-300 text-gray-700 font-extrabold">Answer required questions</button>
     </div>
 
     <div id="message-area" class="mt-6 text-center hidden">
       <p id="error-message" class="text-red-600 font-semibold hidden p-3 rounded border border-red-100 bg-red-50"></p>
       <div id="loading" class="hidden mt-3">
-        <div class="inline-block" style="width:28px; height:28px; border:4px solid rgba(99,102,241,0.2); border-top:4px solid #6366f1; border-radius:50%; animation:spin 1s linear infinite;"></div>
-        <p class="mt-2 text-indigo-700 font-semibold">Generating suggestions — this may take a few seconds...</p>
+        <div style="width:28px; height:28px; border:4px solid rgba(99,102,241,0.18); border-top:4px solid #6366f1; border-radius:50%; animation:spin 1s linear infinite;"></div>
+        <p class="mt-2 text-indigo-700 font-semibold">Cooking up playful gifts — almost ready!</p>
       </div>
       <pre id="raw-response" class="hidden mt-4 text-left"></pre>
     </div>
 
     <div id="results" class="hidden mt-6">
-      <h2 class="text-2xl font-extrabold text-indigo-700 text-center mb-4">Your 3 Personalized Gift Ideas</h2>
+      <h2 class="text-2xl font-extrabold text-indigo-700 text-center mb-4">Your 3 Playful Gift Ideas</h2>
       <div id="gift-cards" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
       <div class="mt-6 text-center">
-        <button id="restart-btn" type="button" class="py-2 px-6 rounded-xl bg-indigo-500 text-white font-bold hover:bg-indigo-600">Find a Gift for Another Person 🔄</button>
+        <button id="restart-btn" type="button" class="py-2 px-6 rounded-xl bg-indigo-500 text-white font-bold hover:bg-indigo-600">Find a Gift for Another Person 🔁</button>
       </div>
     </div>
   </div>
 
   <script>
     // ===== CONFIG =====
-    const workerUrl = "https://bold-lake-a224.moodysaleem.workers.dev/"; // your worker URL
+    const workerUrl = "https://bold-lake-a224.moodysaleem.workers.dev/"; // your worker URL (Cloudflare)
     const affiliateTag = "giftwithai-21";
-    const mandatoryKeys = ['Recipient','Gender','Budget','Age','Occasion','Timeline'];
+    const mandatoryKeys = ['Recipient','Gender','Budget','Occasion','Timeline']; // Age handled separately
     const numRecommendations = 3;
+
     window.selectedAnswers = {};
     const selectedInterests = new Set();
 
@@ -141,20 +145,28 @@
     const progressBar = document.getElementById('progress-bar');
     const progressText = document.getElementById('progress-text');
 
+    const ageModeGroup = document.getElementById('ageModeGroup');
+    const ageModeExact = document.getElementById('ageModeExact');
+    const ageGroupEl = document.getElementById('age-group');
+    const ageExactEl = document.getElementById('age-exact');
+    const exactAgeInput = document.getElementById('exact-age');
+
     function updateProgress() {
-      const answered = mandatoryKeys.filter(k => window.selectedAnswers[k]).length;
-      progressText.textContent = `Progress: ${answered}/${mandatoryKeys.length} Questions Answered`;
-      progressBar.style.width = `${(answered / mandatoryKeys.length) * 100}%`;
-      if (answered === mandatoryKeys.length) {
+      const answeredBase = mandatoryKeys.filter(k => window.selectedAnswers[k]).length;
+      const ageAnswered = (ageModeExact.checked ? (exactAgeInput.value !== '' && !isNaN(Number(exactAgeInput.value))) : !!window.selectedAnswers['Age']);
+      const answered = answeredBase + (ageAnswered ? 1 : 0);
+      progressText.textContent = `Progress: ${answered}/6 Questions Answered`;
+      progressBar.style.width = `${(answered / 6) * 100}%`;
+      if (answered === 6) {
         submitBtn.disabled = false;
-        submitBtn.classList.remove('bg-gray-400','text-gray-700','cursor-not-allowed');
+        submitBtn.classList.remove('bg-gray-300','text-gray-700');
         submitBtn.classList.add('bg-yellow-400','text-indigo-900');
         submitBtn.textContent = `Generate ${numRecommendations} Gift Ideas!`;
       } else {
         submitBtn.disabled = true;
-        submitBtn.classList.add('bg-gray-400','text-gray-700','cursor-not-allowed');
+        submitBtn.classList.add('bg-gray-300','text-gray-700');
         submitBtn.classList.remove('bg-yellow-400','text-indigo-900');
-        submitBtn.textContent = 'Answer 6 Mandatory Questions';
+        submitBtn.textContent = 'Answer required questions';
       }
     }
 
@@ -179,47 +191,87 @@
       }
     }
 
-    // Validate ASIN (10 alphanumeric chars)
+    // Age mode toggles
+    ageModeGroup.addEventListener('change', () => {
+      ageGroupEl.classList.remove('hidden');
+      ageExactEl.classList.add('hidden');
+      // clear exact age
+      exactAgeInput.value = '';
+      delete window.selectedAnswers['ExactAge'];
+      updateProgress();
+    });
+    ageModeExact.addEventListener('change', () => {
+      ageGroupEl.classList.add('hidden');
+      ageExactEl.classList.remove('hidden');
+      // clear group selection
+      document.querySelectorAll('#age-group .choice-btn').forEach(b => b.classList.remove('active'));
+      delete window.selectedAnswers['Age'];
+      updateProgress();
+    });
+
+    exactAgeInput.addEventListener('input', () => {
+      const v = exactAgeInput.value.trim();
+      if (v === '') {
+        delete window.selectedAnswers['ExactAge'];
+      } else {
+        const n = Number(v);
+        if (!isNaN(n) && n >= 0) window.selectedAnswers['ExactAge'] = n;
+      }
+      updateProgress();
+    });
+
+    // ASIN helpers & affiliate link generator
     function isValidAsin(s) {
       if (!s) return false;
       return /^[A-Z0-9]{10}$/i.test(s);
     }
-
+    function extractAsinFromUrl(url) {
+      if (!url || typeof url !== 'string') return null;
+      const dpMatch = url.match(/\/dp\/([A-Z0-9]{10})/i);
+      if (dpMatch) return dpMatch[1];
+      const gpMatch = url.match(/\/gp\/product\/([A-Z0-9]{10})/i);
+      if (gpMatch) return gpMatch[1];
+      try {
+        const u = new URL(url);
+        const q = u.searchParams.get('ASIN') || u.searchParams.get('asin') || u.searchParams.get('id');
+        if (q && isValidAsin(q)) return q;
+      } catch (e) {}
+      return null;
+    }
     function generateAffiliateLink(name, asin, itemAffiliateUrl) {
       const tag = affiliateTag || 'giftwithai-21';
-      // Use explicit affiliateUrl if it looks like an Amazon link and contains an ASIN or dp path
       if (itemAffiliateUrl && typeof itemAffiliateUrl === 'string' && itemAffiliateUrl.includes('amazon.')) {
-        try {
-          const u = new URL(itemAffiliateUrl);
-          // if URL already contains tag param, preserve it; otherwise append tag param
-          if (u.searchParams.get('tag')) return itemAffiliateUrl;
-          u.searchParams.set('tag', tag);
-          return u.toString();
-        } catch (e) {
-          // fall through to fallback
+        const parsedAsin = extractAsinFromUrl(itemAffiliateUrl);
+        if (parsedAsin && isValidAsin(parsedAsin)) {
+          try {
+            const u = new URL(itemAffiliateUrl);
+            if (!u.searchParams.get('tag')) u.searchParams.set('tag', tag);
+            return u.toString();
+          } catch (e) {}
         }
       }
-      // If ASIN is valid, link to product page with tag
-      if (asin && isValidAsin(asin)) {
-        return `https://www.amazon.com/dp/${asin}?tag=${tag}`;
-      }
-      // Otherwise fallback to a search results page (safer than a broken dp URL)
+      if (asin && isValidAsin(asin)) return `https://www.amazon.com/dp/${asin}?tag=${tag}`;
       return `https://www.amazon.com/s?k=${encodeURIComponent(name)}&tag=${tag}`;
     }
 
     function buildPayloadForWorker() {
-      const userQuery = `The gift recipient is a ${window.selectedAnswers.Age} ${window.selectedAnswers.Gender} ${window.selectedAnswers.Recipient}. Occasion: ${window.selectedAnswers.Occasion}. Timeline: ${window.selectedAnswers.Timeline}. Budget: ${window.selectedAnswers.Budget}. Interests: ${Array.from(selectedInterests).join(', ')}.`;
-      const systemInstruction = "Catalog lookup: return top matching products as JSON array of objects with productName, description, image, price (optional), asin (optional), affiliateUrl.";
-      return { userQuery, systemInstruction, answers: window.selectedAnswers, interests: Array.from(selectedInterests), numRecommendations };
+      // send both *group* Age and ExactAge (if provided)
+      const payload = {
+        answers: window.selectedAnswers,
+        interests: Array.from(selectedInterests),
+        numRecommendations
+      };
+      // include a userQuery (for compatibility / fallback)
+      payload.userQuery = `Recipient: ${window.selectedAnswers.Age || window.selectedAnswers.ExactAge || ''} ${window.selectedAnswers.Gender || ''} ${window.selectedAnswers.Recipient || ''}. Budget: ${window.selectedAnswers.Budget || ''}. Occasion: ${window.selectedAnswers.Occasion || ''}. Interests: ${Array.from(selectedInterests).join(', ')}`;
+      return payload;
     }
 
     function renderResults(items, source = 'catalog') {
       giftCardsEl.innerHTML = '';
       items.forEach(item => {
-        const title = item.productName || item.title || 'Gift Idea';
-        const desc = item.description || item.summary || 'A thoughtful gift idea.';
-        // Prefer provided affiliateUrl when it's an Amazon link (generateAffiliateLink will append tag)
-        const url = (item.affiliateUrl && item.affiliateUrl.includes('amazon.')) ? generateAffiliateLink(title, item.asin, item.affiliateUrl) : generateAffiliateLink(title, item.asin, item.affiliateUrl);
+        const title = item.productName || item.title || 'Lovely Gift';
+        const desc = item.description || item.summary || 'A delightful pick — playful and thoughtful.';
+        const url = generateAffiliateLink(title, item.asin, item.affiliateUrl);
         const image = item.image || `https://placehold.co/400x250/6366f1/ffffff?text=${encodeURIComponent(title.slice(0,30))}`;
         const badge = source === 'fallback' ? `<span class="badge badge-fallback">Fallback</span>` : `<span class="badge badge-catalog">Catalog</span>`;
         const price = item.price ? `<div class="text-indigo-900 font-bold mt-2">${item.price}</div>` : '';
@@ -256,8 +308,6 @@
       rawResponseEl.textContent = '';
 
       const payload = buildPayloadForWorker();
-      console.log('Payload to worker:', payload);
-
       try {
         const resp = await fetch(workerUrl, {
           method: 'POST',
@@ -272,9 +322,9 @@
         if (!parsed) {
           rawResponseEl.textContent = text;
           rawResponseEl.classList.remove('hidden');
+          loadingEl.classList.add('hidden');
           errorMsgEl.classList.remove('hidden');
           errorMsgEl.textContent = 'Worker returned non-JSON response; see raw output below.';
-          loadingEl.classList.add('hidden');
           return;
         }
 
