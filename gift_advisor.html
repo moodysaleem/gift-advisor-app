@@ -162,10 +162,313 @@
     <div id="message-area" class="mt-6 text-center hidden">
       <p id="error-message" class="text-red-600 font-semibold hidden p-3 rounded border border-red-100 bg-red-50"></p>
       <div id="loading" class="hidden mt-3">
-        <div style="width:28px; height:28px; border:4px solid rgba(99,102,241,0.18); border-top:4px solid #6366f1; border-radius:50%; animation:spin 1s linear infinite;
+        <div style="width:28px; height:28px; border:4px solid rgba(99,102,241,0.18); border-top:4px solid #6366f1; border-radius:50%; animation:spin 1s linear infinite;"></div>
+        <p class="mt-2 text-indigo-700 font-semibold">Cooking up playful gifts — almost ready!</p>
       </div>
+      <pre id="raw-response" class="hidden mt-4 text-left"></pre>
+    </div>
+
+    <div id="results" class="hidden mt-6">
+      <h2 class="text-2xl font-extrabold text-indigo-700 text-center mb-4">Your Playful Gift Ideas</h2>
+      <div id="gift-cards" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+
+      <div class="controls mt-4">
+        <button id="view-more-btn" class="tertiary hidden">View more ideas</button>
+        <div id="showing-count" class="small muted"></div>
+        <button id="restart-btn" class="tertiary">Find a Gift for Another Person 🔁</button>
       </div>
     </div>
   </div>
+
+  <!-- Fixed submit bar at bottom of viewport (always reachable) -->
+  <div class="submit-fixed" aria-hidden="false">
+    <div class="submit-inner">
+      <button id="submit-btn" type="button" disabled class="bg-gray-300 text-gray-700">Answer required questions</button>
+    </div>
+  </div>
+
+  <script>
+    // ==== CONFIG ====
+    const workerUrl = "https://cool-butterfly-19db.moodysaleem.workers.dev/"; // <- your Worker dev URL
+    const affiliateTag = "giftwithai-21";
+    const requiredKeys = ['Recipient','Gender','Budget','Occasion','Timeline']; // Age handled separately
+    const clientBatchSize = 3;        // how many cards to show per "page"
+    const clientMaxFetch = 12;        // how many items to request from worker
+    window.selectedAnswers = {};
+    const selectedInterests = new Set();
+    let fetchedItems = [];           // full list returned by worker
+    let shownCount = 0;
+
+    // DOM refs
+    const submitBtn = document.getElementById('submit-btn');
+    const missingEl = document.getElementById('missing-fields');
+    const questionnaireEl = document.getElementById('questionnaire');
+    const ageModeGroup = document.getElementById('ageModeGroup');
+    const ageModeExact = document.getElementById('ageModeExact');
+    const ageGroupEl = document.getElementById('age-group');
+    const ageExactEl = document.getElementById('age-exact');
+    const exactAgeInput = document.getElementById('exact-age');
+    const giftCardsEl = document.getElementById('gift-cards');
+    const viewMoreBtn = document.getElementById('view-more-btn');
+    const showingCountEl = document.getElementById('showing-count');
+
+    // helper: missing fields
+    function getMissingFields() {
+      const missing = [];
+      for (const k of requiredKeys) {
+        if (!window.selectedAnswers[k]) missing.push(k);
+      }
+      const ageAnswered = (ageModeExact.checked ? (exactAgeInput.value !== '' && !isNaN(Number(exactAgeInput.value))) : !!window.selectedAnswers['Age']);
+      if (!ageAnswered) missing.push('Age');
+      return missing;
+    }
+
+    function updateProgress() {
+      const missing = getMissingFields();
+      if (missing.length === 0) {
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('bg-gray-300','text-gray-700');
+        submitBtn.classList.add('bg-yellow-400','text-indigo-900');
+        submitBtn.textContent = `Generate ${clientBatchSize} Gift Ideas!`;
+        missingEl.textContent = '';
+        document.querySelectorAll('.question-grid').forEach(g => g.classList.remove('missing'));
+        ageGroupEl.classList.remove('missing');
+      } else {
+        submitBtn.disabled = true;
+        submitBtn.classList.add('bg-gray-300','text-gray-700');
+        submitBtn.classList.remove('bg-yellow-400','text-indigo-900');
+        submitBtn.textContent = 'Answer required questions';
+        missingEl.textContent = 'Missing: ' + missing.join(', ');
+        document.querySelectorAll('.question-grid').forEach(g => {
+          const key = g.dataset.key;
+          if (missing.includes(key)) g.classList.add('missing'); else g.classList.remove('missing');
+        });
+        if (missing.includes('Age')) ageGroupEl.classList.add('missing'); else ageGroupEl.classList.remove('missing');
+      }
+      console.debug('selectedAnswers', window.selectedAnswers, 'interests', Array.from(selectedInterests));
+    }
+
+    // wire up choice grids
+    document.querySelectorAll('.question-grid').forEach(grid => {
+      const key = grid.dataset.key;
+      grid.querySelectorAll('.choice-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          if (key === 'Interests') {
+            const val = btn.dataset.answer;
+            if (btn.classList.contains('active')) {
+              btn.classList.remove('active');
+              selectedInterests.delete(val);
+            } else {
+              btn.classList.add('active');
+              selectedInterests.add(val);
+            }
+            updateProgress();
+            return;
+          }
+          grid.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          window.selectedAnswers[key] = btn.dataset.answer;
+          if (key === 'Age') {
+            delete window.selectedAnswers['ExactAge'];
+            exactAgeInput.value = '';
+          }
+          updateProgress();
+        });
+      });
+    });
+
+    // Age mode handlers
+    ageModeGroup.addEventListener('click', () => {
+      ageGroupEl.classList.remove('hidden');
+      ageExactEl.classList.add('hidden');
+      exactAgeInput.value = '';
+      delete window.selectedAnswers['ExactAge'];
+      updateProgress();
+    });
+    ageModeExact.addEventListener('click', () => {
+      ageGroupEl.classList.add('hidden');
+      ageExactEl.classList.remove('hidden');
+      document.querySelectorAll('#age-group .choice-btn').forEach(b => b.classList.remove('active'));
+      delete window.selectedAnswers['Age'];
+      updateProgress();
+    });
+
+    exactAgeInput.addEventListener('input', () => {
+      const v = exactAgeInput.value.trim();
+      if (v === '') delete window.selectedAnswers['ExactAge'];
+      else {
+        const n = Number(v);
+        if (!isNaN(n) && n >= 0) window.selectedAnswers['ExactAge'] = n;
+      }
+      updateProgress();
+    });
+
+    // affiliate helpers
+    function isValidAsin(s) { if (!s) return false; return /^[A-Z0-9]{10}$/i.test(s); }
+    function extractAsinFromUrl(url) {
+      if (!url || typeof url !== 'string') return null;
+      const dpMatch = url.match(/\/dp\/([A-Z0-9]{10})/i);
+      if (dpMatch) return dpMatch[1];
+      const gpMatch = url.match(/\/gp\/product\/([A-Z0-9]{10})/i);
+      if (gpMatch) return gpMatch[1];
+      try { const u = new URL(url); const q = u.searchParams.get('ASIN') || u.searchParams.get('asin') || u.searchParams.get('id'); if (q && isValidAsin(q)) return q; } catch (e) {}
+      return null;
+    }
+    function generateAffiliateLink(name, asin, itemAffiliateUrl) {
+      const tag = affiliateTag || 'giftwithai-21';
+      if (itemAffiliateUrl && typeof itemAffiliateUrl === 'string' && itemAffiliateUrl.includes('amazon.')) {
+        const parsedAsin = extractAsinFromUrl(itemAffiliateUrl);
+        if (parsedAsin && isValidAsin(parsedAsin)) {
+          try { const u = new URL(itemAffiliateUrl); if (!u.searchParams.get('tag')) u.searchParams.set('tag', tag); return u.toString(); } catch (e) {}
+        }
+      }
+      if (asin && isValidAsin(asin)) return `https://www.amazon.com/dp/${asin}?tag=${tag}`;
+      return `https://www.amazon.com/s?k=${encodeURIComponent(name)}&tag=${tag}`;
+    }
+
+    // build payload for worker (tone removed — worker will handle voice internally)
+    function buildPayloadForWorker() {
+      const answers = Object.assign({}, window.selectedAnswers);
+      if (answers.ExactAge !== undefined && answers.ExactAge !== null) answers.Age = `Exact:${answers.ExactAge}`;
+      return {
+        answers,
+        interests: Array.from(selectedInterests),
+        numRecommendations: clientMaxFetch
+      };
+    }
+
+    // render a single card into container (image fallback onerror)
+    function createCard(item, source = 'catalog') {
+      const title = item.productName || item.title || 'Lovely Gift';
+      const desc = item.description || item.summary || 'A delightful pick — playful and thoughtful.';
+      const url = generateAffiliateLink(title, item.asin, item.affiliateUrl);
+      const image = item.image || `https://placehold.co/400x250/6366f1/ffffff?text=${encodeURIComponent(title.slice(0,30))}`;
+      const badge = source === 'fallback' ? `<span class="badge badge-fallback">Fallback</span>` : `<span class="badge badge-catalog">Catalog</span>`;
+      const price = item.price ? `<div class="text-indigo-900 font-bold mt-2">${item.price}</div>` : '';
+      const availability = item.availability ? `<div class="text-sm text-gray-500 mt-1">${item.availability}</div>` : '';
+      const rating = item.rating ? `<div class="text-sm text-yellow-600 mt-1">★ ${item.rating}</div>` : '';
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <img src="${image}" alt="${escapeHtml(title)}" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/400x250/9ca3ff/ffffff?text=No+Image';">
+        <div class="flex items-center justify-between">
+          <h3 class="text-lg font-bold text-gray-800 mt-2">${escapeHtml(title)}</h3>
+          ${badge}
+        </div>
+        <p class="text-gray-600 text-sm mt-1">${escapeHtml(desc)}</p>
+        ${price}
+        <div class="flex items-center justify-between mt-2">
+          <div>
+            ${availability}
+            ${rating}
+          </div>
+        </div>
+        <a href="${url}" target="_blank" rel="noopener" class="inline-block mt-3 py-2 px-4 bg-yellow-500 text-indigo-900 font-extrabold rounded-xl">View on Amazon ↗️</a>
+      `;
+      return card;
+    }
+
+    function escapeHtml(s) {
+      if (!s) return '';
+      return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[m]));
+    }
+
+    // show next batch
+    function showNextBatch() {
+      const remaining = fetchedItems.length - shownCount;
+      if (remaining <= 0) {
+        viewMoreBtn.classList.add('hidden');
+        showingCountEl.textContent = `Showing ${shownCount} of ${fetchedItems.length}`;
+        return;
+      }
+      const take = Math.min(clientBatchSize, remaining);
+      const slice = fetchedItems.slice(shownCount, shownCount + take);
+      slice.forEach(it => giftCardsEl.appendChild(createCard(it, 'catalog')));
+      shownCount += take;
+      showingCountEl.textContent = `Showing ${shownCount} of ${fetchedItems.length}`;
+      if (shownCount >= fetchedItems.length) viewMoreBtn.classList.add('hidden'); else viewMoreBtn.classList.remove('hidden');
+    }
+
+    // perform request and populate first batch
+    async function getRecommendations() {
+      questionnaireEl.classList.add('hidden');
+      document.getElementById('message-area').classList.remove('hidden');
+      document.getElementById('loading').classList.remove('hidden');
+      document.getElementById('raw-response').classList.add('hidden');
+      fetchedItems = [];
+      shownCount = 0;
+      giftCardsEl.innerHTML = '';
+      showingCountEl.textContent = '';
+
+      const payload = buildPayloadForWorker();
+      try {
+        const resp = await fetch(workerUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+        const text = await resp.text();
+        let parsed = null;
+        try { parsed = JSON.parse(text); } catch (e) { parsed = null; }
+        if (!parsed) {
+          document.getElementById('raw-response').textContent = text;
+          document.getElementById('raw-response').classList.remove('hidden');
+          document.getElementById('loading').classList.add('hidden');
+          return;
+        }
+        if (parsed.error) {
+          document.getElementById('raw-response').textContent = JSON.stringify(parsed, null, 2);
+          document.getElementById('raw-response').classList.remove('hidden');
+          document.getElementById('loading').classList.add('hidden');
+          return;
+        }
+        const items = parsed.items || JSON.parse(parsed.outputText || '[]') || [];
+        fetchedItems = items.slice(0, clientMaxFetch);
+        console.info('Worker response:', parsed);
+        document.getElementById('loading').classList.add('hidden');
+        document.getElementById('message-area').classList.add('hidden');
+        document.getElementById('results').classList.remove('hidden');
+        // show initial batch
+        showNextBatch();
+      } catch (err) {
+        console.error(err);
+        document.getElementById('raw-response').textContent = String(err);
+        document.getElementById('raw-response').classList.remove('hidden');
+        document.getElementById('loading').classList.add('hidden');
+      }
+    }
+
+    function restartFlow() {
+      Object.keys(window.selectedAnswers).forEach(k => delete window.selectedAnswers[k]);
+      selectedInterests.clear();
+      exactAgeInput.value = '';
+      document.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('results').classList.add('hidden');
+      document.getElementById('questionnaire').classList.remove('hidden');
+      document.getElementById('message-area').classList.add('hidden');
+      fetchedItems = [];
+      shownCount = 0;
+      giftCardsEl.innerHTML = '';
+      viewMoreBtn.classList.add('hidden');
+      showingCountEl.textContent = '';
+      updateProgress();
+    }
+
+    // attach listeners
+    document.addEventListener('DOMContentLoaded', () => {
+      updateProgress();
+      submitBtn.addEventListener('click', getRecommendations);
+      viewMoreBtn.addEventListener('click', showNextBatch);
+      document.getElementById('restart-btn').addEventListener('click', restartFlow);
+
+      // If keyboard opens on mobile, ensure the submit button remains visible
+      document.querySelectorAll('input, textarea').forEach(el => {
+        el.addEventListener('focus', () => {
+          // small delay to allow mobile browser to resize viewport
+          setTimeout(() => {
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+          }, 300);
+        });
+      });
+
+      exactAgeInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); updateProgress(); } });
+    });
+  </script>
 </body>
 </html>
