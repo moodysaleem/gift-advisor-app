@@ -25,19 +25,18 @@
     .field-hint { font-size: 13px; color:#475569; margin-top:4px; }
     .controls { display:flex; gap:8px; align-items:center; justify-content:center; margin-top:10px; }
     .tertiary { background: #eef2ff; color:#1e293b; padding:8px 12px; border-radius:10px; font-weight:700; }
-    .tone-pill { display:inline-flex; gap:8px; align-items:center; padding:8px; border-radius:10px; background:#fff; border:1px solid #e6eefc; }
   </style>
 </head>
 <body>
   <div id="app" class="card">
     <header class="text-center mb-4">
       <h1 class="text-3xl font-extrabold text-indigo-700">The Gift Genie 🧞‍♀️</h1>
-      <p class="small mt-1">Playful, curated gift ideas — choose a tone and we'll speak that way (and we can make the picks match it).</p>
+      <p class="small mt-1">Playful, curated gift ideas — the Genie will speak playfully and deliver thoughtful picks.</p>
     </header>
 
     <div id="questionnaire" class="space-y-5">
       <div class="p-3 bg-indigo-50 rounded-md small">
-        <strong>Note:</strong> We use your catalog and an enrichment Worker. Tone influences presentation and (if enabled in the Worker) ranking.
+        <strong>Note:</strong> We use your catalog and an enrichment Worker. The interface is simplified — the Genie handles tone internally.
       </div>
 
       <h2 class="text-lg font-bold text-gray-800">1. Who is the gift for?</h2>
@@ -109,13 +108,6 @@
         <button data-answer="Pets" class="choice-btn p-3 rounded-xl" type="button">Pets</button>
       </div>
 
-      <h2 class="text-lg font-bold text-gray-800">Tone (how the Genie speaks)</h2>
-      <div class="tone-pill" style="flex-wrap:wrap;">
-        <label style="display:inline-flex;align-items:center;gap:8px"><input type="radio" name="tone" value="playful" checked> Playful</label>
-        <label style="display:inline-flex;align-items:center;gap:8px;margin-left:12px"><input type="radio" name="tone" value="neutral"> Neutral</label>
-        <label style="display:inline-flex;align-items:center;gap:8px;margin-left:12px"><input type="radio" name="tone" value="professional"> Professional</label>
-      </div>
-
       <div id="missing-fields" class="field-hint muted"></div>
 
       <button id="submit-btn" type="button" disabled class="w-full text-lg p-4 mt-2 rounded-xl bg-gray-300 text-gray-700 font-extrabold">Answer required questions</button>
@@ -139,10 +131,6 @@
         <div id="showing-count" class="small muted"></div>
         <button id="restart-btn" class="tertiary">Find a Gift for Another Person 🔁</button>
       </div>
-    </div>
-
-    <div style="margin-top:12px; text-align:center;">
-      <button id="debug-print" class="tertiary" title="Print last fetched items to console">Debug: Print last fetched items</button>
     </div>
   </div>
 
@@ -170,7 +158,6 @@
     const giftCardsEl = document.getElementById('gift-cards');
     const viewMoreBtn = document.getElementById('view-more-btn');
     const showingCountEl = document.getElementById('showing-count');
-    const debugBtn = document.getElementById('debug-print');
 
     // helper: missing fields
     function getMissingFields() {
@@ -205,10 +192,10 @@
         });
         if (missing.includes('Age')) ageGroupEl.classList.add('missing'); else ageGroupEl.classList.remove('missing');
       }
-      console.debug('selectedAnswers', window.selectedAnswers, 'interests', Array.from(selectedInterests), 'tone', getSelectedTone());
+      console.debug('selectedAnswers', window.selectedAnswers, 'interests', Array.from(selectedInterests));
     }
 
-    // wire up grids
+    // wire up choice grids
     document.querySelectorAll('.question-grid').forEach(grid => {
       const key = grid.dataset.key;
       grid.querySelectorAll('.choice-btn').forEach(btn => {
@@ -252,7 +239,6 @@
       delete window.selectedAnswers['Age'];
       updateProgress();
     });
-
     exactAgeInput.addEventListener('input', () => {
       const v = exactAgeInput.value.trim();
       if (v === '') delete window.selectedAnswers['ExactAge'];
@@ -263,13 +249,7 @@
       updateProgress();
     });
 
-    // Tone selection
-    function getSelectedTone() {
-      const r = document.querySelector('input[name="tone"]:checked');
-      return r ? r.value : 'playful';
-    }
-
-    // affiliate / ASIN helpers
+    // affiliate helpers
     function isValidAsin(s) { if (!s) return false; return /^[A-Z0-9]{10}$/i.test(s); }
     function extractAsinFromUrl(url) {
       if (!url || typeof url !== 'string') return null;
@@ -277,11 +257,7 @@
       if (dpMatch) return dpMatch[1];
       const gpMatch = url.match(/\/gp\/product\/([A-Z0-9]{10})/i);
       if (gpMatch) return gpMatch[1];
-      try {
-        const u = new URL(url);
-        const q = u.searchParams.get('ASIN') || u.searchParams.get('asin') || u.searchParams.get('id');
-        if (q && isValidAsin(q)) return q;
-      } catch (e) {}
+      try { const u = new URL(url); const q = u.searchParams.get('ASIN') || u.searchParams.get('asin') || u.searchParams.get('id'); if (q && isValidAsin(q)) return q; } catch (e) {}
       return null;
     }
     function generateAffiliateLink(name, asin, itemAffiliateUrl) {
@@ -289,26 +265,21 @@
       if (itemAffiliateUrl && typeof itemAffiliateUrl === 'string' && itemAffiliateUrl.includes('amazon.')) {
         const parsedAsin = extractAsinFromUrl(itemAffiliateUrl);
         if (parsedAsin && isValidAsin(parsedAsin)) {
-          try {
-            const u = new URL(itemAffiliateUrl);
-            if (!u.searchParams.get('tag')) u.searchParams.set('tag', tag);
-            return u.toString();
-          } catch (e) {}
+          try { const u = new URL(itemAffiliateUrl); if (!u.searchParams.get('tag')) u.searchParams.set('tag', tag); return u.toString(); } catch (e) {}
         }
       }
       if (asin && isValidAsin(asin)) return `https://www.amazon.com/dp/${asin}?tag=${tag}`;
       return `https://www.amazon.com/s?k=${encodeURIComponent(name)}&tag=${tag}`;
     }
 
-    // build payload; include tone
+    // build payload for worker (tone removed — worker will handle voice internally)
     function buildPayloadForWorker() {
       const answers = Object.assign({}, window.selectedAnswers);
       if (answers.ExactAge !== undefined && answers.ExactAge !== null) answers.Age = `Exact:${answers.ExactAge}`;
       return {
         answers,
         interests: Array.from(selectedInterests),
-        numRecommendations: clientMaxFetch,
-        tone: getSelectedTone()
+        numRecommendations: clientMaxFetch
       };
     }
 
@@ -431,10 +402,6 @@
       submitBtn.addEventListener('click', getRecommendations);
       viewMoreBtn.addEventListener('click', showNextBatch);
       document.getElementById('restart-btn').addEventListener('click', restartFlow);
-      debugBtn.addEventListener('click', () => {
-        console.log('fetchedItems (last):', fetchedItems);
-        alert('fetchedItems printed to console — open DevTools Console');
-      });
       exactAgeInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); updateProgress(); } });
     });
   </script>
