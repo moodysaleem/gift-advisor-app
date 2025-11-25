@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <title>Gift with AI — Gift Advisor</title>
 
-  <!-- Google Tag Manager (head) - GTM container inserted as requested -->
+  <!-- Google Tag Manager (head) - container GTM-T8TBW4QT -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
   new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
   j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
@@ -14,7 +14,7 @@
 
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <style>
-    /* Small styles for banner and product cards */
+    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; margin:18px; color:#111; }
     #catalogBanner {
       background:#fff3cd;
       color:#6a4f00;
@@ -24,11 +24,16 @@
       border-radius:4px;
       font-size:14px;
     }
+    #advisorForm { display:flex; flex-wrap:wrap; gap:12px; align-items:center; margin-bottom:12px; }
+    #advisorForm label { display:flex; flex-direction:column; font-size:14px; }
+    #generateBtn { padding:8px 14px; font-size:15px; cursor:pointer; }
+    #results { margin-top:16px; }
     .product { margin:10px 0; padding:10px; border:1px solid #eee; border-radius:6px; display:flex; gap:12px; align-items:center; }
-    .product img { width:84px; height:52px; object-fit:cover; border-radius:4px; }
+    .product img { width:84px; height:52px; object-fit:cover; border-radius:4px; flex:0 0 84px; }
     .product .meta { flex:1; }
-    .product .meta .title { font-weight:600; }
-    .affiliate-link { color:#0b66c3; text-decoration:none; }
+    .product .meta .title { font-weight:600; margin-bottom:6px; }
+    .affiliate-link { color:#0b66c3; text-decoration:none; display:inline-block; margin-top:6px; }
+    .note { color:#666; font-size:13px; margin-top:6px; }
   </style>
 </head>
 <body>
@@ -38,60 +43,103 @@
   <!-- End Google Tag Manager (noscript) -->
 
   <main>
-    <!-- Informational banner (small, non-intrusive) -->
     <div id="catalogBanner">Suggestions generated from our catalog — enrichment disabled.</div>
 
-    <!-- Example inputs (your real form may differ) -->
+    <!-- Main form (fields match the worker test fields) -->
     <section id="advisorForm">
-      <!-- Replace or extend these inputs to match your existing UI -->
       <label>Recipient:
-        <select id="recipient">
+        <select id="recipient" name="Recipient">
           <option>Family Member</option>
           <option>Friend</option>
           <option>Co-worker</option>
+          <option>Partner</option>
         </select>
       </label>
+
+      <label>Gender:
+        <select id="gender" name="Gender">
+          <option>Any/Generic</option>
+          <option>Male</option>
+          <option>Female</option>
+          <option>Non-binary</option>
+        </select>
+      </label>
+
       <label>Budget:
-        <select id="budget">
+        <select id="budget" name="Budget">
           <option>Under $25</option>
           <option>$25–$50</option>
-          <option>$50+</option>
+          <option>$50–$100</option>
+          <option>$100+</option>
         </select>
       </label>
+
+      <label>Age:
+        <select id="age" name="Age">
+          <option>Adult (20-55)</option>
+          <option>Young Adult (18-25)</option>
+          <option>Senior (55+)</option>
+          <option>Teen (13-19)</option>
+        </select>
+      </label>
+
+      <label>Occasion:
+        <select id="occasion" name="Occasion">
+          <option>Birthday</option>
+          <option>Holiday</option>
+          <option>Anniversary</option>
+          <option>Just Because</option>
+        </select>
+      </label>
+
+      <label>Timeline:
+        <select id="timeline" name="Timeline">
+          <option>Immediate (1-3)</option>
+          <option>1 week</option>
+          <option>2+ weeks</option>
+        </select>
+      </label>
+
       <button id="generateBtn">Generate</button>
     </section>
 
-    <!-- Results container where product links are rendered -->
     <div id="results" aria-live="polite"></div>
+    <div class="note">If results show encoding artifacts (â, âkeeps, etc.), convert your catalog CSV to UTF-8 and clean the text.</div>
   </main>
 
   <script>
     // Ensure dataLayer exists for GTM
     window.dataLayer = window.dataLayer || [];
 
-    // Helper to collect answers from the simple form above.
-    // Replace this with your real form data collection.
+    // Helper to collect answers from the form fields (keeps same keys as worker expects)
     function collectAnswers() {
       return {
         Recipient: document.getElementById('recipient')?.value || '',
+        Gender: document.getElementById('gender')?.value || '',
         Budget: document.getElementById('budget')?.value || '',
-        // add other fields as needed (Gender, Age, Occasion, Timeline, interests...)
+        Age: document.getElementById('age')?.value || '',
+        Occasion: document.getElementById('occasion')?.value || '',
+        Timeline: document.getElementById('timeline')?.value || ''
       };
     }
 
-    // Call your worker and push a 'generate' event for GTM
+    // Call the worker and push a 'generate' event for GTM
     async function generateRecommendations() {
       const answers = collectAnswers();
       const numRecommendations = 3;
 
-      // Push generate event to dataLayer so GTM can capture it
+      // Push generate event to dataLayer for GTM tracking
       window.dataLayer.push({
         event: 'generate',
         answers: answers,
         numRecommendations: numRecommendations
       });
 
-      // Fetch recommendations from your worker
+      // Show a small loading state
+      const resultsEl = document.getElementById('results');
+      resultsEl.innerHTML = '<div class="note">Loading suggestions…</div>';
+
+      // POST to the existing worker (keeps your existing worker URL)
       try {
         const resp = await fetch('https://bold-lake-a224.moodysaleem.workers.dev/', {
           method: 'POST',
@@ -99,17 +147,17 @@
           body: JSON.stringify({ answers, interests: [], numRecommendations })
         });
 
-        if (!resp.ok) throw new Error('Network response not OK');
+        if (!resp.ok) throw new Error('Network response not OK: ' + resp.status);
 
         const data = await resp.json();
         renderResults(data.items || []);
       } catch (err) {
         console.error('Recommendation fetch failed', err);
-        document.getElementById('results').innerText = 'Sorry — could not fetch recommendations.';
+        resultsEl.innerHTML = '<div class="note">Sorry — could not fetch recommendations right now.</div>';
       }
     }
 
-    // Render results into the page and create affiliate links
+    // Render product results and attach affiliate links
     function renderResults(items) {
       const container = document.getElementById('results');
       container.innerHTML = '';
@@ -145,15 +193,15 @@
         price.textContent = item.price || '';
         meta.appendChild(price);
 
+        // Append meta to card
         card.appendChild(meta);
 
-        // Affiliate link
+        // Affiliate link (use affiliateUrl from worker; if empty, this will be '#')
         const a = document.createElement('a');
         a.href = item.affiliateUrl || '#';
         a.target = '_blank';
         a.rel = 'noopener noreferrer';
         a.className = 'affiliate-link';
-        // Ensure product name is available for tracking
         a.dataset.productName = item.productName || '';
         a.textContent = 'View on Amazon';
         card.appendChild(a);
@@ -162,16 +210,13 @@
       });
     }
 
-    // Delegated click handler for affiliate links to push affiliate_click events.
-    // We attempt to record the click with a short delay before opening the link,
-    // which helps GTM register the event reliably.
+    // Delegated click handler for affiliate links to push affiliate_click to dataLayer,
+    // then open the link after a short delay so GTM can register it.
     document.addEventListener('click', function (e) {
       const el = e.target.closest && e.target.closest('a.affiliate-link');
       if (!el) return;
 
-      // Prevent default navigation to allow event to be pushed.
       e.preventDefault();
-
       const href = el.href;
       const productName = el.dataset.productName || '';
 
@@ -181,9 +226,7 @@
         affiliateUrl: href
       });
 
-      // Small delay so GTM has time to process the push. Adjust if needed.
       setTimeout(() => {
-        // Open in a new tab/window (same as target="_blank")
         window.open(href, '_blank', 'noopener,noreferrer');
       }, 150);
     });
@@ -194,7 +237,7 @@
       generateRecommendations();
     });
 
-    // Optionally, fire a small pageview-like event for GTM on load (GTM can also do this via its config)
+    // Fire an initial pageview-like event for GTM
     window.dataLayer.push({ event: 'gift_advisor_pageview' });
   </script>
 </body>
