@@ -2,473 +2,200 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
+  <title>Gift with AI — Gift Advisor</title>
+
+  <!-- Google Tag Manager (head) - GTM container inserted as requested -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-T8TBW4QT');</script>
+  <!-- End Google Tag Manager (head) -->
+
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>The Gift Genie — Smart & Playful Gift Suggestions</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    /* Make page scroll normally on mobile and keep the submit button visible (fixed) */
-    html, body { height: 100%; margin: 0; }
-    body {
-      font-family: 'Poppins', sans-serif;
-      background-color: #f0f6ff;
-      padding: 16px;
-      box-sizing: border-box;
+    /* Small styles for banner and product cards */
+    #catalogBanner {
+      background:#fff3cd;
+      color:#6a4f00;
+      border:1px solid #f0c36d;
+      padding:8px 12px;
+      margin:12px 0;
+      border-radius:4px;
+      font-size:14px;
     }
-
-    /* Center the card but allow page scroll (no flex layout that traps scrolling) */
-    .card {
-      transition: transform 0.18s ease, box-shadow 0.18s ease;
-      background-color: #ffffff;
-      border: 1px solid #e6eefc;
-      border-radius: 14px;
-      width: 100%;
-      max-width: 1100px;
-      box-sizing: border-box;
-      padding: 1.1rem;
-      margin: 12px auto;
-      /* leave room at bottom so content isn't hidden behind fixed submit */
-      padding-bottom: calc(96px + env(safe-area-inset-bottom, 12px));
-    }
-
-    .choice-btn { border: 2px solid #dbeafe; transition: all 0.12s ease; font-weight: 700; color: #0f172a; background-color: #ffffff; text-align:center; }
-    .choice-btn:hover { border-color: #6366f1; background-color: #f8fafc; }
-    .choice-btn.active { background-color: #6366f1; color: white; border-color: #6366f1; box-shadow: 0 6px 18px rgba(99,102,241,0.12); }
-    .question-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); gap: 0.6rem; }
-    .badge { display:inline-block; padding:6px 10px; border-radius:999px; font-size:12px; font-weight:700; }
-    .badge-catalog { background: #ecfeff; color:#065f46; }
-    .badge-fallback { background: #fff7ed; color:#92400e; }
-    .small { font-size: 13px; color: #475569; }
-    button#submit-btn:disabled { opacity: 0.65; cursor: not-allowed; }
-    .card img { width: 100%; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 0.75rem; }
-    .muted { color:#64748b; }
-    pre { white-space: pre-wrap; word-break: break-word; background:#fff; padding:8px; border-radius:6px; border:1px solid #eef2ff; max-height:360px; overflow:auto; }
-    .missing { outline: 2px dashed #f59e0b; padding: 6px; border-radius: 8px; }
-    .field-hint { font-size: 13px; color:#475569; margin-top:4px; }
-    .controls { display:flex; gap:8px; align-items:center; justify-content:center; margin-top:10px; }
-    .tertiary { background: #eef2ff; color:#1e293b; padding:8px 12px; border-radius:10px; font-weight:700; }
-
-    /* Fixed submit bar (always visible) — safer than sticky on some mobile browsers */
-    .submit-fixed {
-      position: fixed;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      padding: 10px;
-      background: linear-gradient(to top, rgba(255,255,255,0.98), rgba(255,255,255,0.6));
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
-      box-sizing: border-box;
-      z-index: 60;
-      display: flex;
-      justify-content: center;
-      pointer-events: auto;
-      padding-bottom: calc(env(safe-area-inset-bottom, 12px));
-    }
-
-    .submit-inner {
-      width: 100%;
-      max-width: 1100px;
-      padding: 6px;
-    }
-
-    #submit-btn { width: 100%; display: block; border-radius: 12px; font-weight:800; font-size:16px; padding:14px; }
+    .product { margin:10px 0; padding:10px; border:1px solid #eee; border-radius:6px; display:flex; gap:12px; align-items:center; }
+    .product img { width:84px; height:52px; object-fit:cover; border-radius:4px; }
+    .product .meta { flex:1; }
+    .product .meta .title { font-weight:600; }
+    .affiliate-link { color:#0b66c3; text-decoration:none; }
   </style>
 </head>
 <body>
-  <div id="app" class="card">
-    <header class="text-center mb-4">
-      <h1 class="text-3xl font-extrabold text-indigo-700">The Gift Genie 🧞‍♀️</h1>
-      <p class="small mt-1">Playful, curated gift ideas — the Genie will speak playfully and deliver thoughtful picks.</p>
-    </header>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T8TBW4QT"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
 
-    <div id="questionnaire" class="space-y-5">
-      <div class="p-3 bg-indigo-50 rounded-md small">
-        <strong>Note:</strong> We use your catalog and an enrichment Worker. The interface is simplified — the Genie handles tone internally.
-      </div>
+  <main>
+    <!-- Informational banner (small, non-intrusive) -->
+    <div id="catalogBanner">Suggestions generated from our catalog — enrichment disabled.</div>
 
-      <h2 class="text-lg font-bold text-gray-800">1. Who is the gift for?</h2>
-      <div id="Recipient" class="question-grid" data-key="Recipient">
-        <button data-answer="Family Member" class="choice-btn p-3 rounded-xl" type="button">Family Member</button>
-        <button data-answer="Close Friend" class="choice-btn p-3 rounded-xl" type="button">Close Friend</button>
-        <button data-answer="Coworker/Acquaintance" class="choice-btn p-3 rounded-xl" type="button">Coworker/Acquaintance</button>
-        <button data-answer="Partner/Spouse" class="choice-btn p-3 rounded-xl" type="button">Partner/Spouse</button>
-      </div>
+    <!-- Example inputs (your real form may differ) -->
+    <section id="advisorForm">
+      <!-- Replace or extend these inputs to match your existing UI -->
+      <label>Recipient:
+        <select id="recipient">
+          <option>Family Member</option>
+          <option>Friend</option>
+          <option>Co-worker</option>
+        </select>
+      </label>
+      <label>Budget:
+        <select id="budget">
+          <option>Under $25</option>
+          <option>$25–$50</option>
+          <option>$50+</option>
+        </select>
+      </label>
+      <button id="generateBtn">Generate</button>
+    </section>
 
-      <h2 class="text-lg font-bold text-gray-800">2. Recipient's gender</h2>
-      <div id="Gender" class="question-grid" data-key="Gender">
-        <button data-answer="Male" class="choice-btn p-3 rounded-xl" type="button">Male</button>
-        <button data-answer="Female" class="choice-btn p-3 rounded-xl" type="button">Female</button>
-        <button data-answer="Any/Generic" class="choice-btn p-3 rounded-xl" type="button">Any/Generic</button>
-      </div>
-
-      <h2 class="text-lg font-bold text-gray-800">3. Budget</h2>
-      <div id="Budget" class="question-grid" data-key="Budget">
-        <button data-answer="Under $25" class="choice-btn p-3 rounded-xl" type="button">Under $25</button>
-        <button data-answer="$25 - $75" class="choice-btn p-3 rounded-xl" type="button">$25 - $75</button>
-        <button data-answer="Over $75" class="choice-btn p-3 rounded-xl" type="button">Over $75</button>
-      </div>
-
-      <h2 class="text-lg font-bold text-gray-800">4. Age (choose a mode)</h2>
-      <div class="flex gap-3 items-center">
-        <label class="small"><input id="ageModeGroup" type="radio" name="ageMode" checked> Choose age group</label>
-        <label class="small"><input id="ageModeExact" type="radio" name="ageMode"> Enter exact age</label>
-      </div>
-
-      <div id="age-group" class="question-grid" data-key="Age">
-        <button data-answer="Toddler (1-3)" class="choice-btn p-3 rounded-xl" type="button">Toddler (1-3)</button>
-        <button data-answer="Preschool (4-6)" class="choice-btn p-3 rounded-xl" type="button">Preschool (4-6)</button>
-        <button data-answer="Kid (7-9)" class="choice-btn p-3 rounded-xl" type="button">Kid (7-9)</button>
-        <button data-answer="Tween (10-12)" class="choice-btn p-3 rounded-xl" type="button">Tween (10-12)</button>
-        <button data-answer="Teen (13-19)" class="choice-btn p-3 rounded-xl" type="button">Teen (13-19)</button>
-        <button data-answer="Adult (20-55)" class="choice-btn p-3 rounded-xl" type="button">Adult (20-55)</button>
-        <button data-answer="Senior (55+)" class="choice-btn p-3 rounded-xl" type="button">Senior (55+)</button>
-      </div>
-
-      <div id="age-exact" class="hidden">
-        <label class="small">Enter recipient's age (years)</label>
-        <input id="exact-age" type="number" min="0" max="120" placeholder="e.g. 3 or 27" class="p-3 rounded-xl border border-slate-200 w-full" />
-        <div class="field-hint">Tip: entering exact age gives more precise picks for kids.</div>
-      </div>
-
-      <h2 class="text-lg font-bold text-gray-800">5. Occasion</h2>
-      <div id="Occasion" class="question-grid" data-key="Occasion">
-        <button data-answer="Birthday" class="choice-btn p-3 rounded-xl" type="button">Birthday</button>
-        <button data-answer="Holiday/Christmas" class="choice-btn p-3 rounded-xl" type="button">Holiday/Christmas</button>
-        <button data-answer="Anniversary/Milestone" class="choice-btn p-3 rounded-xl" type="button">Anniversary/Milestone</button>
-        <button data-answer="Just Because" class="choice-btn p-3 rounded-xl" type="button">Just Because</button>
-      </div>
-
-      <h2 class="text-lg font-bold text-gray-800">6. Timeline</h2>
-      <div id="Timeline" class="question-grid" data-key="Timeline">
-        <button data-answer="Immediate (1-3 days)" class="choice-btn p-3 rounded-xl" type="button">Immediate (1-3 days)</button>
-        <button data-answer="Standard (4-7 days)" class="choice-btn p-3 rounded-xl" type="button">Standard (4-7 days)</button>
-        <button data-answer="Flexible (2+ weeks)" class="choice-btn p-3 rounded-xl" type="button">Flexible (2+ weeks)</button>
-      </div>
-
-      <h2 class="text-lg font-bold text-gray-800">Optional: Interests (multi-select)</h2>
-      <div id="Interests" class="question-grid" data-key="Interests">
-        <button data-answer="STEM" class="choice-btn p-3 rounded-xl" type="button">STEM</button>
-        <button data-answer="Arts & Crafts" class="choice-btn p-3 rounded-xl" type="button">Arts & Crafts</button>
-        <button data-answer="Sports" class="choice-btn p-3 rounded-xl" type="button">Sports</button>
-        <button data-answer="Tech & Gadgets" class="choice-btn p-3 rounded-xl" type="button">Tech & Gadgets</button>
-        <button data-answer="Books" class="choice-btn p-3 rounded-xl" type="button">Books</button>
-        <button data-answer="Pets" class="choice-btn p-3 rounded-xl" type="button">Pets</button>
-      </div>
-
-      <div id="missing-fields" class="field-hint muted"></div>
-    </div>
-
-    <div id="message-area" class="mt-6 text-center hidden">
-      <p id="error-message" class="text-red-600 font-semibold hidden p-3 rounded border border-red-100 bg-red-50"></p>
-      <div id="loading" class="hidden mt-3">
-        <div style="width:28px; height:28px; border:4px solid rgba(99,102,241,0.18); border-top:4px solid #6366f1; border-radius:50%; animation:spin 1s linear infinite;"></div>
-        <p class="mt-2 text-indigo-700 font-semibold">Cooking up playful gifts — almost ready!</p>
-      </div>
-      <pre id="raw-response" class="hidden mt-4 text-left"></pre>
-    </div>
-
-    <div id="results" class="hidden mt-6">
-      <h2 class="text-2xl font-extrabold text-indigo-700 text-center mb-4">Your Playful Gift Ideas</h2>
-      <div id="gift-cards" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-
-      <div class="controls mt-4">
-        <button id="view-more-btn" class="tertiary hidden">View more ideas</button>
-        <div id="showing-count" class="small muted"></div>
-        <button id="restart-btn" class="tertiary">Find a Gift for Another Person 🔁</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Fixed submit bar at bottom of viewport (always reachable) -->
-  <div class="submit-fixed" aria-hidden="false">
-    <div class="submit-inner">
-      <button id="submit-btn" type="button" disabled class="bg-gray-300 text-gray-700">Answer required questions</button>
-    </div>
-  </div>
+    <!-- Results container where product links are rendered -->
+    <div id="results" aria-live="polite"></div>
+  </main>
 
   <script>
-    // ==== CONFIG ====
-    const workerUrl = "https://bold-lake-a224.moodysaleem.workers.dev/"; // <- your Worker dev URL
-    const affiliateTag = "giftwithai-21";
-    const requiredKeys = ['Recipient','Gender','Budget','Occasion','Timeline']; // Age handled separately
-    const clientBatchSize = 3;        // how many cards to show per "page"
-    const clientMaxFetch = 12;        // how many items to request from worker
-    window.selectedAnswers = {};
-    const selectedInterests = new Set();
-    let fetchedItems = [];           // full list returned by worker
-    let shownCount = 0;
+    // Ensure dataLayer exists for GTM
+    window.dataLayer = window.dataLayer || [];
 
-    // DOM refs
-    const submitBtn = document.getElementById('submit-btn');
-    const missingEl = document.getElementById('missing-fields');
-    const questionnaireEl = document.getElementById('questionnaire');
-    const ageModeGroup = document.getElementById('ageModeGroup');
-    const ageModeExact = document.getElementById('ageModeExact');
-    const ageGroupEl = document.getElementById('age-group');
-    const ageExactEl = document.getElementById('age-exact');
-    const exactAgeInput = document.getElementById('exact-age');
-    const giftCardsEl = document.getElementById('gift-cards');
-    const viewMoreBtn = document.getElementById('view-more-btn');
-    const showingCountEl = document.getElementById('showing-count');
-
-    // helper: missing fields
-    function getMissingFields() {
-      const missing = [];
-      for (const k of requiredKeys) {
-        if (!window.selectedAnswers[k]) missing.push(k);
-      }
-      const ageAnswered = (ageModeExact.checked ? (exactAgeInput.value !== '' && !isNaN(Number(exactAgeInput.value))) : !!window.selectedAnswers['Age']);
-      if (!ageAnswered) missing.push('Age');
-      return missing;
-    }
-
-    function updateProgress() {
-      const missing = getMissingFields();
-      if (missing.length === 0) {
-        submitBtn.disabled = false;
-        submitBtn.classList.remove('bg-gray-300','text-gray-700');
-        submitBtn.classList.add('bg-yellow-400','text-indigo-900');
-        submitBtn.textContent = `Generate ${clientBatchSize} Gift Ideas!`;
-        missingEl.textContent = '';
-        document.querySelectorAll('.question-grid').forEach(g => g.classList.remove('missing'));
-        ageGroupEl.classList.remove('missing');
-      } else {
-        submitBtn.disabled = true;
-        submitBtn.classList.add('bg-gray-300','text-gray-700');
-        submitBtn.classList.remove('bg-yellow-400','text-indigo-900');
-        submitBtn.textContent = 'Answer required questions';
-        missingEl.textContent = 'Missing: ' + missing.join(', ');
-        document.querySelectorAll('.question-grid').forEach(g => {
-          const key = g.dataset.key;
-          if (missing.includes(key)) g.classList.add('missing'); else g.classList.remove('missing');
-        });
-        if (missing.includes('Age')) ageGroupEl.classList.add('missing'); else ageGroupEl.classList.remove('missing');
-      }
-      console.debug('selectedAnswers', window.selectedAnswers, 'interests', Array.from(selectedInterests));
-    }
-
-    // wire up choice grids
-    document.querySelectorAll('.question-grid').forEach(grid => {
-      const key = grid.dataset.key;
-      grid.querySelectorAll('.choice-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          if (key === 'Interests') {
-            const val = btn.dataset.answer;
-            if (btn.classList.contains('active')) {
-              btn.classList.remove('active');
-              selectedInterests.delete(val);
-            } else {
-              btn.classList.add('active');
-              selectedInterests.add(val);
-            }
-            updateProgress();
-            return;
-          }
-          grid.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          window.selectedAnswers[key] = btn.dataset.answer;
-          if (key === 'Age') {
-            delete window.selectedAnswers['ExactAge'];
-            exactAgeInput.value = '';
-          }
-          updateProgress();
-        });
-      });
-    });
-
-    // Age mode handlers
-    ageModeGroup.addEventListener('click', () => {
-      ageGroupEl.classList.remove('hidden');
-      ageExactEl.classList.add('hidden');
-      exactAgeInput.value = '';
-      delete window.selectedAnswers['ExactAge'];
-      updateProgress();
-    });
-    ageModeExact.addEventListener('click', () => {
-      ageGroupEl.classList.add('hidden');
-      ageExactEl.classList.remove('hidden');
-      document.querySelectorAll('#age-group .choice-btn').forEach(b => b.classList.remove('active'));
-      delete window.selectedAnswers['Age'];
-      updateProgress();
-    });
-
-    exactAgeInput.addEventListener('input', () => {
-      const v = exactAgeInput.value.trim();
-      if (v === '') delete window.selectedAnswers['ExactAge'];
-      else {
-        const n = Number(v);
-        if (!isNaN(n) && n >= 0) window.selectedAnswers['ExactAge'] = n;
-      }
-      updateProgress();
-    });
-
-    // affiliate helpers
-    function isValidAsin(s) { if (!s) return false; return /^[A-Z0-9]{10}$/i.test(s); }
-    function extractAsinFromUrl(url) {
-      if (!url || typeof url !== 'string') return null;
-      const dpMatch = url.match(/\/dp\/([A-Z0-9]{10})/i);
-      if (dpMatch) return dpMatch[1];
-      const gpMatch = url.match(/\/gp\/product\/([A-Z0-9]{10})/i);
-      if (gpMatch) return gpMatch[1];
-      try { const u = new URL(url); const q = u.searchParams.get('ASIN') || u.searchParams.get('asin') || u.searchParams.get('id'); if (q && isValidAsin(q)) return q; } catch (e) {}
-      return null;
-    }
-    function generateAffiliateLink(name, asin, itemAffiliateUrl) {
-      const tag = affiliateTag || 'giftwithai-21';
-      if (itemAffiliateUrl && typeof itemAffiliateUrl === 'string' && itemAffiliateUrl.includes('amazon.')) {
-        const parsedAsin = extractAsinFromUrl(itemAffiliateUrl);
-        if (parsedAsin && isValidAsin(parsedAsin)) {
-          try { const u = new URL(itemAffiliateUrl); if (!u.searchParams.get('tag')) u.searchParams.set('tag', tag); return u.toString(); } catch (e) {}
-        }
-      }
-      if (asin && isValidAsin(asin)) return `https://www.amazon.com/dp/${asin}?tag=${tag}`;
-      return `https://www.amazon.com/s?k=${encodeURIComponent(name)}&tag=${tag}`;
-    }
-
-    // build payload for worker (tone removed — worker will handle voice internally)
-    function buildPayloadForWorker() {
-      const answers = Object.assign({}, window.selectedAnswers);
-      if (answers.ExactAge !== undefined && answers.ExactAge !== null) answers.Age = `Exact:${answers.ExactAge}`;
+    // Helper to collect answers from the simple form above.
+    // Replace this with your real form data collection.
+    function collectAnswers() {
       return {
-        answers,
-        interests: Array.from(selectedInterests),
-        numRecommendations: clientMaxFetch
+        Recipient: document.getElementById('recipient')?.value || '',
+        Budget: document.getElementById('budget')?.value || '',
+        // add other fields as needed (Gender, Age, Occasion, Timeline, interests...)
       };
     }
 
-    // render a single card into container (image fallback onerror)
-    function createCard(item, source = 'catalog') {
-      const title = item.productName || item.title || 'Lovely Gift';
-      const desc = item.description || item.summary || 'A delightful pick — playful and thoughtful.';
-      const url = generateAffiliateLink(title, item.asin, item.affiliateUrl);
-      const image = item.image || `https://placehold.co/400x250/6366f1/ffffff?text=${encodeURIComponent(title.slice(0,30))}`;
-      const badge = source === 'fallback' ? `<span class="badge badge-fallback">Fallback</span>` : `<span class="badge badge-catalog">Catalog</span>`;
-      const price = item.price ? `<div class="text-indigo-900 font-bold mt-2">${item.price}</div>` : '';
-      const availability = item.availability ? `<div class="text-sm text-gray-500 mt-1">${item.availability}</div>` : '';
-      const rating = item.rating ? `<div class="text-sm text-yellow-600 mt-1">★ ${item.rating}</div>` : '';
-      const card = document.createElement('div');
-      card.className = 'card';
-      card.innerHTML = `
-        <img src="${image}" alt="${escapeHtml(title)}" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/400x250/9ca3ff/ffffff?text=No+Image';">
-        <div class="flex items-center justify-between">
-          <h3 class="text-lg font-bold text-gray-800 mt-2">${escapeHtml(title)}</h3>
-          ${badge}
-        </div>
-        <p class="text-gray-600 text-sm mt-1">${escapeHtml(desc)}</p>
-        ${price}
-        <div class="flex items-center justify-between mt-2">
-          <div>
-            ${availability}
-            ${rating}
-          </div>
-        </div>
-        <a href="${url}" target="_blank" rel="noopener" class="inline-block mt-3 py-2 px-4 bg-yellow-500 text-indigo-900 font-extrabold rounded-xl">View on Amazon ↗️</a>
-      `;
-      return card;
-    }
+    // Call your worker and push a 'generate' event for GTM
+    async function generateRecommendations() {
+      const answers = collectAnswers();
+      const numRecommendations = 3;
 
-    function escapeHtml(s) {
-      if (!s) return '';
-      return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[m]));
-    }
-
-    // show next batch
-    function showNextBatch() {
-      const remaining = fetchedItems.length - shownCount;
-      if (remaining <= 0) {
-        viewMoreBtn.classList.add('hidden');
-        showingCountEl.textContent = `Showing ${shownCount} of ${fetchedItems.length}`;
-        return;
-      }
-      const take = Math.min(clientBatchSize, remaining);
-      const slice = fetchedItems.slice(shownCount, shownCount + take);
-      slice.forEach(it => giftCardsEl.appendChild(createCard(it, 'catalog')));
-      shownCount += take;
-      showingCountEl.textContent = `Showing ${shownCount} of ${fetchedItems.length}`;
-      if (shownCount >= fetchedItems.length) viewMoreBtn.classList.add('hidden'); else viewMoreBtn.classList.remove('hidden');
-    }
-
-    // perform request and populate first batch
-    async function getRecommendations() {
-      questionnaireEl.classList.add('hidden');
-      document.getElementById('message-area').classList.remove('hidden');
-      document.getElementById('loading').classList.remove('hidden');
-      document.getElementById('raw-response').classList.add('hidden');
-      fetchedItems = [];
-      shownCount = 0;
-      giftCardsEl.innerHTML = '';
-      showingCountEl.textContent = '';
-
-      const payload = buildPayloadForWorker();
-      try {
-        const resp = await fetch(workerUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-        const text = await resp.text();
-        let parsed = null;
-        try { parsed = JSON.parse(text); } catch (e) { parsed = null; }
-        if (!parsed) {
-          document.getElementById('raw-response').textContent = text;
-          document.getElementById('raw-response').classList.remove('hidden');
-          document.getElementById('loading').classList.add('hidden');
-          return;
-        }
-        if (parsed.error) {
-          document.getElementById('raw-response').textContent = JSON.stringify(parsed, null, 2);
-          document.getElementById('raw-response').classList.remove('hidden');
-          document.getElementById('loading').classList.add('hidden');
-          return;
-        }
-        const items = parsed.items || JSON.parse(parsed.outputText || '[]') || [];
-        fetchedItems = items.slice(0, clientMaxFetch);
-        console.info('Worker response:', parsed);
-        document.getElementById('loading').classList.add('hidden');
-        document.getElementById('message-area').classList.add('hidden');
-        document.getElementById('results').classList.remove('hidden');
-        // show initial batch
-        showNextBatch();
-      } catch (err) {
-        console.error(err);
-        document.getElementById('raw-response').textContent = String(err);
-        document.getElementById('raw-response').classList.remove('hidden');
-        document.getElementById('loading').classList.add('hidden');
-      }
-    }
-
-    function restartFlow() {
-      Object.keys(window.selectedAnswers).forEach(k => delete window.selectedAnswers[k]);
-      selectedInterests.clear();
-      exactAgeInput.value = '';
-      document.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('active'));
-      document.getElementById('results').classList.add('hidden');
-      document.getElementById('questionnaire').classList.remove('hidden');
-      document.getElementById('message-area').classList.add('hidden');
-      fetchedItems = [];
-      shownCount = 0;
-      giftCardsEl.innerHTML = '';
-      viewMoreBtn.classList.add('hidden');
-      showingCountEl.textContent = '';
-      updateProgress();
-    }
-
-    // attach listeners
-    document.addEventListener('DOMContentLoaded', () => {
-      updateProgress();
-      submitBtn.addEventListener('click', getRecommendations);
-      viewMoreBtn.addEventListener('click', showNextBatch);
-      document.getElementById('restart-btn').addEventListener('click', restartFlow);
-
-      // If keyboard opens on mobile, ensure the submit button remains visible
-      document.querySelectorAll('input, textarea').forEach(el => {
-        el.addEventListener('focus', () => {
-          // small delay to allow mobile browser to resize viewport
-          setTimeout(() => {
-            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-          }, 300);
-        });
+      // Push generate event to dataLayer so GTM can capture it
+      window.dataLayer.push({
+        event: 'generate',
+        answers: answers,
+        numRecommendations: numRecommendations
       });
 
-      exactAgeInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); updateProgress(); } });
+      // Fetch recommendations from your worker
+      try {
+        const resp = await fetch('https://bold-lake-a224.moodysaleem.workers.dev/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ answers, interests: [], numRecommendations })
+        });
+
+        if (!resp.ok) throw new Error('Network response not OK');
+
+        const data = await resp.json();
+        renderResults(data.items || []);
+      } catch (err) {
+        console.error('Recommendation fetch failed', err);
+        document.getElementById('results').innerText = 'Sorry — could not fetch recommendations.';
+      }
+    }
+
+    // Render results into the page and create affiliate links
+    function renderResults(items) {
+      const container = document.getElementById('results');
+      container.innerHTML = '';
+      if (!items.length) {
+        container.textContent = 'No suggestions found.';
+        return;
+      }
+
+      items.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'product';
+
+        const img = document.createElement('img');
+        img.src = item.image || 'https://placehold.co/400x250?text=No+image';
+        img.alt = item.productName || 'Product image';
+        card.appendChild(img);
+
+        const meta = document.createElement('div');
+        meta.className = 'meta';
+
+        const title = document.createElement('div');
+        title.className = 'title';
+        title.textContent = item.productName || 'Untitled product';
+        meta.appendChild(title);
+
+        const desc = document.createElement('div');
+        desc.className = 'desc';
+        desc.textContent = item.description || '';
+        meta.appendChild(desc);
+
+        const price = document.createElement('div');
+        price.className = 'price';
+        price.textContent = item.price || '';
+        meta.appendChild(price);
+
+        card.appendChild(meta);
+
+        // Affiliate link
+        const a = document.createElement('a');
+        a.href = item.affiliateUrl || '#';
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        a.className = 'affiliate-link';
+        // Ensure product name is available for tracking
+        a.dataset.productName = item.productName || '';
+        a.textContent = 'View on Amazon';
+        card.appendChild(a);
+
+        container.appendChild(card);
+      });
+    }
+
+    // Delegated click handler for affiliate links to push affiliate_click events.
+    // We attempt to record the click with a short delay before opening the link,
+    // which helps GTM register the event reliably.
+    document.addEventListener('click', function (e) {
+      const el = e.target.closest && e.target.closest('a.affiliate-link');
+      if (!el) return;
+
+      // Prevent default navigation to allow event to be pushed.
+      e.preventDefault();
+
+      const href = el.href;
+      const productName = el.dataset.productName || '';
+
+      window.dataLayer.push({
+        event: 'affiliate_click',
+        productName: productName,
+        affiliateUrl: href
+      });
+
+      // Small delay so GTM has time to process the push. Adjust if needed.
+      setTimeout(() => {
+        // Open in a new tab/window (same as target="_blank")
+        window.open(href, '_blank', 'noopener,noreferrer');
+      }, 150);
     });
+
+    // Wire up Generate button
+    document.getElementById('generateBtn').addEventListener('click', function (evt) {
+      evt.preventDefault();
+      generateRecommendations();
+    });
+
+    // Optionally, fire a small pageview-like event for GTM on load (GTM can also do this via its config)
+    window.dataLayer.push({ event: 'gift_advisor_pageview' });
   </script>
 </body>
 </html>
