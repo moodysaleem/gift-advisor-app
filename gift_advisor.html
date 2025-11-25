@@ -337,16 +337,41 @@
       try { const u = new URL(url); const q = u.searchParams.get('ASIN') || u.searchParams.get('asin') || u.searchParams.get('id'); if (q && isValidAsin(q)) return q; } catch (e) {}
       return null;
     }
+
+    // Sanitized affiliate link generator (prefers /dp/ASIN, falls back to a cleaned search)
     function generateAffiliateLink(name, asin, itemAffiliateUrl) {
       const tag = affiliateTag || 'giftwithai-21';
+
+      // If worker supplied an Amazon URL, try to add the tag if missing (and prefer ASIN)
       if (itemAffiliateUrl && typeof itemAffiliateUrl === 'string' && itemAffiliateUrl.includes('amazon.')) {
         const parsedAsin = extractAsinFromUrl(itemAffiliateUrl);
         if (parsedAsin && isValidAsin(parsedAsin)) {
-          try { const u = new URL(itemAffiliateUrl); if (!u.searchParams.get('tag')) u.searchParams.set('tag', tag); return u.toString(); } catch (e) {}
+          try {
+            const u = new URL(itemAffiliateUrl);
+            if (!u.searchParams.get('tag')) u.searchParams.set('tag', tag);
+            return u.toString();
+          } catch (e) { /* fall through */ }
         }
       }
+
+      // Prefer direct ASIN links when available
       if (asin && isValidAsin(asin)) return `https://www.amazon.com/dp/${asin}?tag=${tag}`;
-      return `https://www.amazon.com/s?k=${encodeURIComponent(name)}&tag=${tag}`;
+
+      // Build a safe search query from the name.
+      // Use Unicode-aware sanitization where available, otherwise fallback.
+      try {
+        let q = String(name || '').normalize('NFKD')
+          .replace(/[–—]/g, ' ')                    // replace en/em dashes with space
+          .replace(/[^\p{L}\p{N}\s\-]+/gu, '')      // remove other punctuation (unicode aware)
+          .trim()
+          .replace(/\s+/g, '+');                    // convert spaces to +
+        if (!q || q === '+') q = encodeURIComponent(name || '').replace(/%20/g, '+');
+        return `https://www.amazon.com/s?k=${q}&tag=${tag}`;
+      } catch (err) {
+        // Fallback for older engines: simple replace of problematic characters + encode
+        const safe = encodeURIComponent(String(name || '').replace(/[–—]/g, ' ')).replace(/%20/g, '+');
+        return `https://www.amazon.com/s?k=${safe}&tag=${tag}`;
+      }
     }
 
     // build payload for worker (tone removed — worker will handle voice internally)
@@ -477,18 +502,19 @@
       updateProgress();
     }
 
-    // affiliate click tracking (delegated) — pushes GTM event then opens the link
+    // affiliate click tracking (delegated) — push GTM event and allow normal navigation
     document.addEventListener('click', function(e){
       const el = e.target.closest && e.target.closest('a.affiliate-link');
       if (!el) return;
-      e.preventDefault();
+      // Do not prevent default; let the browser open the link (target="_blank")
       const href = el.href;
       // try to capture product name (from surrounding card h3) or dataset if available
       const card = el.closest('.card');
       let productName = '';
       if (card) productName = card.querySelector('h3')?.textContent?.trim() || '';
+      if (!productName) productName = el.dataset.productName || '';
+      // Push the event; GTM preview will show it. No window.open, no preventDefault.
       window.dataLayer.push({ event:'affiliate_click', productName, affiliateUrl: href });
-      setTimeout(()=> window.open(href, '_blank', 'noopener,noreferrer'), 150);
     });
 
     // attach listeners
