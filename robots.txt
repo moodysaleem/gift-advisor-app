@@ -1,5 +1,3 @@
 User-agent: *
 Allow: /
-
-# Point to sitemap (canonical site)
 Sitemap: https://www.giftwithai.com/sitemap.xml

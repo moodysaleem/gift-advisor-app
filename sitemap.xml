@@ -15,16 +15,23 @@
   </url>
 
   <url>
-    <loc>https://www.giftwithai.com/guides/gifts-under-25</loc>
+    <loc>https://www.giftwithai.com/guides/gifts-under-25/</loc>
     <lastmod>2025-11-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
-    <loc>https://www.giftwithai.com/guides/top-board-games</loc>
+    <loc>https://www.giftwithai.com/guides/top-board-games/</loc>
     <lastmod>2025-11-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://www.giftwithai.com/faq/</loc>
+    <lastmod>2025-11-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
 </urlset>
