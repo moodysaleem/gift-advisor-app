@@ -338,42 +338,59 @@
       return null;
     }
 
-    // Sanitized affiliate link generator (prefers /dp/ASIN, falls back to a cleaned search)
-    function generateAffiliateLink(name, asin, itemAffiliateUrl) {
-      const tag = affiliateTag || 'giftwithai-21';
+   // Replace the existing generateAffiliateLink(...) function with this improved version
+function generateAffiliateLink(name, asin, itemAffiliateUrl) {
+  const tag = affiliateTag || 'giftwithai-21';
 
-      // If worker supplied an Amazon URL, try to add the tag if missing (and prefer ASIN)
-      if (itemAffiliateUrl && typeof itemAffiliateUrl === 'string' && itemAffiliateUrl.includes('amazon.')) {
-        const parsedAsin = extractAsinFromUrl(itemAffiliateUrl);
-        if (parsedAsin && isValidAsin(parsedAsin)) {
-          try {
-            const u = new URL(itemAffiliateUrl);
-            if (!u.searchParams.get('tag')) u.searchParams.set('tag', tag);
-            return u.toString();
-          } catch (e) { /* fall through */ }
-        }
+  // If worker supplied an Amazon URL, prefer a clean /dp/ASIN link when possible,
+  // otherwise ensure the tag param is present on the provided URL.
+  try {
+    if (itemAffiliateUrl && typeof itemAffiliateUrl === 'string' && itemAffiliateUrl.includes('amazon.')) {
+      const parsedAsin = extractAsinFromUrl(itemAffiliateUrl);
+      if (parsedAsin && isValidAsin(parsedAsin)) {
+        return `https://www.amazon.com/dp/${parsedAsin}?tag=${encodeURIComponent(tag)}`;
       }
-
-      // Prefer direct ASIN links when available
-      if (asin && isValidAsin(asin)) return `https://www.amazon.com/dp/${asin}?tag=${tag}`;
-
-      // Build a safe search query from the name.
-      // Use Unicode-aware sanitization where available, otherwise fallback.
       try {
-        let q = String(name || '').normalize('NFKD')
-          .replace(/[–—]/g, ' ')                    // replace en/em dashes with space
-          .replace(/[^\p{L}\p{N}\s\-]+/gu, '')      // remove other punctuation (unicode aware)
-          .trim()
-          .replace(/\s+/g, '+');                    // convert spaces to +
-        if (!q || q === '+') q = encodeURIComponent(name || '').replace(/%20/g, '+');
-        return `https://www.amazon.com/s?k=${q}&tag=${tag}`;
-      } catch (err) {
-        // Fallback for older engines: simple replace of problematic characters + encode
-        const safe = encodeURIComponent(String(name || '').replace(/[–—]/g, ' ')).replace(/%20/g, '+');
-        return `https://www.amazon.com/s?k=${safe}&tag=${tag}`;
-      }
+        const u = new URL(itemAffiliateUrl);
+        if (!u.searchParams.get('tag')) u.searchParams.set('tag', tag);
+        return u.toString();
+      } catch (e) { /* fall through to search fallback */ }
     }
+  } catch (err) {
+    /* ignore and fall back */
+  }
 
+  // Prefer direct ASIN when available
+  if (asin && isValidAsin(asin)) {
+    return `https://www.amazon.com/dp/${asin}?tag=${encodeURIComponent(tag)}`;
+  }
+
+  // Build a safe search query from the name.
+  // Strip invisible/control characters and common problematic punctuation, then encode.
+  try {
+    let q = String(name || '')
+      .normalize('NFKD')
+      // remove zero-width / BOM characters
+      .replace(/[\u200B-\u200F\uFEFF]/g, '')
+      // replace smart punctuation with space
+      .replace(/[–—“”‘’·•…]/g, ' ')
+      // remove other punctuation while keeping letters/numbers/spaces/hyphen (unicode-aware)
+      .replace(/[^\p{L}\p{N}\s\-]+/gu, '')
+      .trim()
+      .replace(/\s+/g, '+');                    // use + for spaces
+    if (!q || q === '+') q = encodeURIComponent(name || '').replace(/%20/g, '+');
+    return `https://www.amazon.com/s?k=${q}&tag=${encodeURIComponent(tag)}`;
+  } catch (err) {
+    // Fallback for older engines without full Unicode regex support
+    const safe = encodeURIComponent(String(name || '')
+      .replace(/[\u200B-\u200F\uFEFF]/g, '')
+      .replace(/[–—“”‘’·•…]/g, ' ')
+      .replace(/[^\w\s\-]+/g, '')
+      .trim()
+      .replace(/\s+/g, '+'));
+    return `https://www.amazon.com/s?k=${safe.replace(/%20/g, '+')}&tag=${encodeURIComponent(tag)}`;
+  }
+}
     // build payload for worker (tone removed — worker will handle voice internally)
     function buildPayloadForWorker() {
       const answers = Object.assign({}, window.selectedAnswers);
