@@ -7,9 +7,8 @@
     <priority>1.0</priority>
   </url>
 
-  <!-- Add the actual tool and guide pages you have -->
   <url>
-    <loc>https://www.giftwithai.com/gift-advisor</loc>
+    <loc>https://www.giftwithai.com/gift-advisor/</loc>
     <lastmod>2025-11-26</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
