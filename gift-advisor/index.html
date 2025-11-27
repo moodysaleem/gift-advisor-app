@@ -79,6 +79,7 @@
     .share-row .share-actions { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
     .share-btn { padding:8px 12px; border-radius:12px; font-weight:700; cursor:pointer; background:#eef2ff; color:#1e293b; border:1px solid #e0e7ff; }
     .share-btn.primary { background:#6366f1; color:#fff; width:100%; max-width:260px; }
+    .share-btn.viewmore { background:#fff7ed; color:#92400e; border-color:#ffe9d5; font-weight:800; }
     .modal-backdrop { position:fixed; inset:0; background: rgba(2,6,23,0.5); display:flex; align-items:center; justify-content:center; z-index:80; }
     .modal { background:#fff; padding:18px; border-radius:12px; max-width:480px; width:92%; box-shadow:0 8px 30px rgba(2,6,23,0.18); }
     .modal h3{ margin-top:0; }
@@ -90,6 +91,7 @@
       .share-row .share-actions { justify-content: center; }
       .share-row .share-actions .share-btn { width: 100%; min-width: 0; }
       .share-btn.primary { max-width: none; }
+      .share-btn.viewmore { max-width: none; }
     }
   </style>
 </head>
@@ -198,7 +200,11 @@
 
       <!-- share/email row now appears after the cards and only after 3 recommendations are visible -->
       <div class="share-row" id="share-row" style="display:none;">
+        <!-- moved View more here and placed before email action -->
+        <button id="view-more-btn" class="tertiary share-btn viewmore hidden" title="View more ideas">View more ideas</button>
+
         <button id="email-recs-btn" class="share-btn primary" title="Send recommendations by email">Send recommendations by email ✉️</button>
+
         <div class="share-actions" style="display:flex;">
           <button id="share-twitter" class="share-btn" title="Share on Twitter">Twitter</button>
           <button id="share-facebook" class="share-btn" title="Share on Facebook">Facebook</button>
@@ -211,7 +217,6 @@
       </div>
 
       <div class="controls mt-4">
-        <button id="view-more-btn" class="tertiary hidden">View more ideas</button>
         <div id="showing-count" class="small muted"></div>
         <button id="restart-btn" class="tertiary">Find a Gift for Another Person 🔁</button>
       </div>
@@ -285,6 +290,7 @@
     const shareWhatsAppBtn = document.getElementById('share-whatsapp');
     const shareTikTokBtn = document.getElementById('share-tiktok');
     const shareSnapchatBtn = document.getElementById('share-snapchat');
+    const restartBtn = document.getElementById('restart-btn');
 
     // helper: missing fields
     function getMissingFields() {
@@ -487,7 +493,13 @@
       if (shownCount >= fetchedItems.length) viewMoreBtn.classList.add('hidden'); else viewMoreBtn.classList.remove('hidden');
 
       // Show share/email UI only after user has seen at least 3 recommendations
-      if (shownCount >= 3) shareRow.style.display = 'flex'; else shareRow.style.display = 'none';
+      if (shownCount >= 3) {
+        shareRow.style.display = 'flex';
+        // ensure the viewMoreBtn is shown if there are more items
+        if (fetchedItems.length > shownCount) viewMoreBtn.classList.remove('hidden');
+      } else {
+        shareRow.style.display = 'none';
+      }
     }
 
     async function getRecommendations() {
@@ -743,7 +755,7 @@
       updateProgress();
       submitBtn.addEventListener('click', getRecommendations);
       viewMoreBtn.addEventListener('click', showNextBatch);
-      document.getElementById('restart-btn').addEventListener('click', restartFlow);
+      restartBtn.addEventListener('click', restartFlow);
 
       emailRecsBtn.addEventListener('click', openEmailModal);
       emailCancelBtn.addEventListener('click', closeEmailModal);
