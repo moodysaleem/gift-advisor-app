@@ -49,7 +49,7 @@
     pre { white-space: pre-wrap; word-break: break-word; background:#fff; padding:8px; border-radius:6px; border:1px solid #eef2ff; max-height:360px; overflow:auto; }
     .missing { outline: 2px dashed #f59e0b; padding: 6px; border-radius: 8px; }
     .field-hint { font-size: 13px; color:#475569; margin-top:4px; }
-    .controls { display:flex; gap:8px; align-items:center; justify-content:center; margin-top:10px; }
+    .controls { display:flex; gap:8px; align-items:center; justify-content:center; margin-top:10px; flex-wrap:wrap; }
     .tertiary { background: #eef2ff; color:#1e293b; padding:8px 12px; border-radius:10px; font-weight:700; }
 
     .submit-fixed {
@@ -75,13 +75,22 @@
     .top-note { display:flex; align-items:center; gap:8px; justify-content:center; margin-bottom:10px; }
 
     /* share/email UI */
-    .share-row { display:flex; gap:8px; align-items:center; justify-content:center; flex-wrap:wrap; margin-bottom:12px; }
+    .share-row { display:flex; gap:8px; align-items:center; justify-content:center; flex-wrap:wrap; margin:14px auto; width:100%; max-width:1100px; box-sizing:border-box; padding:0 8px; }
+    .share-row .share-actions { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
     .share-btn { padding:8px 12px; border-radius:12px; font-weight:700; cursor:pointer; background:#eef2ff; color:#1e293b; border:1px solid #e0e7ff; }
-    .share-btn.primary { background:#6366f1; color:#fff; }
+    .share-btn.primary { background:#6366f1; color:#fff; width:100%; max-width:260px; }
     .modal-backdrop { position:fixed; inset:0; background: rgba(2,6,23,0.5); display:flex; align-items:center; justify-content:center; z-index:80; }
     .modal { background:#fff; padding:18px; border-radius:12px; max-width:480px; width:92%; box-shadow:0 8px 30px rgba(2,6,23,0.18); }
     .modal h3{ margin-top:0; }
     .note-inline { font-size:13px; color:#475569; margin-top:8px; }
+
+    /* Mobile responsiveness: stack share buttons inside card frame */
+    @media (max-width: 640px) {
+      .share-row { flex-direction: column; align-items: stretch; padding: 8px; }
+      .share-row .share-actions { justify-content: center; }
+      .share-row .share-actions .share-btn { width: 100%; min-width: 0; }
+      .share-btn.primary { max-width: none; }
+    }
   </style>
 </head>
 <body>
@@ -185,10 +194,12 @@
     <div id="results" class="hidden mt-6">
       <h2 class="text-2xl font-extrabold text-indigo-700 text-center mb-4">Your Playful Gift Ideas</h2>
 
-      <div class="share-row" id="share-row" style="display:none;">
-        <button id="email-recs-btn" class="share-btn primary" title="Email these recommendations">Email recommendations ✉️</button>
+      <div id="gift-cards" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
 
-        <div style="display:flex; gap:8px; align-items:center;">
+      <!-- share/email row now appears after the cards and only after 3 recommendations are visible -->
+      <div class="share-row" id="share-row" style="display:none;">
+        <button id="email-recs-btn" class="share-btn primary" title="Send recommendations by email">Send recommendations by email ✉️</button>
+        <div class="share-actions" style="display:flex;">
           <button id="share-twitter" class="share-btn" title="Share on Twitter">Twitter</button>
           <button id="share-facebook" class="share-btn" title="Share on Facebook">Facebook</button>
           <button id="share-linkedin" class="share-btn" title="Share on LinkedIn">LinkedIn</button>
@@ -198,8 +209,6 @@
           <button id="copy-share" class="share-btn" title="Copy share text">Copy text</button>
         </div>
       </div>
-
-      <div id="gift-cards" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
 
       <div class="controls mt-4">
         <button id="view-more-btn" class="tertiary hidden">View more ideas</button>
@@ -212,7 +221,7 @@
   <!-- Email modal -->
   <div id="email-modal" class="modal-backdrop hidden" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true">
-      <h3>Email these recommendations</h3>
+      <h3>Send recommendations by email</h3>
       <p class="note-inline">Enter the email where you'd like to receive the recommendations. We will open your mail client and (optionally) submit the address to the configured capture endpoint.</p>
       <div style="margin-top:12px;">
         <input id="email-input" type="email" placeholder="you@example.com" class="p-3 rounded-xl border border-slate-200 w-full" />
@@ -236,7 +245,6 @@
     // ==== CONFIG ====
     const workerUrl = "https://bold-lake-a224.moodysaleem.workers.dev/"; // <- your Worker dev URL
     const affiliateTag = "giftwithai-21";
-    // Optional endpoint to capture emails (set to your endpoint if you want server-side capture)
     const captureEndpoint = ""; // e.g. "https://your-worker.example/capture-email"
     const requiredKeys = ['Recipient','Gender','Budget','Occasion','Timeline'];
     const clientBatchSize = 3;
@@ -477,7 +485,9 @@
       shownCount += take;
       showingCountEl.textContent = `Showing ${shownCount} of ${fetchedItems.length}`;
       if (shownCount >= fetchedItems.length) viewMoreBtn.classList.add('hidden'); else viewMoreBtn.classList.remove('hidden');
-      if (fetchedItems.length > 0) shareRow.style.display = 'flex';
+
+      // Show share/email UI only after user has seen at least 3 recommendations
+      if (shownCount >= 3) shareRow.style.display = 'flex'; else shareRow.style.display = 'none';
     }
 
     async function getRecommendations() {
@@ -755,6 +765,17 @@
 
       exactAgeInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); updateProgress(); } });
     });
+
+    // small helper used above
+    function getVisibleRecommendations() {
+      return fetchedItems.slice(0, shownCount).map(it => {
+        return {
+          title: it.productName || it.title || it.name || 'Gift',
+          url: generateAffiliateLink(it.productName || it.title || it.name, it.asin, it.affiliateUrl),
+          price: it.price || ''
+        };
+      });
+    }
   </script>
 </body>
 </html>
