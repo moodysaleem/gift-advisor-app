@@ -16,7 +16,6 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    /* Make page scroll normally on mobile and keep the submit button visible (fixed) */
     html, body { height: 100%; margin: 0; }
     body {
       font-family: 'Poppins', sans-serif;
@@ -24,8 +23,6 @@
       padding: 16px;
       box-sizing: border-box;
     }
-
-    /* Center the card but allow page scroll (no flex layout that traps scrolling) */
     .card {
       transition: transform 0.18s ease, box-shadow 0.18s ease;
       background-color: #ffffff;
@@ -36,10 +33,8 @@
       box-sizing: border-box;
       padding: 1.1rem;
       margin: 12px auto;
-      /* leave room at bottom so content isn't hidden behind fixed submit */
       padding-bottom: calc(96px + env(safe-area-inset-bottom, 12px));
     }
-
     .choice-btn { border: 2px solid #dbeafe; transition: all 0.12s ease; font-weight: 700; color: #0f172a; background-color: #ffffff; text-align:center; }
     .choice-btn:hover { border-color: #6366f1; background-color: #f8fafc; }
     .choice-btn.active { background-color: #6366f1; color: white; border-color: #6366f1; box-shadow: 0 6px 18px rgba(99,102,241,0.12); }
@@ -57,7 +52,6 @@
     .controls { display:flex; gap:8px; align-items:center; justify-content:center; margin-top:10px; }
     .tertiary { background: #eef2ff; color:#1e293b; padding:8px 12px; border-radius:10px; font-weight:700; }
 
-    /* Fixed submit bar (always visible) — safer than sticky on some mobile browsers */
     .submit-fixed {
       position: fixed;
       left: 0;
@@ -75,23 +69,24 @@
       padding-bottom: calc(env(safe-area-inset-bottom, 12px));
     }
 
-    .submit-inner {
-      width: 100%;
-      max-width: 1100px;
-      padding: 6px;
-    }
-
+    .submit-inner { width: 100%; max-width: 1100px; padding: 6px; }
     #submit-btn { width: 100%; display: block; border-radius: 12px; font-weight:800; font-size:16px; padding:14px; }
 
-    /* Small GTM/catalog banner styling if you want it visible inside the card header */
     .top-note { display:flex; align-items:center; gap:8px; justify-content:center; margin-bottom:10px; }
+
+    /* share/email UI */
+    .share-row { display:flex; gap:8px; align-items:center; justify-content:center; flex-wrap:wrap; margin-bottom:12px; }
+    .share-btn { padding:8px 12px; border-radius:12px; font-weight:700; cursor:pointer; background:#eef2ff; color:#1e293b; border:1px solid #e0e7ff; }
+    .share-btn.primary { background:#6366f1; color:#fff; }
+    .modal-backdrop { position:fixed; inset:0; background: rgba(2,6,23,0.5); display:flex; align-items:center; justify-content:center; z-index:80; }
+    .modal { background:#fff; padding:18px; border-radius:12px; max-width:480px; width:92%; box-shadow:0 8px 30px rgba(2,6,23,0.18); }
+    .modal h3{ margin-top:0; }
+    .note-inline { font-size:13px; color:#475569; margin-top:8px; }
   </style>
 </head>
 <body>
-  <!-- Google Tag Manager (noscript) -->
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T8TBW4QT"
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-  <!-- End Google Tag Manager (noscript) -->
 
   <div id="app" class="card">
     <header class="text-center mb-4">
@@ -189,6 +184,21 @@
 
     <div id="results" class="hidden mt-6">
       <h2 class="text-2xl font-extrabold text-indigo-700 text-center mb-4">Your Playful Gift Ideas</h2>
+
+      <div class="share-row" id="share-row" style="display:none;">
+        <button id="email-recs-btn" class="share-btn primary" title="Email these recommendations">Email recommendations ✉️</button>
+
+        <div style="display:flex; gap:8px; align-items:center;">
+          <button id="share-twitter" class="share-btn" title="Share on Twitter">Twitter</button>
+          <button id="share-facebook" class="share-btn" title="Share on Facebook">Facebook</button>
+          <button id="share-linkedin" class="share-btn" title="Share on LinkedIn">LinkedIn</button>
+          <button id="share-whatsapp" class="share-btn" title="Share on WhatsApp">WhatsApp</button>
+          <button id="share-tiktok" class="share-btn" title="Share on TikTok">TikTok</button>
+          <button id="share-snapchat" class="share-btn" title="Share on Snapchat">Snapchat</button>
+          <button id="copy-share" class="share-btn" title="Copy share text">Copy text</button>
+        </div>
+      </div>
+
       <div id="gift-cards" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
 
       <div class="controls mt-4">
@@ -199,7 +209,23 @@
     </div>
   </div>
 
-  <!-- Fixed submit bar at bottom of viewport (always reachable) -->
+  <!-- Email modal -->
+  <div id="email-modal" class="modal-backdrop hidden" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true">
+      <h3>Email these recommendations</h3>
+      <p class="note-inline">Enter the email where you'd like to receive the recommendations. We will open your mail client and (optionally) submit the address to the configured capture endpoint.</p>
+      <div style="margin-top:12px;">
+        <input id="email-input" type="email" placeholder="you@example.com" class="p-3 rounded-xl border border-slate-200 w-full" />
+        <div id="email-error" class="text-red-600 mt-2 hidden"></div>
+      </div>
+      <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:12px;">
+        <button id="email-cancel" class="share-btn">Cancel</button>
+        <button id="email-send" class="share-btn primary">Send</button>
+      </div>
+      <div id="email-feedback" class="note-inline" style="display:none; margin-top:8px;"></div>
+    </div>
+  </div>
+
   <div class="submit-fixed" aria-hidden="false">
     <div class="submit-inner">
       <button id="submit-btn" type="button" disabled class="bg-gray-300 text-gray-700">Answer required questions</button>
@@ -210,15 +236,16 @@
     // ==== CONFIG ====
     const workerUrl = "https://bold-lake-a224.moodysaleem.workers.dev/"; // <- your Worker dev URL
     const affiliateTag = "giftwithai-21";
-    const requiredKeys = ['Recipient','Gender','Budget','Occasion','Timeline']; // Age handled separately
-    const clientBatchSize = 3;        // how many cards to show per "page"
-    const clientMaxFetch = 12;        // how many items to request from worker
+    // Optional endpoint to capture emails (set to your endpoint if you want server-side capture)
+    const captureEndpoint = ""; // e.g. "https://your-worker.example/capture-email"
+    const requiredKeys = ['Recipient','Gender','Budget','Occasion','Timeline'];
+    const clientBatchSize = 3;
+    const clientMaxFetch = 12;
     window.selectedAnswers = {};
     const selectedInterests = new Set();
-    let fetchedItems = [];           // full list returned by worker
+    let fetchedItems = [];
     let shownCount = 0;
 
-    // dataLayer (GTM) init
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({ event: 'gift_advisor_pageview' });
 
@@ -234,6 +261,22 @@
     const giftCardsEl = document.getElementById('gift-cards');
     const viewMoreBtn = document.getElementById('view-more-btn');
     const showingCountEl = document.getElementById('showing-count');
+
+    const shareRow = document.getElementById('share-row');
+    const emailModal = document.getElementById('email-modal');
+    const emailInput = document.getElementById('email-input');
+    const emailSendBtn = document.getElementById('email-send');
+    const emailCancelBtn = document.getElementById('email-cancel');
+    const emailFeedback = document.getElementById('email-feedback');
+    const emailError = document.getElementById('email-error');
+    const emailRecsBtn = document.getElementById('email-recs-btn');
+    const shareTwitterBtn = document.getElementById('share-twitter');
+    const shareFacebookBtn = document.getElementById('share-facebook');
+    const shareLinkedinBtn = document.getElementById('share-linkedin');
+    const copyShareBtn = document.getElementById('copy-share');
+    const shareWhatsAppBtn = document.getElementById('share-whatsapp');
+    const shareTikTokBtn = document.getElementById('share-tiktok');
+    const shareSnapchatBtn = document.getElementById('share-snapchat');
 
     // helper: missing fields
     function getMissingFields() {
@@ -338,71 +381,54 @@
       return null;
     }
 
-   // Replace the existing generateAffiliateLink(...) function with this improved version
-function generateAffiliateLink(name, asin, itemAffiliateUrl) {
-  const tag = affiliateTag || 'giftwithai-21';
-
-  // If worker supplied an Amazon URL, prefer a clean /dp/ASIN link when possible,
-  // otherwise ensure the tag param is present on the provided URL.
-  try {
-    if (itemAffiliateUrl && typeof itemAffiliateUrl === 'string' && itemAffiliateUrl.includes('amazon.')) {
-      const parsedAsin = extractAsinFromUrl(itemAffiliateUrl);
-      if (parsedAsin && isValidAsin(parsedAsin)) {
-        return `https://www.amazon.com/dp/${parsedAsin}?tag=${encodeURIComponent(tag)}`;
-      }
+    // generateAffiliateLink (improved)
+    function generateAffiliateLink(name, asin, itemAffiliateUrl) {
+      const tag = affiliateTag || 'giftwithai-21';
       try {
-        const u = new URL(itemAffiliateUrl);
-        if (!u.searchParams.get('tag')) u.searchParams.set('tag', tag);
-        return u.toString();
-      } catch (e) { /* fall through to search fallback */ }
+        if (itemAffiliateUrl && typeof itemAffiliateUrl === 'string' && itemAffiliateUrl.includes('amazon.')) {
+          const parsedAsin = extractAsinFromUrl(itemAffiliateUrl);
+          if (parsedAsin && isValidAsin(parsedAsin)) {
+            return `https://www.amazon.com/dp/${parsedAsin}?tag=${encodeURIComponent(tag)}`;
+          }
+          try {
+            const u = new URL(itemAffiliateUrl);
+            if (!u.searchParams.get('tag')) u.searchParams.set('tag', tag);
+            return u.toString();
+          } catch (e) { /* fall through */ }
+        }
+      } catch (err) { /* continue */ }
+
+      if (asin && isValidAsin(asin)) {
+        return `https://www.amazon.com/dp/${asin}?tag=${encodeURIComponent(tag)}`;
+      }
+
+      try {
+        let q = String(name || '')
+          .normalize('NFKD')
+          .replace(/[\u200B-\u200F\uFEFF]/g, '')
+          .replace(/[–—“”‘’·•…]/g, ' ')
+          .replace(/[^\p{L}\p{N}\s\-]+/gu, '')
+          .trim()
+          .replace(/\s+/g, '+');
+        if (!q || q === '+') q = encodeURIComponent(name || '').replace(/%20/g, '+');
+        return `https://www.amazon.com/s?k=${q}&tag=${encodeURIComponent(tag)}`;
+      } catch (err) {
+        const safe = encodeURIComponent(String(name || '')
+          .replace(/[\u200B-\u200F\uFEFF]/g, '')
+          .replace(/[–—“”‘’·•…]/g, ' ')
+          .replace(/[^\w\s\-]+/g, '')
+          .trim()
+          .replace(/\s+/g, '+'));
+        return `https://www.amazon.com/s?k=${safe.replace(/%20/g, '+')}&tag=${encodeURIComponent(tag)}`;
+      }
     }
-  } catch (err) {
-    /* ignore and fall back */
-  }
 
-  // Prefer direct ASIN when available
-  if (asin && isValidAsin(asin)) {
-    return `https://www.amazon.com/dp/${asin}?tag=${encodeURIComponent(tag)}`;
-  }
-
-  // Build a safe search query from the name.
-  // Strip invisible/control characters and common problematic punctuation, then encode.
-  try {
-    let q = String(name || '')
-      .normalize('NFKD')
-      // remove zero-width / BOM characters
-      .replace(/[\u200B-\u200F\uFEFF]/g, '')
-      // replace smart punctuation with space
-      .replace(/[–—“”‘’·•…]/g, ' ')
-      // remove other punctuation while keeping letters/numbers/spaces/hyphen (unicode-aware)
-      .replace(/[^\p{L}\p{N}\s\-]+/gu, '')
-      .trim()
-      .replace(/\s+/g, '+');                    // use + for spaces
-    if (!q || q === '+') q = encodeURIComponent(name || '').replace(/%20/g, '+');
-    return `https://www.amazon.com/s?k=${q}&tag=${encodeURIComponent(tag)}`;
-  } catch (err) {
-    // Fallback for older engines without full Unicode regex support
-    const safe = encodeURIComponent(String(name || '')
-      .replace(/[\u200B-\u200F\uFEFF]/g, '')
-      .replace(/[–—“”‘’·•…]/g, ' ')
-      .replace(/[^\w\s\-]+/g, '')
-      .trim()
-      .replace(/\s+/g, '+'));
-    return `https://www.amazon.com/s?k=${safe.replace(/%20/g, '+')}&tag=${encodeURIComponent(tag)}`;
-  }
-}
-    // build payload for worker (tone removed — worker will handle voice internally)
     function buildPayloadForWorker() {
       const answers = Object.assign({}, window.selectedAnswers);
       if (answers.ExactAge !== undefined && answers.ExactAge !== null) answers.Age = `Exact:${answers.ExactAge}`;
-      return {
-        answers,
-        interests: Array.from(selectedInterests),
-        numRecommendations: clientMaxFetch
-      };
+      return { answers, interests: Array.from(selectedInterests), numRecommendations: clientMaxFetch };
     }
 
-    // render a single card into container (image fallback onerror)
     function createCard(item, source = 'catalog') {
       const title = item.productName || item.title || 'Lovely Gift';
       const desc = item.description || item.summary || 'A delightful pick — playful and thoughtful.';
@@ -438,7 +464,6 @@ function generateAffiliateLink(name, asin, itemAffiliateUrl) {
       return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[m]));
     }
 
-    // show next batch
     function showNextBatch() {
       const remaining = fetchedItems.length - shownCount;
       if (remaining <= 0) {
@@ -452,9 +477,9 @@ function generateAffiliateLink(name, asin, itemAffiliateUrl) {
       shownCount += take;
       showingCountEl.textContent = `Showing ${shownCount} of ${fetchedItems.length}`;
       if (shownCount >= fetchedItems.length) viewMoreBtn.classList.add('hidden'); else viewMoreBtn.classList.remove('hidden');
+      if (fetchedItems.length > 0) shareRow.style.display = 'flex';
     }
 
-    // perform request and populate first batch
     async function getRecommendations() {
       questionnaireEl.classList.add('hidden');
       document.getElementById('message-area').classList.remove('hidden');
@@ -466,8 +491,6 @@ function generateAffiliateLink(name, asin, itemAffiliateUrl) {
       showingCountEl.textContent = '';
 
       const payload = buildPayloadForWorker();
-
-      // GTM generate event push — includes answers and number requested
       window.dataLayer.push({ event: 'generate', answers: payload.answers, numRecommendations: payload.numRecommendations });
 
       try {
@@ -493,7 +516,6 @@ function generateAffiliateLink(name, asin, itemAffiliateUrl) {
         document.getElementById('loading').classList.add('hidden');
         document.getElementById('message-area').classList.add('hidden');
         document.getElementById('results').classList.remove('hidden');
-        // show initial batch
         showNextBatch();
       } catch (err) {
         console.error(err);
@@ -516,23 +538,195 @@ function generateAffiliateLink(name, asin, itemAffiliateUrl) {
       giftCardsEl.innerHTML = '';
       viewMoreBtn.classList.add('hidden');
       showingCountEl.textContent = '';
+      shareRow.style.display = 'none';
       updateProgress();
     }
 
-    // affiliate click tracking (delegated) — push GTM event and allow normal navigation
     document.addEventListener('click', function(e){
       const el = e.target.closest && e.target.closest('a.affiliate-link');
       if (!el) return;
-      // Do not prevent default; let the browser open the link (target="_blank")
       const href = el.href;
-      // try to capture product name (from surrounding card h3) or dataset if available
       const card = el.closest('.card');
       let productName = '';
       if (card) productName = card.querySelector('h3')?.textContent?.trim() || '';
       if (!productName) productName = el.dataset.productName || '';
-      // Push the event; GTM preview will show it. No window.open, no preventDefault.
       window.dataLayer.push({ event:'affiliate_click', productName, affiliateUrl: href });
     });
+
+    // ===== sharing & email helpers =====
+    function getVisibleRecommendations() {
+      return fetchedItems.slice(0, shownCount).map(it => {
+        return {
+          title: it.productName || it.title || it.name || 'Gift',
+          url: generateAffiliateLink(it.productName || it.title || it.name, it.asin, it.affiliateUrl),
+          price: it.price || ''
+        };
+      });
+    }
+
+    function buildShareText() {
+      const items = getVisibleRecommendations();
+      if (items.length === 0) return `Check out Gift Advisor — playful, curated gift ideas: https://www.giftwithai.com/gift-advisor/`;
+      const lines = items.slice(0, 3).map(it => `• ${it.title}${it.price ? ` — ${it.price}` : ''} — ${it.url}`);
+      const text = `Gift ideas from Gift Advisor:\n${lines.join('\n')}\nTry the tool: https://www.giftwithai.com/gift-advisor/`;
+      return text;
+    }
+
+    function openSharePopup(url) {
+      const w = 900, h = 600;
+      const left = (screen.width / 2) - (w / 2);
+      const top = (screen.height / 2) - (h / 2);
+      window.open(url, '_blank', `toolbar=0,status=0,width=${w},height=${h},top=${top},left=${left}`);
+    }
+
+    function shareToTwitter() {
+      const txt = buildShareText();
+      const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(txt)}`;
+      openSharePopup(url);
+      window.dataLayer.push({ event:'share', method:'twitter' });
+    }
+    function shareToFacebook() {
+      const page = encodeURIComponent('https://www.giftwithai.com/gift-advisor/');
+      const quote = encodeURIComponent('Playful, curated gift ideas from Gift Advisor — try it!');
+      const url = `https://www.facebook.com/sharer/sharer.php?u=${page}&quote=${quote}`;
+      openSharePopup(url);
+      window.dataLayer.push({ event:'share', method:'facebook' });
+    }
+    function shareToLinkedIn() {
+      const page = encodeURIComponent('https://www.giftwithai.com/gift-advisor/');
+      const summary = encodeURIComponent('Playful, curated gift ideas from Gift Advisor.');
+      const url = `https://www.linkedin.com/sharing/share-offsite/?url=${page}&summary=${summary}`;
+      openSharePopup(url);
+      window.dataLayer.push({ event:'share', method:'linkedin' });
+    }
+
+    async function copyToClipboard(text) {
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          await navigator.clipboard.writeText(text);
+          return true;
+        }
+      } catch (e) { /* fall through */ }
+      try {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        return true;
+      } catch (e) {
+        return false;
+      }
+    }
+
+    async function copyShareText() {
+      const txt = buildShareText();
+      const ok = await copyToClipboard(txt);
+      if (ok) {
+        alert('Share text copied to clipboard — paste it into the app you want to share to.');
+        window.dataLayer.push({ event:'share', method:'copy_text' });
+      } else {
+        alert('Unable to copy automatically — please select and copy the text manually.');
+      }
+    }
+
+    // WhatsApp share: works on mobile app and web.whatsapp.com
+    function shareToWhatsApp() {
+      const txt = buildShareText();
+      const url = 'https://api.whatsapp.com/send?text=' + encodeURIComponent(txt);
+      window.open(url, '_blank');
+      window.dataLayer.push({ event:'share', method:'whatsapp' });
+    }
+
+    // Generic flow for apps without stable web share URLs (TikTok, Snapchat)
+    async function shareViaWebShareOrCopy(serviceName) {
+      const txt = buildShareText();
+      const pageUrl = 'https://www.giftwithai.com/gift-advisor/';
+      if (navigator.share) {
+        try {
+          await navigator.share({ title: 'Gift Advisor recommendations', text: txt, url: pageUrl });
+          window.dataLayer.push({ event:'share', method: serviceName, via:'webshare' });
+          return;
+        } catch (err) { /* user cancelled or failed */ }
+      }
+      const ok = await copyToClipboard(txt + '\n\n' + pageUrl);
+      if (ok) {
+        alert(`${serviceName} not available from this browser. Share text copied to clipboard — open ${serviceName} and paste it into a new post/message.`);
+        window.dataLayer.push({ event:'share', method: serviceName, via:'copy_fallback', success:true });
+      } else {
+        alert(`Unable to copy automatically. Please open ${serviceName} and paste this link: ${pageUrl}`);
+        window.dataLayer.push({ event:'share', method: serviceName, via:'copy_fallback', success:false });
+      }
+    }
+
+    function shareToTikTok() { return shareViaWebShareOrCopy('TikTok'); }
+    function shareToSnapchat() { return shareViaWebShareOrCopy('Snapchat'); }
+
+    // EMAIL flow
+    function openEmailModal() {
+      emailInput.value = '';
+      emailError.classList.add('hidden');
+      emailFeedback.style.display = 'none';
+      emailModal.classList.remove('hidden');
+      emailModal.setAttribute('aria-hidden', 'false');
+      setTimeout(() => emailInput.focus(), 200);
+    }
+    function closeEmailModal() {
+      emailModal.classList.add('hidden');
+      emailModal.setAttribute('aria-hidden', 'true');
+    }
+    function validateEmail(e) { if (!e) return false; return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); }
+
+    async function sendEmailRecommendations() {
+      const email = emailInput.value.trim();
+      if (!validateEmail(email)) {
+        emailError.textContent = 'Please enter a valid email address.';
+        emailError.classList.remove('hidden');
+        return;
+      }
+      emailError.classList.add('hidden');
+
+      const items = getVisibleRecommendations();
+      const lines = items.map(it => `${it.title}${it.price ? ` — ${it.price}` : ''}\n${it.url}\n`);
+      const bodyText = `Here are the gift ideas you asked for:\n\n${lines.join('\n')}\nFrom Gift Advisor — try it: https://www.giftwithai.com/gift-advisor/`;
+
+      const subject = encodeURIComponent('Your Gift Advisor recommendations');
+      const body = encodeURIComponent(bodyText);
+      window.open(`mailto:${encodeURIComponent(email)}?subject=${subject}&body=${body}`, '_self');
+
+      if (captureEndpoint && captureEndpoint.trim() !== '') {
+        try {
+          const payload = { email, timestamp: new Date().toISOString(), answers: Object.assign({}, window.selectedAnswers), items };
+          const r = await fetch(captureEndpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          if (r.ok) {
+            emailFeedback.textContent = 'Email opened in your mail app — we also saved your address (thank you).';
+            emailFeedback.style.display = 'block';
+            window.dataLayer.push({ event:'email_capture', success:true });
+          } else {
+            emailFeedback.textContent = 'Email opened in your mail app. (Capture endpoint returned an error.)';
+            emailFeedback.style.display = 'block';
+            window.dataLayer.push({ event:'email_capture', success:false, status:r.status });
+          }
+        } catch (err) {
+          console.error('capture post failed', err);
+          emailFeedback.textContent = 'Email opened in your mail app. (Could not save the address.)';
+          emailFeedback.style.display = 'block';
+          window.dataLayer.push({ event:'email_capture', success:false });
+        }
+      } else {
+        emailFeedback.textContent = 'Email opened in your mail app.';
+        emailFeedback.style.display = 'block';
+      }
+
+      setTimeout(closeEmailModal, 1200);
+    }
 
     // attach listeners
     document.addEventListener('DOMContentLoaded', () => {
@@ -541,13 +735,21 @@ function generateAffiliateLink(name, asin, itemAffiliateUrl) {
       viewMoreBtn.addEventListener('click', showNextBatch);
       document.getElementById('restart-btn').addEventListener('click', restartFlow);
 
-      // If keyboard opens on mobile, ensure the submit button remains visible
+      emailRecsBtn.addEventListener('click', openEmailModal);
+      emailCancelBtn.addEventListener('click', closeEmailModal);
+      emailSendBtn.addEventListener('click', sendEmailRecommendations);
+
+      shareTwitterBtn.addEventListener('click', shareToTwitter);
+      shareFacebookBtn.addEventListener('click', shareToFacebook);
+      shareLinkedinBtn.addEventListener('click', shareToLinkedIn);
+      copyShareBtn.addEventListener('click', copyShareText);
+      shareWhatsAppBtn.addEventListener('click', shareToWhatsApp);
+      shareTikTokBtn.addEventListener('click', shareToTikTok);
+      shareSnapchatBtn.addEventListener('click', shareToSnapchat);
+
       document.querySelectorAll('input, textarea').forEach(el => {
         el.addEventListener('focus', () => {
-          // small delay to allow mobile browser to resize viewport
-          setTimeout(() => {
-            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-          }, 300);
+          setTimeout(() => { window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }); }, 300);
         });
       });
 
