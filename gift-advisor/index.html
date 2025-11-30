@@ -249,9 +249,11 @@
 
   <script>
     // ==== CONFIG ====
-    const workerUrl = "https://bold-lake-a224.moodysaleem.workers.dev/"; // <- your Worker dev URL
+    // enrichment worker (unchanged)
+    const workerUrl = "https://bold-lake-a224.moodysaleem.workers.dev/";
+    // Capture endpoint: prefer a page-level override (window.CAPTURE_ENDPOINT), otherwise fall back to the D1-enabled Worker
+    const captureEndpoint = window.CAPTURE_ENDPOINT || "https://twilight-salad-f78c.moodysaleem.workers.dev/";
     const affiliateTag = "giftwithai-21";
-    const captureEndpoint = ""; // e.g. "https://your-worker.example/capture-email"
     const requiredKeys = ['Recipient','Gender','Budget','Occasion','Timeline'];
     const clientBatchSize = 3;
     const clientMaxFetch = 12;
