@@ -402,7 +402,7 @@
     function generateAffiliateLink(name, asin, itemAffiliateUrl) {
       const tag = affiliateTag || 'giftwithai-21';
       try {
-        if (itemAffiliateUrl && typeof itemAffiliateUrl === 'string' and itemAffiliateUrl.includes('amazon.')) {
+        if (itemAffiliateUrl && typeof itemAffiliateUrl === 'string' && itemAffiliateUrl.includes('amazon.')) {
           const parsedAsin = extractAsinFromUrl(itemAffiliateUrl);
           if (parsedAsin && isValidAsin(parsedAsin)) {
             return `https://www.amazon.com/dp/${parsedAsin}?tag=${encodeURIComponent(tag)}`;
