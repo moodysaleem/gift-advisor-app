@@ -402,7 +402,7 @@
     function generateAffiliateLink(name, asin, itemAffiliateUrl) {
       const tag = affiliateTag || 'giftwithai-21';
       try {
-        if (itemAffiliateUrl && typeof itemAffiliateUrl === 'string' && itemAffiliateUrl.includes('amazon.')) {
+        if (itemAffiliateUrl && typeof itemAffiliateUrl === 'string' and itemAffiliateUrl.includes('amazon.')) {
           const parsedAsin = extractAsinFromUrl(itemAffiliateUrl);
           if (parsedAsin && isValidAsin(parsedAsin)) {
             return `https://www.amazon.com/dp/${parsedAsin}?tag=${encodeURIComponent(tag)}`;
@@ -690,7 +690,7 @@
     function shareToTikTok() { return shareViaWebShareOrCopy('TikTok'); }
     function shareToSnapchat() { return shareViaWebShareOrCopy('Snapchat'); }
 
-    // EMAIL flow
+    // EMAIL flow helpers
     function openEmailModal() {
       emailInput.value = '';
       emailError.classList.add('hidden');
@@ -705,6 +705,7 @@
     }
     function validateEmail(e) { if (!e) return false; return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); }
 
+    // UPDATED: sendEmailRecommendations — sends consent + recommendations + path to captureEndpoint
     async function sendEmailRecommendations() {
       const email = emailInput.value.trim();
       if (!validateEmail(email)) {
@@ -712,32 +713,59 @@
         emailError.classList.remove('hidden');
         return;
       }
+
+      // require explicit consent checkbox
+      const consentChecked = document.getElementById('email-consent')?.checked;
+      if (!consentChecked) {
+        emailError.textContent = 'You must check the consent box to receive emails.';
+        emailError.classList.remove('hidden');
+        return;
+      }
       emailError.classList.add('hidden');
 
+      // visible recommendations and mailto body (unchanged)
       const items = getVisibleRecommendations();
       const lines = items.map(it => `${it.title}${it.price ? ` — ${it.price}` : ''}\n${it.url}\n`);
       const bodyText = `Here are the gift ideas you asked for:\n\n${lines.join('\n')}\nFrom Gift Advisor — try it: https://www.giftwithai.com/gift-advisor/`;
 
       const subject = encodeURIComponent('Your Gift Advisor recommendations');
       const body = encodeURIComponent(bodyText);
+
+      // open mail client
       window.open(`mailto:${encodeURIComponent(email)}?subject=${subject}&body=${body}`, '_self');
 
+      // Build capture payload with consent and other useful fields
+      const payload = {
+        email,
+        consent: true,
+        timestamp: new Date().toISOString(),
+        path: window.location ? window.location.pathname : null,
+        answers: Object.assign({}, window.selectedAnswers),
+        recommendations: items,
+        userAgent: navigator.userAgent || null
+      };
+
+      // Send to capture endpoint (non-blocking except we await to show success/failure)
       if (captureEndpoint && captureEndpoint.trim() !== '') {
         try {
-          const payload = { email, timestamp: new Date().toISOString(), answers: Object.assign({}, window.selectedAnswers), items };
           const r = await fetch(captureEndpoint, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
           });
+
           if (r.ok) {
             emailFeedback.textContent = 'Email opened in your mail app — we also saved your address (thank you).';
             emailFeedback.style.display = 'block';
             window.dataLayer.push({ event:'email_capture', success:true });
           } else {
+            // try to parse body for debug info
+            let txt = '';
+            try { txt = await r.text(); } catch(e) { txt = ''; }
             emailFeedback.textContent = 'Email opened in your mail app. (Capture endpoint returned an error.)';
             emailFeedback.style.display = 'block';
-            window.dataLayer.push({ event:'email_capture', success:false, status:r.status });
+            window.dataLayer.push({ event:'email_capture', success:false, status:r.status, body: txt });
+            console.warn('capture post error', r.status, txt);
           }
         } catch (err) {
           console.error('capture post failed', err);
@@ -781,7 +809,7 @@
       exactAgeInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); updateProgress(); } });
     });
 
-    // small helper used above
+    // small helper used above (already defined earlier but keep here for safety)
     function getVisibleRecommendations() {
       return fetchedItems.slice(0, shownCount).map(it => {
         return {
