@@ -1,0 +1,40 @@
+```text
+Project: gift-advisor (divine-violet + bold-lake)
+
+What this repo contains (important files)
+- worker/arsenal-worker-toggle.mjs  — divine-violet worker with env.USE_FALLBACK toggle, D1 storage & paging.
+- worker/bold-lake-worker.js       — bold-lake worker that loads catalog.json, scores items, and returns recommendations.
+- generate-catalog.js             — Node script to generate N realistic catalog entries (writes catalog.json).
+- catalog.json                    — generated product catalog (if you ran the generator).
+- worker/bold-lake-expand-items.mjs — optional snippet to synthesize variants when catalog is small.
+
+How to resume with me (single command I will ask for first)
+- From your project folder run:
+  git remote -v
+  Paste the full output into the chat when you return.
+
+If you prefer to share a URL instead:
+- Paste your repository URL (e.g. https://github.com/your-username/your-repo) or the public catalog.json URL:
+  https://<username>.github.io/<repo>/catalog.json
+
+Key facts to remember (from our session)
+- MAX_ARSENAL = 1000 in divine-violet; PAGE_SIZE = 50.
+- bold-lake currently loads catalog.json and returned 26 items (catalog had ~26 matches).
+- We created a node generator to produce 300/500/1000 items: generate-catalog.js
+- Recommended long-term: fill catalog.json with real items and host via GitHub Pages.
+- Quick/fallback: expand items with expandItemsTo() that synthesizes variants.
+
+Immediate next steps I can do for you when you return
+- If you push the repo / catalog.json: I will give the single one-line change to bold-lake CATALOG_URL (if needed) and a single test POST to confirm bold-lake returns N items.
+- If you prefer the quick patch: I will produce a single-file worker replacement that integrates expandItemsTo and returns synthesized variants when catalog is small.
+
+Security & privacy notes
+- Keep any API keys, secrets, or credentials out of the repo (use environment variables in workers).
+- If you want me to edit files in the repo, paste the file(s) or grant access via a tool you control — I cannot access your account on my own.
+
+If you want, I can also:
+- produce a one-line git commit you can run now to add this PROJECT_SUMMARY.md to your repo, or
+- produce a backup zip you can download and store locally.
+
+When you return, paste the git remote -v output (or the repo URL) and say “resume” — I’ll pick up exactly where we left off and give the next single action.
+```
