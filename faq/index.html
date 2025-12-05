@@ -1,74 +1,30 @@
 <!doctype html>
 <html lang="en">
 <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Frequently Asked Questions | GiftWithAI</title>
+  <meta name="description" content="Have questions about how the Gift Genie works? Find answers about our AI recommendations, affiliate links, and privacy policy." />
+  <link rel="canonical" href="https://www.giftwithai.com/faq/" />
+
   <!-- Google Tag Manager (head) - container GTM-T8TBW4QT -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
   new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
   j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
   })(window,document,'script','dataLayer','GTM-T8TBW4QT');</script>
-  <!-- End Google Tag Manager (head) -->
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>FAQ | Gift Advisor</title>
-  <meta name="description" content="Frequently asked questions about Gift Advisor. Learn how our AI-powered gift recommendation tool works and about our affiliate partnerships." />
-  <link rel="canonical" href="https://www.giftwithai.com/faq/" />
-
-  <!-- Open Graph Tags -->
-  <meta property="og:title" content="FAQ | Gift Advisor" />
-  <meta property="og:description" content="Frequently asked questions about Gift Advisor. Learn how our AI-powered gift recommendation tool works and about our affiliate partnerships." />
-  <meta property="og:url" content="https://www.giftwithai.com/faq/" />
-  <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="Gift Advisor" />
-
-  <!-- FAQPage JSON-LD -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "How does the Gift Advisor work?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "The Gift Advisor uses AI to analyze your preferences and recipient details to provide personalized gift recommendations. Simply answer a few questions about who you're shopping [...]
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Does Gift Advisor use affiliate links?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Yes, some of the product links on our site are affiliate links. This means we may earn a small commission if you make a purchase through these links, at no additional cost to yo[...]
-        }
-      }
-    ]
-  }
-  </script>
+  <!-- End Google Tag Manager -->
 
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      background-color: #f0f6ff;
-      padding: 16px;
-    }
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-      background: #fff;
-      border-radius: 14px;
-      padding: 2rem;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-    }
-    h1 { color: #4f46e5; }
-    .faq-item { margin-bottom: 1.5rem; }
-    .faq-question { font-weight: 600; color: #1e293b; margin-bottom: 0.5rem; }
-    .faq-answer { color: #475569; }
-    a { color: #6366f1; }
-    a:hover { text-decoration: underline; }
+    body { font-family: 'Poppins', sans-serif; background-color: #f0f6ff; color: #1e293b; }
+    .accordion-item { border-bottom: 1px solid #e2e8f0; }
+    .accordion-button { width: 100%; text-align: left; padding: 1.5rem 0; font-weight: 600; font-size: 1.125rem; color: #1e293b; display: flex; justify-content: space-between; align-items: center; }
+    .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; color: #475569; line-height: 1.6; }
+    .accordion-content.open { max-height: 500px; /* arbitrary large height */ }
+    .icon { transition: transform 0.3s ease; }
+    .icon.rotate { transform: rotate(180deg); }
   </style>
 </head>
 <body>
@@ -77,43 +33,124 @@
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <!-- End Google Tag Manager (noscript) -->
 
-  <div class="container">
-    <nav class="text-sm text-gray-500 mb-4">
-      <a href="/">Home</a> &raquo;
-      <span>FAQ</span>
-    </nav>
+  <!-- Navigation -->
+  <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center">
+          <a href="/" class="text-2xl font-extrabold text-indigo-700">The Gift Genie 🧞‍♀️</a>
+        </div>
+        <div class="flex items-center">
+          <a href="/" class="text-sm font-semibold text-gray-600 hover:text-indigo-600">Use the Tool →</a>
+        </div>
+      </div>
+    </div>
+  </nav>
 
-    <h1 class="text-3xl font-bold mb-6">Frequently Asked Questions</h1>
+  <!-- Header -->
+  <header class="bg-purple-700 text-white py-16 px-4 text-center">
+    <div class="max-w-3xl mx-auto">
+      <h1 class="text-4xl md:text-5xl font-extrabold mb-4">Frequently Asked Questions</h1>
+      <p class="text-purple-100 text-lg md:text-xl">Everything you need to know about finding the perfect gift.</p>
+    </div>
+  </header>
 
-    <div class="faq-item">
-      <h2 class="faq-question">How does the Gift Advisor work?</h2>
-      <p class="faq-answer">
-        The Gift Advisor uses AI to analyze your preferences and recipient details to provide personalized gift recommendations. Simply answer a few questions about who you're shopping for, their [...]
-      </p>
+  <!-- Main Content -->
+  <main class="max-w-3xl mx-auto px-4 py-12">
+    
+    <!-- FAQ Accordion -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 md:p-10">
+      
+      <div class="accordion-item">
+        <button class="accordion-button">
+          How does the Gift Genie choose gifts?
+          <svg class="icon w-6 h-6 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+        </button>
+        <div class="accordion-content">
+          <div class="pb-6">
+            Our system uses smart filtering logic to analyze thousands of products. When you tell us who the gift is for (Age, Interests, Budget), we match those criteria against our curated catalog to find items that have high ratings and relevant tags. We prioritize items that are currently popular and well-reviewed.
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <button class="accordion-button">
+          Do I pay extra when buying through your links?
+          <svg class="icon w-6 h-6 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+        </button>
+        <div class="accordion-content">
+          <div class="pb-6">
+            Not at all! We are a participant in the Amazon Services LLC Associates Program. This means if you click a link and make a purchase, we may earn a small commission at <strong>no additional cost to you</strong>. The price you pay is exactly the same as if you went to Amazon directly.
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <button class="accordion-button">
+          How often is the gift catalog updated?
+          <svg class="icon w-6 h-6 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+        </button>
+        <div class="accordion-content">
+          <div class="pb-6">
+            We update our catalog regularly to ensure all items are in stock and relevant for the current season. We remove discontinued items and add trending new products constantly to keep our recommendations fresh.
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <button class="accordion-button">
+          Is my email address safe?
+          <svg class="icon w-6 h-6 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+        </button>
+        <div class="accordion-content">
+          <div class="pb-6">
+            Absolutely. If you choose to email your recommendations to yourself, we only use your email address to send that specific message. We do not sell your personal data to third parties. You can read more about this in our privacy policy.
+          </div>
+        </div>
+      </div>
+
     </div>
 
-    <div class="faq-item">
-      <h2 class="faq-question">Does Gift Advisor use affiliate links?</h2>
-      <p class="faq-answer">
-        Yes, some of the product links on our site are affiliate links. This means we may earn a small commission if you make a purchase through these links, at no additional cost to you. These co[...]
-      </p>
+    <div class="text-center mt-12">
+      <p class="text-gray-600 mb-6">Still have a question? We're here to help.</p>
+      <a href="mailto:support@giftwithai.com" class="text-indigo-600 font-bold hover:underline">Contact Support</a>
     </div>
 
-    <div class="mt-8">
-      <h2 class="text-xl font-semibold mb-3">Need More Help?</h2>
-      <p class="text-gray-700 mb-4">
-        Explore our gift guides or try the Gift Advisor for personalized recommendations:
-      </p>
-      <ul class="list-disc list-inside text-gray-700">
-        <li><a href="/gift-advisor/">Gift Advisor</a> – Get personalized gift recommendations</li>
-        <li><a href="/guides/gifts-under-25/">Best Gifts Under $25</a> – Budget-friendly gift ideas</li>
-        <li><a href="/guides/top-board-games/">Top Board Games</a> – Fun games for all ages</li>
-      </ul>
-    </div>
+  </main>
 
-    <footer class="text-sm text-gray-500 mt-8 pt-4 border-t">
-      <p>&copy; 2025 Gift Advisor. All rights reserved.</p>
-    </footer>
-  </div>
+  <!-- Footer -->
+  <footer class="bg-gray-50 border-t border-gray-200 mt-12 py-12">
+    <div class="max-w-4xl mx-auto px-4 text-center">
+      <p class="text-gray-500 text-sm mb-4">© 2025 GiftWithAI.com. All rights reserved.</p>
+      <div class="space-x-4 text-sm text-gray-600">
+        <a href="/guides/gifts-under-25/" class="hover:text-indigo-600 underline">Gifts Under $25</a>
+        <a href="/guides/top-board-games/" class="hover:text-indigo-600 underline">Top Board Games</a>
+        <a href="/faq/" class="hover:text-indigo-600 underline">FAQ</a>
+      </div>
+      <p class="text-xs text-gray-400 mt-8">As an Amazon Associate, we earn from qualifying purchases.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Simple Accordion Logic
+    document.querySelectorAll('.accordion-button').forEach(button => {
+      button.addEventListener('click', () => {
+        const content = button.nextElementSibling;
+        const icon = button.querySelector('.icon');
+        
+        // Toggle current
+        content.classList.toggle('open');
+        icon.classList.toggle('rotate');
+
+        // Optional: Close others
+        document.querySelectorAll('.accordion-content').forEach(c => {
+          if (c !== content) c.classList.remove('open');
+        });
+        document.querySelectorAll('.icon').forEach(i => {
+          if (i !== icon) i.classList.remove('rotate');
+        });
+      });
+    });
+  </script>
 </body>
 </html>
