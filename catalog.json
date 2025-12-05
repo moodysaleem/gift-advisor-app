@@ -15,7 +15,8 @@
       "family member",
       "books",
       "playful"
-    ]
+    ],
+    "asin": ""
   },
   {
     "id": 2,
@@ -32,7 +33,8 @@
       "child",
       "toys",
       "under $25"
-    ]
+    ],
+    "asin": ""
   },
   {
     "id": 3,
@@ -49,7 +51,8 @@
       "under $25",
       "family member",
       "toys"
-    ]
+    ],
+    "asin": ""
   },
   {
     "id": 4,
@@ -66,7 +69,8 @@
       "arts & crafts",
       "under $25",
       "child"
-    ]
+    ],
+    "asin": ""
   },
   {
     "id": 5,
@@ -82,7 +86,8 @@
       "child (4-12)",
       "under $25",
       "toys"
-    ]
+    ],
+    "asin": ""
   },
   {
     "id": 6,
@@ -97,7 +102,8 @@
       "preschool (4-6)",
       "arts & crafts",
       "under $25"
-    ]
+    ],
+    "asin": ""
   },
   {
     "id": 7,
@@ -114,7 +120,8 @@
       "stem",
       "$25 - $75",
       "educational"
-    ]
+    ],
+    "asin": ""
   },
   {
     "id": 8,
@@ -130,7 +137,8 @@
       "child (4-12)",
       "books",
       "under $25"
-    ]
+    ],
+    "asin": ""
   },
   {
     "id": 9,
@@ -146,7 +154,8 @@
       "tween (10-12)",
       "$25 - $75",
       "family"
-    ]
+    ],
+    "asin": ""
   },
   {
     "id": 10,
@@ -161,7 +170,8 @@
       "teen (13-19)",
       "tech & gadgets",
       "under $25"
-    ]
+    ],
+    "asin": ""
   },
   {
     "id": 11,
@@ -176,7 +186,8 @@
       "teen (13-19)",
       "tech & gadgets",
       "holiday/christmas"
-    ]
+    ],
+    "asin": ""
   },
   {
     "id": 12,
@@ -191,7 +202,8 @@
       "teen (13-19)",
       "under $25",
       "holiday/christmas"
-    ]
+    ],
+    "asin": ""
   },
   {
     "id": 13,
@@ -206,7 +218,8 @@
       "adult (20-55)",
       "under $25",
       "practical"
-    ]
+    ],
+    "asin": ""
   },
   {
     "id": 14,
@@ -221,7 +234,8 @@
       "adult (20-55)",
       "under $25",
       "home"
-    ]
+    ],
+    "asin": ""
   },
   {
     "id": 15,
@@ -236,7 +250,8 @@
       "adult (20-55)",
       "under $25",
       "practical"
-    ]
+    ],
+    "asin": ""
   },
   {
     "id": 16,
@@ -251,7 +266,8 @@
       "adult (20-55)",
       "$25 - $75",
       "tech & gadgets"
-    ]
+    ],
+    "asin": ""
   },
   {
     "id": 17,
@@ -266,7 +282,8 @@
       "adult (20-55)",
       "$25 - $75",
       "gifts"
-    ]
+    ],
+    "asin": ""
   },
   {
     "id": 18,
@@ -281,7 +298,8 @@
       "senior (55+)",
       "under $25",
       "family member"
-    ]
+    ],
+    "asin": ""
   },
   {
     "id": 19,
@@ -296,7 +314,8 @@
       "senior (55+)",
       "under $25",
       "puzzles"
-    ]
+    ],
+    "asin": ""
   },
   {
     "id": 20,
@@ -311,7 +330,8 @@
       "senior (55+)",
       "$25 - $75",
       "home"
-    ]
+    ],
+    "asin": ""
   },
   {
     "id": 21,
@@ -326,7 +346,8 @@
       "adult (20-55)",
       "$25 - $75",
       "travel"
-    ]
+    ],
+    "asin": ""
   },
   {
     "id": 22,
@@ -341,7 +362,8 @@
       "adult (20-55)",
       "under $25",
       "home"
-    ]
+    ],
+    "asin": ""
   },
   {
     "id": 23,
@@ -356,7 +378,8 @@
       "adult (20-55)",
       "under $25",
       "office"
-    ]
+    ],
+    "asin": ""
   },
   {
     "id": 24,
@@ -371,7 +394,8 @@
       "pets",
       "under $25",
       "family member"
-    ]
+    ],
+    "asin": ""
   },
   {
     "id": 25,
@@ -385,7 +409,8 @@
     "tags": [
       "pets",
       "under $25"
-    ]
+    ],
+    "asin": ""
   },
   {
     "id": 26,
@@ -400,7 +425,8 @@
       "adult (20-55)",
       "under $25",
       "practical"
-    ]
+    ],
+    "asin": ""
   },
   {
     "id": 27,
@@ -417,7 +443,8 @@
       "$25 - $75",
       "stem",
       "toys"
-    ]
+    ],
+    "asin": ""
   },
   {
     "id": 28,
@@ -433,7 +460,8 @@
       "preschool (4-6)",
       "toys",
       "family member"
-    ]
+    ],
+    "asin": ""
   },
   {
     "id": 29,
@@ -449,11 +477,12 @@
       "preschool (4-6)",
       "under $25",
       "child"
-    ]
+    ],
+    "asin": ""
   },
   {
     "id": 30,
-    "title": "Kids' Gardening Kit",
+    "title": "Gardening Kit",
     "description": "Small tools, seeds and a kid-sized pot for growing green thumbs.",
     "image": "https://placehold.co/400x250/98fb98/000000?text=Gardening+Kit",
     "price": "$21.99",
@@ -465,7 +494,8 @@
       "preschool (4-6)",
       "$25 - $75",
       "outdoors"
-    ]
+    ],
+    "asin": ""
   },
   {
     "id": 31,
@@ -481,11 +511,12 @@
       "kid (7-9)",
       "arts & crafts",
       "$25 - $75"
-    ]
+    ],
+    "asin": ""
   },
   {
     "id": 32,
-    "title": "Kids' Headlamp for Adventures",
+    "title": "Headlamp for Adventures",
     "description": "Hands-free light for night forts and backyard exploring.",
     "image": "https://placehold.co/400x250/00008b/ffffff?text=Headlamp",
     "price": "$14.99",
@@ -497,7 +528,8 @@
       "tween (10-12)",
       "outdoors",
       "under $25"
-    ]
+    ],
+    "asin": ""
   },
   {
     "id": 33,
@@ -512,7 +544,8 @@
       "teen (13-19)",
       "tech & gadgets",
       "$25 - $75"
-    ]
+    ],
+    "asin": ""
   },
   {
     "id": 34,
@@ -521,14 +554,15 @@
     "image": "https://placehold.co/400x250/9acd32/000000?text=Slime+Kit",
     "price": "$16.99",
     "availability": "In stock",
-    "rating": 4.0,
+    "rating": 4,
     "affiliateUrl": "https://www.amazon.com/s?k=diy+slime+kit&tag=giftwithai-21",
     "tags": [
       "tween (10-12)",
       "kid (7-9)",
       "arts & crafts",
       "under $25"
-    ]
+    ],
+    "asin": ""
   },
   {
     "id": 35,
@@ -544,7 +578,8 @@
       "stem",
       "$25 - $75",
       "educational"
-    ]
+    ],
+    "asin": ""
   },
   {
     "id": 36,
@@ -560,7 +595,8 @@
       "tween (10-12)",
       "under $25",
       "educational"
-    ]
+    ],
+    "asin": ""
   },
   {
     "id": 37,
@@ -576,7 +612,8 @@
       "stem",
       "$25 - $75",
       "educational"
-    ]
+    ],
+    "asin": ""
   },
   {
     "id": 38,
@@ -592,7 +629,8 @@
       "preschool (4-6)",
       "family member",
       "$25 - $75"
-    ]
+    ],
+    "asin": ""
   },
   {
     "id": 39,
@@ -608,7 +646,8 @@
       "kid (7-9)",
       "arts & crafts",
       "under $25"
-    ]
+    ],
+    "asin": ""
   },
   {
     "id": 40,
@@ -624,7 +663,8 @@
       "preschool (4-6)",
       "under $25",
       "toys"
-    ]
+    ],
+    "asin": ""
   },
   {
     "id": 41,
@@ -640,7 +680,8 @@
       "tween (10-12)",
       "arts & crafts",
       "$25 - $75"
-    ]
+    ],
+    "asin": ""
   },
   {
     "id": 42,
@@ -656,7 +697,8 @@
       "tween (10-12)",
       "under $25",
       "books"
-    ]
+    ],
+    "asin": ""
   },
   {
     "id": 43,
@@ -672,7 +714,8 @@
       "tween (10-12)",
       "under $25",
       "home"
-    ]
+    ],
+    "asin": ""
   },
   {
     "id": 44,
@@ -688,7 +731,8 @@
       "teen (13-19)",
       "$25 - $75",
       "music"
-    ]
+    ],
+    "asin": ""
   },
   {
     "id": 45,
@@ -704,7 +748,8 @@
       "tween (10-12)",
       "adult (20-55)",
       "under $25"
-    ]
+    ],
+    "asin": ""
   },
   {
     "id": 46,
@@ -720,7 +765,8 @@
       "tween (10-12)",
       "outdoors",
       "$25 - $75"
-    ]
+    ],
+    "asin": ""
   },
   {
     "id": 47,
@@ -736,7 +782,8 @@
       "adult (20-55)",
       "tech & gadgets",
       "$25 - $75"
-    ]
+    ],
+    "asin": ""
   },
   {
     "id": 48,
@@ -752,7 +799,8 @@
       "kid (7-9)",
       "arts & crafts",
       "under $25"
-    ]
+    ],
+    "asin": ""
   },
   {
     "id": 49,
@@ -768,11 +816,12 @@
       "toddler (1-3)",
       "under $25",
       "family"
-    ]
+    ],
+    "asin": ""
   },
   {
     "id": 50,
-    "title": "Kids' Baking Set (Safe Tools)",
+    "title": "Baking Set (Safe Tools)",
     "description": "Mini rolling pin, cutters and a recipe card for tiny bakers.",
     "image": "https://placehold.co/400x250/ffdead/000000?text=Baking+Set",
     "price": "$19.99",
@@ -784,6 +833,2348 @@
       "preschool (4-6)",
       "under $25",
       "arts & crafts"
-    ]
+    ],
+    "asin": ""
+  },
+  {
+    "id": 51,
+    "title": "Compact Travel Chess Set",
+    "description": "Magnetic travel chess for strategic play on the go.",
+    "image": "https://placehold.co/400x250/000000/ffffff?text=Travel+Chess",
+    "price": "$24.99",
+    "availability": "In stock",
+    "rating": 4.5,
+    "affiliateUrl": "https://www.amazon.com/s?k=travel+chess+set&tag=giftwithai-21",
+    "tags": [
+      "tween (10-12)",
+      "adult (20-55)",
+      "$25 - $75",
+      "games"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 52,
+    "title": "LED Night Light Projector",
+    "description": "Project magical stars or animals onto bedroom ceilings.",
+    "image": "https://placehold.co/400x250/8a2be2/ffffff?text=Night+Projector",
+    "price": "$19.99",
+    "availability": "In stock",
+    "rating": 4.4,
+    "affiliateUrl": "https://www.amazon.com/s?k=led+night+light+projector&tag=giftwithai-21",
+    "tags": [
+      "kid (7-9)",
+      "tween (10-12)",
+      "under $25",
+      "home"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 53,
+    "title": "Collectible Sticker Cards Pack",
+    "description": "Trendy collectible cards and sticker sets for swapping.",
+    "image": "https://placehold.co/400x250/ffb6c1/000000?text=Sticker+Cards",
+    "price": "$8.99",
+    "availability": "In stock",
+    "rating": 4,
+    "affiliateUrl": "https://www.amazon.com/s?k=collectible+sticker+cards&tag=giftwithai-21",
+    "tags": [
+      "tween (10-12)",
+      "teen (13-19)",
+      "under $25"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 54,
+    "title": "Starter Telescope for Kids",
+    "description": "Compact telescope for first glimpses of the moon and stars.",
+    "image": "https://placehold.co/400x250/00008b/ffffff?text=Telescope",
+    "price": "$54.99",
+    "availability": "In stock",
+    "rating": 4.2,
+    "affiliateUrl": "https://www.amazon.com/s?k=starter+telescope+for+kids&tag=giftwithai-21",
+    "tags": [
+      "tween (10-12)",
+      "teen (13-19)",
+      "$25 - $75",
+      "educational"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 55,
+    "title": "Interactive Flash Cards (Early Learning)",
+    "description": "Cards for letters, numbers and shapes with bright imagery.",
+    "image": "https://placehold.co/400x250/ffd700/000000?text=Flash+Cards",
+    "price": "$12.99",
+    "availability": "In stock",
+    "rating": 4.6,
+    "affiliateUrl": "https://www.amazon.com/s?k=interactive+flash+cards&tag=giftwithai-21",
+    "tags": [
+      "toddler (1-3)",
+      "preschool (4-6)",
+      "under $25",
+      "educational"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 56,
+    "title": "Pop-It Sensory Fidget Toy Pack",
+    "description": "Colorful pop-it toys for calming and focus.",
+    "image": "https://placehold.co/400x250/ff69b4/000000?text=Pop+It",
+    "price": "$11.99",
+    "availability": "In stock",
+    "rating": 4.1,
+    "affiliateUrl": "https://www.amazon.com/s?k=pop+it+sensory+toy&tag=giftwithai-21",
+    "tags": [
+      "kid (7-9)",
+      "tween (10-12)",
+      "under $25",
+      "gadgets"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 57,
+    "title": "Waterproof Camera",
+    "description": "Rugged camera for capturing outdoor adventures and vacations.",
+    "image": "https://placehold.co/400x250/20b2aa/ffffff?text=Waterproof+Camera",
+    "price": "$39.99",
+    "availability": "In stock",
+    "rating": 4,
+    "affiliateUrl": "https://www.amazon.com/s?k=kids+waterproof+camera&tag=giftwithai-21",
+    "tags": [
+      "tween (10-12)",
+      "teen (13-19)",
+      "$25 - $75",
+      "tech & gadgets"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 58,
+    "title": "Wooden Balance Board",
+    "description": "Develop balance and core strength with playful rocking.",
+    "image": "https://placehold.co/400x250/8b4513/ffffff?text=Balance+Board",
+    "price": "$49.99",
+    "availability": "In stock",
+    "rating": 4.3,
+    "affiliateUrl": "https://www.amazon.com/s?k=wooden+balance+board&tag=giftwithai-21",
+    "tags": [
+      "kid (7-9)",
+      "tween (10-12)",
+      "$25 - $75",
+      "fitness"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 59,
+    "title": "Color-Changing Mood Lamp",
+    "description": "Lamp that shifts colors for cozy and playful vibes.",
+    "image": "https://placehold.co/400x250/8a2be2/ffffff?text=Mood+Lamp",
+    "price": "$29.99",
+    "availability": "In stock",
+    "rating": 4.4,
+    "affiliateUrl": "https://www.amazon.com/s?k=color+changing+mood+lamp&tag=giftwithai-21",
+    "tags": [
+      "teen (13-19)",
+      "adult (20-55)",
+      "$25 - $75",
+      "home"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 60,
+    "title": "Compact Puzzle Ball",
+    "description": "Challenging spherical puzzle for curious minds.",
+    "image": "https://placehold.co/400x250/ffd700/000000?text=Puzzle+Ball",
+    "price": "$14.99",
+    "availability": "In stock",
+    "rating": 4.2,
+    "affiliateUrl": "https://www.amazon.com/s?k=compact+puzzle+ball&tag=giftwithai-21",
+    "tags": [
+      "tween (10-12)",
+      "teen (13-19)",
+      "under $25",
+      "games"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 61,
+    "title": "Yoga Mat (Non-slip)",
+    "description": "Soft mat for little yogis and stretch sessions.",
+    "image": "https://placehold.co/400x250/20b2aa/ffffff?text=Kids+Yoga+Mat",
+    "price": "$19.99",
+    "availability": "In stock",
+    "rating": 4.5,
+    "affiliateUrl": "https://www.amazon.com/s?k=kids+yoga+mat&tag=giftwithai-21",
+    "tags": [
+      "kid (7-9)",
+      "tween (10-12)",
+      "under $25",
+      "fitness"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 62,
+    "title": "Digital Drawing Tablet (Beginner)",
+    "description": "Affordable tablet for digital doodles and practice.",
+    "image": "https://placehold.co/400x250/6495ed/ffffff?text=Drawing+Tablet",
+    "price": "$59.99",
+    "availability": "In stock",
+    "rating": 4.3,
+    "affiliateUrl": "https://www.amazon.com/s?k=digital+drawing+tablet+beginner&tag=giftwithai-21",
+    "tags": [
+      "tween (10-12)",
+      "teen (13-19)",
+      "$25 - $75",
+      "tech & gadgets"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 63,
+    "title": "Wooden Shape Sorter",
+    "description": "Classic shape sorter with bright shapes and push-in fun.",
+    "image": "https://placehold.co/400x250/ffb6c1/000000?text=Shape+Sorter",
+    "price": "$24.99",
+    "availability": "In stock",
+    "rating": 4.7,
+    "affiliateUrl": "https://www.amazon.com/s?k=wooden+shape+sorter&tag=giftwithai-21",
+    "tags": [
+      "toddler (1-3)",
+      "preschool (4-6)",
+      "toys",
+      "under $25"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 64,
+    "title": "Play Tent & Tunnel Set",
+    "description": "Indoor tent and tunnel for hide-and-seek and cozy corners.",
+    "image": "https://placehold.co/400x250/ff7f50/000000?text=Play+Tent",
+    "price": "$39.99",
+    "availability": "In stock",
+    "rating": 4.4,
+    "affiliateUrl": "https://www.amazon.com/s?k=play+tent+tunnel&tag=giftwithai-21",
+    "tags": [
+      "kid (7-9)",
+      "preschool (4-6)",
+      "$25 - $75",
+      "indoor"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 65,
+    "title": "Sports Kit (Mini Soccer)",
+    "description": "Soft ball, cones and pump for backyard play.",
+    "image": "https://placehold.co/400x250/228b22/ffffff?text=Sports+Kit",
+    "price": "$19.99",
+    "availability": "In stock",
+    "rating": 4.3,
+    "affiliateUrl": "https://www.amazon.com/s?k=kids+sports+kit&tag=giftwithai-21",
+    "tags": [
+      "kid (7-9)",
+      "tween (10-12)",
+      "outdoors",
+      "under $25"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 66,
+    "title": "Sticker Reward Calendar",
+    "description": "Magnetic daily chart for routines, chores and wins.",
+    "image": "https://placehold.co/400x250/ffdead/000000?text=Reward+Calendar",
+    "price": "$12.99",
+    "availability": "In stock",
+    "rating": 4.5,
+    "affiliateUrl": "https://www.amazon.com/s?k=sticker+reward+calendar&tag=giftwithai-21",
+    "tags": [
+      "toddler (1-3)",
+      "preschool (4-6)",
+      "under $25",
+      "family"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 67,
+    "title": "Child-Safe Binoculars",
+    "description": "Small optics for birdwatching and nature days.",
+    "image": "https://placehold.co/400x250/6a5acd/ffffff?text=Binoculars",
+    "price": "$21.99",
+    "availability": "In stock",
+    "rating": 4.2,
+    "affiliateUrl": "https://www.amazon.com/s?k=child+binoculars&tag=giftwithai-21",
+    "tags": [
+      "kid (7-9)",
+      "tween (10-12)",
+      "outdoors",
+      "under $25"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 68,
+    "title": "Sound Puzzle Book",
+    "description": "Interactive book with animal sounds and puzzles.",
+    "image": "https://placehold.co/400x250/ffb6c1/000000?text=Sound+Book",
+    "price": "$14.99",
+    "availability": "In stock",
+    "rating": 4.6,
+    "affiliateUrl": "https://www.amazon.com/s?k=sound+puzzle+book&tag=giftwithai-21",
+    "tags": [
+      "toddler (1-3)",
+      "preschool (4-6)",
+      "books",
+      "under $25"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 69,
+    "title": "Snack Maker (Toy Kitchen)",
+    "description": "Pretend-play snack set to stir creativity and role play.",
+    "image": "https://placehold.co/400x250/ffa07a/000000?text=Snack+Maker",
+    "price": "$29.99",
+    "availability": "In stock",
+    "rating": 4.1,
+    "affiliateUrl": "https://www.amazon.com/s?k=kids+snack+maker+toy&tag=giftwithai-21",
+    "tags": [
+      "kid (7-9)",
+      "preschool (4-6)",
+      "$25 - $75",
+      "play"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 70,
+    "title": "Junior Gardening Gloves & Tools",
+    "description": "Small, safe tools for planting and digging fun.",
+    "image": "https://placehold.co/400x250/98fb98/000000?text=Gardening+Gloves",
+    "price": "$15.99",
+    "availability": "In stock",
+    "rating": 4.3,
+    "affiliateUrl": "https://www.amazon.com/s?k=junior+gardening+tools&tag=giftwithai-21",
+    "tags": [
+      "kid (7-9)",
+      "preschool (4-6)",
+      "under $25",
+      "outdoors"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 71,
+    "title": "Beginner Sewing Kit for Kids",
+    "description": "Safe needle alternatives and large-stitch practice.",
+    "image": "https://placehold.co/400x250/ff69b4/000000?text=Sewing+Kit",
+    "price": "$18.99",
+    "availability": "In stock",
+    "rating": 4,
+    "affiliateUrl": "https://www.amazon.com/s?k=beginner+sewing+kit+for+kids&tag=giftwithai-21",
+    "tags": [
+      "tween (10-12)",
+      "arts & crafts",
+      "under $25"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 72,
+    "title": "Junior Sports Watch (Waterproof)",
+    "description": "Kid-friendly watch with basic timer functions.",
+    "image": "https://placehold.co/400x250/00008b/ffffff?text=Kids+Watch",
+    "price": "$24.99",
+    "availability": "In stock",
+    "rating": 4.2,
+    "affiliateUrl": "https://www.amazon.com/s?k=junior+sports+watch&tag=giftwithai-21",
+    "tags": [
+      "kid (7-9)",
+      "tween (10-12)",
+      "under $25",
+      "gifts"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 73,
+    "title": "Animal Hand Puppets Set",
+    "description": "Puppets for storytelling and cozy play sessions.",
+    "image": "https://placehold.co/400x250/ffdead/000000?text=Puppets",
+    "price": "$16.99",
+    "availability": "In stock",
+    "rating": 4.5,
+    "affiliateUrl": "https://www.amazon.com/s?k=animal+hand+puppets+set&tag=giftwithai-21",
+    "tags": [
+      "preschool (4-6)",
+      "toddler (1-3)",
+      "under $25",
+      "toys"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 74,
+    "title": "Camping Chair (Foldable)",
+    "description": "Tiny foldable chair for picnics and camping trips.",
+    "image": "https://placehold.co/400x250/6a5acd/ffffff?text=Camping+Chair",
+    "price": "$29.99",
+    "availability": "In stock",
+    "rating": 4.3,
+    "affiliateUrl": "https://www.amazon.com/s?k=kids+camping+chair&tag=giftwithai-21",
+    "tags": [
+      "kid (7-9)",
+      "tween (10-12)",
+      "$25 - $75",
+      "outdoors"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 75,
+    "title": "Build-and-Play Marble Run",
+    "description": "Modular marble track with satisfying falls and loops.",
+    "image": "https://placehold.co/400x250/ffd700/000000?text=Marble+Run",
+    "price": "$34.99",
+    "availability": "In stock",
+    "rating": 4.6,
+    "affiliateUrl": "https://www.amazon.com/s?k=marble+run+set&tag=giftwithai-21",
+    "tags": [
+      "kid (7-9)",
+      "tween (10-12)",
+      "stem",
+      "$25 - $75"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 76,
+    "title": "Cookbook (Simple Recipes)",
+    "description": "Child-friendly recipes for family cooking nights.",
+    "image": "https://placehold.co/400x250/8b4513/ffffff?text=Kids+Cookbook",
+    "price": "$12.99",
+    "availability": "In stock",
+    "rating": 4.4,
+    "affiliateUrl": "https://www.amazon.com/s?k=kids+cookbook&tag=giftwithai-21",
+    "tags": [
+      "tween (10-12)",
+      "kid (7-9)",
+      "books",
+      "under $25"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 77,
+    "title": "Glow Paint Party Set",
+    "description": "Safe glow-in-the-dark paints for evening art projects.",
+    "image": "https://placehold.co/400x250/00008b/ffffff?text=Glow+Paint",
+    "price": "$14.99",
+    "availability": "In stock",
+    "rating": 4.1,
+    "affiliateUrl": "https://www.amazon.com/s?k=glow+paint+party+set&tag=giftwithai-21",
+    "tags": [
+      "tween (10-12)",
+      "teen (13-19)",
+      "arts & crafts",
+      "under $25"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 78,
+    "title": "Junior Rock Tumbler Kit",
+    "description": "Polish stones and discover colorful results over time.",
+    "image": "https://placehold.co/400x250/00ced1/000000?text=Rock+Tumbler",
+    "price": "$39.99",
+    "availability": "In stock",
+    "rating": 4.3,
+    "affiliateUrl": "https://www.amazon.com/s?k=junior+rock+tumbler&tag=giftwithai-21",
+    "tags": [
+      "tween (10-12)",
+      "stem",
+      "$25 - $75",
+      "educational"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 79,
+    "title": "Tool Bench (Pretend)",
+    "description": "Pretend workbench with safe plastic tools for role play.",
+    "image": "https://placehold.co/400x250/ffa07a/000000?text=Tool+Bench",
+    "price": "$49.99",
+    "availability": "In stock",
+    "rating": 4.5,
+    "affiliateUrl": "https://www.amazon.com/s?k=kids+tool+bench&tag=giftwithai-21",
+    "tags": [
+      "preschool (4-6)",
+      "kid (7-9)",
+      "$25 - $75",
+      "toys"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 80,
+    "title": "Mini Scooter (Adjustable Height)",
+    "description": "Lightweight scooter for outdoor scooting and balance.",
+    "image": "https://placehold.co/400x250/ffa500/000000?text=Mini+Scooter",
+    "price": "$59.99",
+    "availability": "In stock",
+    "rating": 4.4,
+    "affiliateUrl": "https://www.amazon.com/s?k=mini+scooter+adjustable&tag=giftwithai-21",
+    "tags": [
+      "kid (7-9)",
+      "tween (10-12)",
+      "$25 - $75",
+      "outdoors"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 81,
+    "title": "Emoji Cushion (Plush)",
+    "description": "Happy emoji cushion for room decor and napping.",
+    "image": "https://placehold.co/400x250/ff69b4/000000?text=Emoji+Cushion",
+    "price": "$14.99",
+    "availability": "In stock",
+    "rating": 4.2,
+    "affiliateUrl": "https://www.amazon.com/s?k=emoji+cushion&tag=giftwithai-21",
+    "tags": [
+      "teen (13-19)",
+      "kid (7-9)",
+      "under $25",
+      "home"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 82,
+    "title": "Walkie Talkies (Pair)",
+    "description": "Range-friendly walkies for secret missions and forts.",
+    "image": "https://placehold.co/400x250/4682b4/ffffff?text=Walkie+Talkies",
+    "price": "$24.99",
+    "availability": "In stock",
+    "rating": 4.1,
+    "affiliateUrl": "https://www.amazon.com/s?k=kids+walkie+talkies&tag=giftwithai-21",
+    "tags": [
+      "kid (7-9)",
+      "tween (10-12)",
+      "under $25",
+      "outdoors"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 83,
+    "title": "Origami Starter Kit",
+    "description": "Paper, folds and beginner-friendly guides for neat cranes.",
+    "image": "https://placehold.co/400x250/9acd32/000000?text=Origami+Kit",
+    "price": "$13.99",
+    "availability": "In stock",
+    "rating": 4.3,
+    "affiliateUrl": "https://www.amazon.com/s?k=origami+starter+kit&tag=giftwithai-21",
+    "tags": [
+      "tween (10-12)",
+      "kid (7-9)",
+      "arts & crafts",
+      "under $25"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 84,
+    "title": "Junior Science Experiment Kit",
+    "description": "Safe chemistry and simple experiments for curious minds.",
+    "image": "https://placehold.co/400x250/00ced1/000000?text=Science+Kit",
+    "price": "$29.99",
+    "availability": "In stock",
+    "rating": 4.6,
+    "affiliateUrl": "https://www.amazon.com/s?k=junior+science+experiment+kit&tag=giftwithai-21",
+    "tags": [
+      "tween (10-12)",
+      "stem",
+      "$25 - $75",
+      "educational"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 85,
+    "title": "Karaoke Stage",
+    "description": "Compact mic and mini speaker for living room concerts.",
+    "image": "https://placehold.co/400x250/ff69b4/000000?text=Karaoke+Stage",
+    "price": "$34.99",
+    "availability": "In stock",
+    "rating": 4,
+    "affiliateUrl": "https://www.amazon.com/s?k=kids+karaoke+stage&tag=giftwithai-21",
+    "tags": [
+      "teen (13-19)",
+      "tween (10-12)",
+      "$25 - $75",
+      "music"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 86,
+    "title": "Bath Bombs for Kids (Fun Scents)",
+    "description": "Gentle, colorful bath bombs with fun shapes.",
+    "image": "https://placehold.co/400x250/ff7f50/000000?text=Bath+Bombs",
+    "price": "$12.99",
+    "availability": "In stock",
+    "rating": 4.2,
+    "affiliateUrl": "https://www.amazon.com/s?k=bath+bombs+for+kids&tag=giftwithai-21",
+    "tags": [
+      "toddler (1-3)",
+      "preschool (4-6)",
+      "under $25",
+      "home"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 87,
+    "title": "LEGO-Compatible Creative Bricks (Small Set)",
+    "description": "Small brick set for beginner builds and models.",
+    "image": "https://placehold.co/400x250/ffd700/000000?text=Creative+Bricks",
+    "price": "$29.99",
+    "availability": "In stock",
+    "rating": 4.7,
+    "affiliateUrl": "https://www.amazon.com/s?k=lego+compatible+bricks+small&tag=giftwithai-21",
+    "tags": [
+      "kid (7-9)",
+      "tween (10-12)",
+      "$25 - $75",
+      "toys"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 88,
+    "title": "Binoculars with Compass",
+    "description": "Explorer set for backyard safaris and nature lists.",
+    "image": "https://placehold.co/400x250/6a5acd/ffffff?text=Binoculars+Compass",
+    "price": "$26.99",
+    "availability": "In stock",
+    "rating": 4.3,
+    "affiliateUrl": "https://www.amazon.com/s?k=kids+binoculars+with+compass&tag=giftwithai-21",
+    "tags": [
+      "kid (7-9)",
+      "tween (10-12)",
+      "under $25",
+      "outdoors"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 89,
+    "title": "Play-Doh Mega Pack",
+    "description": "Modeling compound pack for endless sculpting and colors.",
+    "image": "https://placehold.co/400x250/ffb6c1/000000?text=PlayDoh",
+    "price": "$19.99",
+    "availability": "In stock",
+    "rating": 4.5,
+    "affiliateUrl": "https://www.amazon.com/s?k=play-doh+mega+pack&tag=giftwithai-21",
+    "tags": [
+      "preschool (4-6)",
+      "toddler (1-3)",
+      "under $25",
+      "arts & crafts"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 90,
+    "title": "Magnetic Drawing Board",
+    "description": "Mess-free doodling board for creativity on the go.",
+    "image": "https://placehold.co/400x250/20b2aa/ffffff?text=Drawing+Board",
+    "price": "$14.99",
+    "availability": "In stock",
+    "rating": 4.1,
+    "affiliateUrl": "https://www.amazon.com/s?k=magnetic+drawing+board+kids&tag=giftwithai-21",
+    "tags": [
+      "toddler (1-3)",
+      "preschool (4-6)",
+      "under $25",
+      "travel"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 91,
+    "title": "Junior Gardening Book (Kid-Friendly)",
+    "description": "Guide to easy plants and backyard projects for kids.",
+    "image": "https://placehold.co/400x250/98fb98/000000?text=Gardening+Book",
+    "price": "$9.99",
+    "availability": "In stock",
+    "rating": 4.4,
+    "affiliateUrl": "https://www.amazon.com/s?k=junior+gardening+book&tag=giftwithai-21",
+    "tags": [
+      "kid (7-9)",
+      "preschool (4-6)",
+      "books",
+      "under $25"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 92,
+    "title": "Classic Card Game (Family Edition)",
+    "description": "Easy-to-learn card game for mixed-age family play.",
+    "image": "https://placehold.co/400x250/ffa07a/000000?text=Card+Game",
+    "price": "$11.99",
+    "availability": "In stock",
+    "rating": 4.6,
+    "affiliateUrl": "https://www.amazon.com/s?k=classic+card+game+family&tag=giftwithai-21",
+    "tags": [
+      "family member",
+      "kid (7-9)",
+      "tween (10-12)",
+      "under $25"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 93,
+    "title": "Pajama Set (Cool Prints)",
+    "description": "Soft cotton pj set with fun prints and comfy fit.",
+    "image": "https://placehold.co/400x250/ffdead/000000?text=Pajama+Set",
+    "price": "$19.99",
+    "availability": "In stock",
+    "rating": 4.3,
+    "affiliateUrl": "https://www.amazon.com/s?k=kids+pajama+set&tag=giftwithai-21",
+    "tags": [
+      "kid (7-9)",
+      "preschool (4-6)",
+      "under $25",
+      "clothing"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 94,
+    "title": "Beginner Skateboard (Mini)",
+    "description": "Small deck with soft wheels for first cruising.",
+    "image": "https://placehold.co/400x250/000000/ffffff?text=Mini+Skate",
+    "price": "$49.99",
+    "availability": "In stock",
+    "rating": 4,
+    "affiliateUrl": "https://www.amazon.com/s?k=beginner+skateboard+mini&tag=giftwithai-21",
+    "tags": [
+      "tween (10-12)",
+      "teen (13-19)",
+      "$25 - $75",
+      "outdoors"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 95,
+    "title": "Slippers (Animal)",
+    "description": "Cute animal slippers for warm feet and smiles.",
+    "image": "https://placehold.co/400x250/ff69b4/000000?text=Slippers",
+    "price": "$12.99",
+    "availability": "In stock",
+    "rating": 4.2,
+    "affiliateUrl": "https://www.amazon.com/s?k=kids+animal+slippers&tag=giftwithai-21",
+    "tags": [
+      "toddler (1-3)",
+      "preschool (4-6)",
+      "under $25",
+      "clothing"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 96,
+    "title": "Mini Science Desk Lamp",
+    "description": "Adjustable desk lamp for homework and projects.",
+    "image": "https://placehold.co/400x250/8a2be2/ffffff?text=Desk+Lamp",
+    "price": "$29.99",
+    "availability": "In stock",
+    "rating": 4.4,
+    "affiliateUrl": "https://www.amazon.com/s?k=mini+desk+lamp&tag=giftwithai-21",
+    "tags": [
+      "tween (10-12)",
+      "teen (13-19)",
+      "$25 - $75",
+      "school"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 97,
+    "title": "Soccer Goal Set (Portable)",
+    "description": "Pop-up mini goals for backyard practice and fun.",
+    "image": "https://placehold.co/400x250/228b22/ffffff?text=Soccer+Goals",
+    "price": "$34.99",
+    "availability": "In stock",
+    "rating": 4.3,
+    "affiliateUrl": "https://www.amazon.com/s?k=kids+soccer+goal+set&tag=giftwithai-21",
+    "tags": [
+      "kid (7-9)",
+      "tween (10-12)",
+      "outdoors",
+      "$25 - $75"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 98,
+    "title": "DIY Terrarium Kit for Kids",
+    "description": "Small glass kit to create a tiny green world and learn plant care.",
+    "image": "https://placehold.co/400x250/98fb98/000000?text=Terrarium+Kit",
+    "price": "$24.99",
+    "availability": "In stock",
+    "rating": 4.6,
+    "affiliateUrl": "https://www.amazon.com/s?k=diy+terrarium+kit&tag=giftwithai-21",
+    "tags": [
+      "tween (10-12)",
+      "adult (20-55)",
+      "under $25",
+      "home"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 99,
+    "title": "s Atlas (Illustrated)",
+    "description": "Colorful maps and facts for curious young explorers.",
+    "image": "https://placehold.co/400x250/8b4513/ffffff?text=Kids+Atlas",
+    "price": "$14.99",
+    "availability": "In stock",
+    "rating": 4.5,
+    "affiliateUrl": "https://www.amazon.com/s?k=children's+atlas+illustrated&tag=giftwithai-21",
+    "tags": [
+      "kid (7-9)",
+      "tween (10-12)",
+      "books",
+      "under $25"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 100,
+    "title": "Glow-in-the-Dark Puzzle (100 pcs)",
+    "description": "Puzzle with glow pieces — daytime fun, nighttime magic.",
+    "image": "https://placehold.co/400x250/ffd700/000000?text=Glow+Puzzle",
+    "price": "$18.99",
+    "availability": "In stock",
+    "rating": 4.2,
+    "affiliateUrl": "https://www.amazon.com/s?k=glow+in+the+dark+puzzle&tag=giftwithai-21",
+    "tags": [
+      "kid (7-9)",
+      "tween (10-12)",
+      "under $25",
+      "games"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 101,
+    "title": "Travel Toothbrush Set (Kids)",
+    "description": "Compact and cute toothbrush and cover for trips.",
+    "image": "https://placehold.co/400x250/20b2aa/ffffff?text=Toothbrush+Set",
+    "price": "$8.99",
+    "availability": "In stock",
+    "rating": 4,
+    "affiliateUrl": "https://www.amazon.com/s?k=travel+toothbrush+set+kids&tag=giftwithai-21",
+    "tags": [
+      "kid (7-9)",
+      "preschool (4-6)",
+      "under $25",
+      "travel"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 102,
+    "title": "Interactive Globe with Facts",
+    "description": "Globe with QR-linked facts and audio for curious kids.",
+    "image": "https://placehold.co/400x250/4682b4/ffffff?text=Interactive+Globe",
+    "price": "$49.99",
+    "availability": "In stock",
+    "rating": 4.4,
+    "affiliateUrl": "https://www.amazon.com/s?k=interactive+globe&tag=giftwithai-21",
+    "tags": [
+      "tween (10-12)",
+      "kid (7-9)",
+      "$25 - $75",
+      "educational"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 103,
+    "title": "Raincoat (Bright Colors)",
+    "description": "Waterproof coat with fun prints for puddle-season smiles.",
+    "image": "https://placehold.co/400x250/ff7f50/000000?text=Raincoat",
+    "price": "$29.99",
+    "availability": "In stock",
+    "rating": 4.3,
+    "affiliateUrl": "https://www.amazon.com/s?k=kids+raincoat&tag=giftwithai-21",
+    "tags": [
+      "toddler (1-3)",
+      "preschool (4-6)",
+      "under $25",
+      "clothing"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 104,
+    "title": "Firefighter Helmet (Pretend Play)",
+    "description": "Dress-up helmet with badge for brave play.",
+    "image": "https://placehold.co/400x250/ffb347/000000?text=Helmet",
+    "price": "$14.99",
+    "availability": "In stock",
+    "rating": 4.1,
+    "affiliateUrl": "https://www.amazon.com/s?k=kids+firefighter+helmet&tag=giftwithai-21",
+    "tags": [
+      "preschool (4-6)",
+      "toddler (1-3)",
+      "under $25",
+      "toys"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 105,
+    "title": "Junior Microscope Slides Kit",
+    "description": "Safe pre-made slides and guides for curious learners.",
+    "image": "https://placehold.co/400x250/00ced1/000000?text=Slides+Kit",
+    "price": "$19.99",
+    "availability": "In stock",
+    "rating": 4.2,
+    "affiliateUrl": "https://www.amazon.com/s?k=junior+microscope+slides&tag=giftwithai-21",
+    "tags": [
+      "tween (10-12)",
+      "stem",
+      "under $25",
+      "educational"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 106,
+    "title": "Safety Helmet for Cycling",
+    "description": "Bright and comfortable helmet with adjustable strap.",
+    "image": "https://placehold.co/400x250/6a5acd/ffffff?text=Safety+Helmet",
+    "price": "$29.99",
+    "availability": "In stock",
+    "rating": 4.5,
+    "affiliateUrl": "https://www.amazon.com/s?k=kids+cycling+helmet&tag=giftwithai-21",
+    "tags": [
+      "kid (7-9)",
+      "tween (10-12)",
+      "$25 - $75",
+      "outdoors"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 107,
+    "title": "Mini Electric Toothbrush (Kids)",
+    "description": "Fun characters and gentle bristles for healthy habits.",
+    "image": "https://placehold.co/400x250/ffdead/000000?text=Toothbrush",
+    "price": "$19.99",
+    "availability": "In stock",
+    "rating": 4.3,
+    "affiliateUrl": "https://www.amazon.com/s?k=mini+electric+toothbrush+kids&tag=giftwithai-21",
+    "tags": [
+      "toddler (1-3)",
+      "preschool (4-6)",
+      "under $25",
+      "health"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 108,
+    "title": "Walkie Talkie Set",
+    "description": "Long-range walkies for backyard adventures and teamwork.",
+    "image": "https://placehold.co/400x250/4682b4/ffffff?text=Walkie+Set",
+    "price": "$29.99",
+    "availability": "In stock",
+    "rating": 4.1,
+    "affiliateUrl": "https://www.amazon.com/s?k=kids+walkie+talkie+set&tag=giftwithai-21",
+    "tags": [
+      "kid (7-9)",
+      "tween (10-12)",
+      "$25 - $75"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 109,
+    "title": "Forest Animal Plush Set",
+    "description": "Set of small plush animals for storytelling and snuggles.",
+    "image": "https://placehold.co/400x250/ffdead/000000?text=Plush+Set",
+    "price": "$22.99",
+    "availability": "In stock",
+    "rating": 4.6,
+    "affiliateUrl": "https://www.amazon.com/s?k=forest+animal+plush+set&tag=giftwithai-21",
+    "tags": [
+      "toddler (1-3)",
+      "child (4-12)",
+      "under $25",
+      "toys"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 110,
+    "title": "Magnetic Tiles (Creative Play)",
+    "description": "Transparent tiles for light-table and building fun.",
+    "image": "https://placehold.co/400x250/00bfff/000000?text=Magnetic+Tiles",
+    "price": "$59.99",
+    "availability": "In stock",
+    "rating": 4.7,
+    "affiliateUrl": "https://www.amazon.com/s?k=magnetic+tiles+creative&tag=giftwithai-21",
+    "tags": [
+      "preschool (4-6)",
+      "kid (7-9)",
+      "$25 - $75",
+      "stem"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 111,
+    "title": "Junior Drum Pad (Electronic)",
+    "description": "Soft electronic pad for rhythm practice and sound play.",
+    "image": "https://placehold.co/400x250/ff69b4/000000?text=Drum+Pad",
+    "price": "$39.99",
+    "availability": "In stock",
+    "rating": 4.2,
+    "affiliateUrl": "https://www.amazon.com/s?k=junior+drum+pad&tag=giftwithai-21",
+    "tags": [
+      "tween (10-12)",
+      "teen (13-19)",
+      "$25 - $75",
+      "music"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 112,
+    "title": "LED Bike Wheel Lights",
+    "description": "Colorful LED strips to glow up evening rides.",
+    "image": "https://placehold.co/400x250/8a2be2/ffffff?text=Wheel+Lights",
+    "price": "$19.99",
+    "availability": "In stock",
+    "rating": 4.3,
+    "affiliateUrl": "https://www.amazon.com/s?k=kids+led+bike+wheel+lights&tag=giftwithai-21",
+    "tags": [
+      "kid (7-9)",
+      "tween (10-12)",
+      "under $25",
+      "outdoors"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 113,
+    "title": "s Gardening Book & Kit",
+    "description": "Seeds, tiny tools and a guide for first gardens.",
+    "image": "https://placehold.co/400x250/98fb98/000000?text=Garden+Kit",
+    "price": "$24.99",
+    "availability": "In stock",
+    "rating": 4.5,
+    "affiliateUrl": "https://www.amazon.com/s?k=children+gardening+book+kit&tag=giftwithai-21",
+    "tags": [
+      "kid (7-9)",
+      "tween (10-12)",
+      "$25 - $75",
+      "educational"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 114,
+    "title": "Toddler Push Car (Ride-on)",
+    "description": "Low seat, stable base and colorful design for early movers.",
+    "image": "https://placehold.co/400x250/ff7f50/000000?text=Ride+On",
+    "price": "$44.99",
+    "availability": "In stock",
+    "rating": 4.6,
+    "affiliateUrl": "https://www.amazon.com/s?k=toddler+push+car&tag=giftwithai-21",
+    "tags": [
+      "toddler (1-3)",
+      "preschool (4-6)",
+      "$25 - $75",
+      "toys"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 115,
+    "title": "Bathrobe (Soft Cotton)",
+    "description": "Warm robe with hood for post-swim and bath routines.",
+    "image": "https://placehold.co/400x250/ffdead/000000?text=Bathrobe",
+    "price": "$24.99",
+    "availability": "In stock",
+    "rating": 4.4,
+    "affiliateUrl": "https://www.amazon.com/s?k=kids+bathrobe&tag=giftwithai-21",
+    "tags": [
+      "toddler (1-3)",
+      "preschool (4-6)",
+      "under $25",
+      "clothing"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 116,
+    "title": "Junior Gardening Seats & Tools",
+    "description": "Low seat and tools for comfortable planting sessions.",
+    "image": "https://placehold.co/400x250/98fb98/000000?text=Garden+Seat",
+    "price": "$29.99",
+    "availability": "In stock",
+    "rating": 4.1,
+    "affiliateUrl": "https://www.amazon.com/s?k=junior+gardening+seat+tools&tag=giftwithai-21",
+    "tags": [
+      "kid (7-9)",
+      "tween (10-12)",
+      "$25 - $75",
+      "outdoors"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 117,
+    "title": "Movie Night Projector",
+    "description": "Compact projector for cozy family movie nights.",
+    "image": "https://placehold.co/400x250/00008b/ffffff?text=Projector",
+    "price": "$59.99",
+    "availability": "In stock",
+    "rating": 4,
+    "affiliateUrl": "https://www.amazon.com/s?k=kids+movie+projector&tag=giftwithai-21",
+    "tags": [
+      "family member",
+      "teen (13-19)",
+      "$25 - $75",
+      "home"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 118,
+    "title": "s Baking Apron Set",
+    "description": "Apron and utensils sized for little chefs.",
+    "image": "https://placehold.co/400x250/ffb347/000000?text=Baking+Apron",
+    "price": "$16.99",
+    "availability": "In stock",
+    "rating": 4.3,
+    "affiliateUrl": "https://www.amazon.com/s?k=children+baking+apron+set&tag=giftwithai-21",
+    "tags": [
+      "preschool (4-6)",
+      "kid (7-9)",
+      "under $25",
+      "play"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 119,
+    "title": "Junior Robotics Kit",
+    "description": "Modular robot pieces and beginner instructions.",
+    "image": "https://placehold.co/400x250/00ced1/000000?text=Robotics+Kit",
+    "price": "$69.99",
+    "availability": "In stock",
+    "rating": 4.6,
+    "affiliateUrl": "https://www.amazon.com/s?k=junior+robotics+kit&tag=giftwithai-21",
+    "tags": [
+      "tween (10-12)",
+      "stem",
+      "$25 - $75",
+      "educational"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 120,
+    "title": "Personalized Storybook (Name Inside)",
+    "description": "Story featuring the child's name as the hero.",
+    "image": "https://placehold.co/400x250/8b4513/ffffff?text=Personalized+Book",
+    "price": "$24.99",
+    "availability": "In stock",
+    "rating": 4.8,
+    "affiliateUrl": "https://www.amazon.com/s?k=personalized+storybook+name&tag=giftwithai-21",
+    "tags": [
+      "kid (7-9)",
+      "preschool (4-6)",
+      "$25 - $75",
+      "books"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 121,
+    "title": "Mini Art Supply Organizer",
+    "description": "Portable case with compartments for markers and brushes.",
+    "image": "https://placehold.co/400x250/ff7f50/000000?text=Art+Organizer",
+    "price": "$18.99",
+    "availability": "In stock",
+    "rating": 4.2,
+    "affiliateUrl": "https://www.amazon.com/s?k=mini+art+supply+organizer&tag=giftwithai-21",
+    "tags": [
+      "tween (10-12)",
+      "kid (7-9)",
+      "under $25",
+      "arts & crafts"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 122,
+    "title": "Fitness Tracker (Basic)",
+    "description": "Simple tracker for steps and active minutes.",
+    "image": "https://placehold.co/400x250/4682b4/ffffff?text=Fitness+Tracker",
+    "price": "$39.99",
+    "availability": "In stock",
+    "rating": 4.1,
+    "affiliateUrl": "https://www.amazon.com/s?k=kids+fitness+tracker&tag=giftwithai-21",
+    "tags": [
+      "tween (10-12)",
+      "teen (13-19)",
+      "$25 - $75",
+      "fitness"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 123,
+    "title": "Play Food Set (Wooden)",
+    "description": "Realistic wooden food pieces for kitchen role play.",
+    "image": "https://placehold.co/400x250/ffd700/000000?text=Play+Food",
+    "price": "$29.99",
+    "availability": "In stock",
+    "rating": 4.5,
+    "affiliateUrl": "https://www.amazon.com/s?k=wooden+play+food+set&tag=giftwithai-21",
+    "tags": [
+      "preschool (4-6)",
+      "toddler (1-3)",
+      "$25 - $75",
+      "toys"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 124,
+    "title": "Tablet Stand & Holder",
+    "description": "Adjustable stand for tablets and video learning.",
+    "image": "https://placehold.co/400x250/6495ed/ffffff?text=Tablet+Stand",
+    "price": "$14.99",
+    "availability": "In stock",
+    "rating": 4.2,
+    "affiliateUrl": "https://www.amazon.com/s?k=kids+tablet+stand&tag=giftwithai-21",
+    "tags": [
+      "tween (10-12)",
+      "teen (13-19)",
+      "under $25",
+      "tech & gadgets"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 125,
+    "title": "Backpack (Animal Prints)",
+    "description": "Durable backpack with roomy pockets and cute prints.",
+    "image": "https://placehold.co/400x250/ffb6c1/000000?text=Backpack",
+    "price": "$29.99",
+    "availability": "In stock",
+    "rating": 4.4,
+    "affiliateUrl": "https://www.amazon.com/s?k=kids+backpack+animal&tag=giftwithai-21",
+    "tags": [
+      "kid (7-9)",
+      "preschool (4-6)",
+      "$25 - $75",
+      "school"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 126,
+    "title": "Magnetic Fishing Bath Book",
+    "description": "Bath-friendly book and magnetic fish for learning letters.",
+    "image": "https://placehold.co/400x250/20b2aa/ffffff?text=Bath+Book",
+    "price": "$12.99",
+    "availability": "In stock",
+    "rating": 4.3,
+    "affiliateUrl": "https://www.amazon.com/s?k=magnetic+bath+book&tag=giftwithai-21",
+    "tags": [
+      "toddler (1-3)",
+      "preschool (4-6)",
+      "under $25",
+      "books"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 127,
+    "title": "Junior Woodworking Kit (Safe Tools)",
+    "description": "Soft woodworking projects with safe bits for learning.",
+    "image": "https://placehold.co/400x250/8b4513/ffffff?text=Woodworking+Kit",
+    "price": "$34.99",
+    "availability": "In stock",
+    "rating": 4.1,
+    "affiliateUrl": "https://www.amazon.com/s?k=junior+woodworking+kit&tag=giftwithai-21",
+    "tags": [
+      "tween (10-12)",
+      "stem",
+      "$25 - $75",
+      "creative"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 128,
+    "title": "Waterproof Bluetooth Speaker",
+    "description": "Rugged, splashproof speaker for poolside playlists.",
+    "image": "https://placehold.co/400x250/4682b4/ffffff?text=Speaker+Waterproof",
+    "price": "$29.99",
+    "availability": "In stock",
+    "rating": 4.4,
+    "affiliateUrl": "https://www.amazon.com/s?k=waterproof+bluetooth+speaker+kids&tag=giftwithai-21",
+    "tags": [
+      "teen (13-19)",
+      "kid (7-9)",
+      "$25 - $75",
+      "tech & gadgets"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 129,
+    "title": "Junior Metal Detector (Beginner)",
+    "description": "Search for hidden treasures at the beach and parks.",
+    "image": "https://placehold.co/400x250/6a5acd/ffffff?text=Metal+Detector",
+    "price": "$49.99",
+    "availability": "In stock",
+    "rating": 4,
+    "affiliateUrl": "https://www.amazon.com/s?k=junior+metal+detector&tag=giftwithai-21",
+    "tags": [
+      "tween (10-12)",
+      "outdoors",
+      "$25 - $75",
+      "adventure"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 130,
+    "title": "Magnetic Calendar Set",
+    "description": "Magnetic date and activities board for routines.",
+    "image": "https://placehold.co/400x250/ffdead/000000?text=Magnetic+Calendar",
+    "price": "$14.99",
+    "availability": "In stock",
+    "rating": 4.3,
+    "affiliateUrl": "https://www.amazon.com/s?k=kids+magnetic+calendar&tag=giftwithai-21",
+    "tags": [
+      "preschool (4-6)",
+      "toddler (1-3)",
+      "under $25",
+      "family"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 131,
+    "title": "Junior Science Fossil Kit",
+    "description": "Discover fossils and learn paleontology basics.",
+    "image": "https://placehold.co/400x250/00ced1/000000?text=Fossil+Kit",
+    "price": "$24.99",
+    "availability": "In stock",
+    "rating": 4.6,
+    "affiliateUrl": "https://www.amazon.com/s?k=junior+fossil+kit&tag=giftwithai-21",
+    "tags": [
+      "tween (10-12)",
+      "kid (7-9)",
+      "$25 - $75",
+      "educational"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 132,
+    "title": "Swimming Goggles (Anti-fog)",
+    "description": "Comfortable goggles for swim lessons and pool fun.",
+    "image": "https://placehold.co/400x250/20b2aa/ffffff?text=Goggles",
+    "price": "$12.99",
+    "availability": "In stock",
+    "rating": 4.2,
+    "affiliateUrl": "https://www.amazon.com/s?k=kids+swimming+goggles&tag=giftwithai-21",
+    "tags": [
+      "toddler (1-3)",
+      "preschool (4-6)",
+      "under $25",
+      "sports"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 133,
+    "title": "Tool Belt (Pretend Play)",
+    "description": "Belt and plastic tools for imaginative building.",
+    "image": "https://placehold.co/400x250/ffd700/000000?text=Tool+Belt",
+    "price": "$19.99",
+    "availability": "In stock",
+    "rating": 4.1,
+    "affiliateUrl": "https://www.amazon.com/s?k=kids+tool+belt&tag=giftwithai-21",
+    "tags": [
+      "preschool (4-6)",
+      "kid (7-9)",
+      "under $25",
+      "toys"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 134,
+    "title": "s Audio Story Player",
+    "description": "Preloaded stories and kid-safe controls for listening.",
+    "image": "https://placehold.co/400x250/8b4513/ffffff?text=Audio+Player",
+    "price": "$39.99",
+    "availability": "In stock",
+    "rating": 4.4,
+    "affiliateUrl": "https://www.amazon.com/s?k=children+audio+story+player&tag=giftwithai-21",
+    "tags": [
+      "kid (7-9)",
+      "preschool (4-6)",
+      "$25 - $75",
+      "books"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 135,
+    "title": "Junior Gardening Terrarium",
+    "description": "Small kit for tiny plants and display jars.",
+    "image": "https://placehold.co/400x250/98fb98/000000?text=Terrarium",
+    "price": "$21.99",
+    "availability": "In stock",
+    "rating": 4.3,
+    "affiliateUrl": "https://www.amazon.com/s?k=junior+terrarium+kit&tag=giftwithai-21",
+    "tags": [
+      "kid (7-9)",
+      "tween (10-12)",
+      "under $25",
+      "home"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 136,
+    "title": "Astronomy Flashcards",
+    "description": "Flashcards for planets, stars and space facts.",
+    "image": "https://placehold.co/400x250/00008b/ffffff?text=Astronomy+Cards",
+    "price": "$9.99",
+    "availability": "In stock",
+    "rating": 4.5,
+    "affiliateUrl": "https://www.amazon.com/s?k=kids+astronomy+flashcards&tag=giftwithai-21",
+    "tags": [
+      "tween (10-12)",
+      "kid (7-9)",
+      "under $25",
+      "educational"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 137,
+    "title": "Junior Sewing Machine (Toy)",
+    "description": "Child-friendly machine for creative sewing projects.",
+    "image": "https://placehold.co/400x250/ff69b4/000000?text=Sewing+Machine",
+    "price": "$59.99",
+    "availability": "In stock",
+    "rating": 4.2,
+    "affiliateUrl": "https://www.amazon.com/s?k=junior+sewing+machine&tag=giftwithai-21",
+    "tags": [
+      "tween (10-12)",
+      "arts & crafts",
+      "$25 - $75"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 138,
+    "title": "Rock Climbing Holds (Indoor Play)",
+    "description": "Set to add climbing holds to a safe indoor play board for active exploration.",
+    "image": "https://placehold.co/400x250/8b4513/ffffff?text=Climbing+Holds",
+    "price": "$34.99",
+    "availability": "In stock",
+    "rating": 4.1,
+    "affiliateUrl": "https://www.amazon.com/s?k=kids+rock+climbing+holds&tag=giftwithai-21",
+    "tags": [
+      "tween (10-12)",
+      "outdoors",
+      "fitness",
+      "$25 - $75"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 139,
+    "title": "Interactive Learning Tablet (Kids)",
+    "description": "Durable tablet with preloaded educational games and parental controls.",
+    "image": "https://placehold.co/400x250/6495ed/ffffff?text=Learning+Tablet",
+    "price": "$69.99",
+    "availability": "In stock",
+    "rating": 4.3,
+    "affiliateUrl": "https://www.amazon.com/s?k=interactive+learning+tablet+kids&tag=giftwithai-21",
+    "tags": [
+      "tween (10-12)",
+      "kid (7-9)",
+      "$25 - $75",
+      "educational"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 140,
+    "title": "Personalized Growth Chart",
+    "description": "Wood or fabric growth chart that records height and memories.",
+    "image": "https://placehold.co/400x250/ffb6c1/000000?text=Growth+Chart",
+    "price": "$29.99",
+    "availability": "In stock",
+    "rating": 4.6,
+    "affiliateUrl": "https://www.amazon.com/s?k=personalized+growth+chart&tag=giftwithai-21",
+    "tags": [
+      "kid (7-9)",
+      "preschool (4-6)",
+      "family",
+      "home"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 141,
+    "title": "Glow Stick Party Pack",
+    "description": "Glow sticks and accessories for safe night-time fun and events.",
+    "image": "https://placehold.co/400x250/ffd700/000000?text=Glow+Sticks",
+    "price": "$9.99",
+    "availability": "In stock",
+    "rating": 4,
+    "affiliateUrl": "https://www.amazon.com/s?k=kids+glow+sticks&tag=giftwithai-21",
+    "tags": [
+      "tween (10-12)",
+      "teen (13-19)",
+      "under $25",
+      "party"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 142,
+    "title": "Junior Chess Tutor Book",
+    "description": "Beginner chess strategies explained with puzzles and tips.",
+    "image": "https://placehold.co/400x250/8b4513/ffffff?text=Chess+Tutor",
+    "price": "$12.99",
+    "availability": "In stock",
+    "rating": 4.4,
+    "affiliateUrl": "https://www.amazon.com/s?k=junior+chess+tutor&tag=giftwithai-21",
+    "tags": [
+      "kid (7-9)",
+      "tween (10-12)",
+      "books",
+      "under $25"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 143,
+    "title": "Gardening Apron",
+    "description": "Cute apron with pockets for seeds, tools and mud-friendly play.",
+    "image": "https://placehold.co/400x250/98fb98/000000?text=Garden+Apron",
+    "price": "$14.99",
+    "availability": "In stock",
+    "rating": 4.2,
+    "affiliateUrl": "https://www.amazon.com/s?k=kids+gardening+apron&tag=giftwithai-21",
+    "tags": [
+      "kid (7-9)",
+      "preschool (4-6)",
+      "under $25",
+      "outdoors"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 144,
+    "title": "Junior Skate Helmet & Pads",
+    "description": "Protective set with colorful designs for first skate sessions.",
+    "image": "https://placehold.co/400x250/000000/ffffff?text=Helmet+Pads",
+    "price": "$29.99",
+    "availability": "In stock",
+    "rating": 4.3,
+    "affiliateUrl": "https://www.amazon.com/s?k=junior+skate+helmet+pads&tag=giftwithai-21",
+    "tags": [
+      "tween (10-12)",
+      "kid (7-9)",
+      "safety",
+      "outdoors"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 145,
+    "title": "Science Chemistry Set (Safe)",
+    "description": "Age-appropriate experiments with colorful results and safety focus.",
+    "image": "https://placehold.co/400x250/00ced1/000000?text=Chemistry+Set",
+    "price": "$39.99",
+    "availability": "In stock",
+    "rating": 4.5,
+    "affiliateUrl": "https://www.amazon.com/s?k=kids+chemistry+set+safe&tag=giftwithai-21",
+    "tags": [
+      "tween (10-12)",
+      "stem",
+      "$25 - $75",
+      "educational"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 146,
+    "title": "Personalized Puzzle (Name & Photo)",
+    "description": "Custom jigsaw puzzle printed with a photo or name for keepsakes.",
+    "image": "https://placehold.co/400x250/ffb6c1/000000?text=Personalized+Puzzle",
+    "price": "$24.99",
+    "availability": "In stock",
+    "rating": 4.8,
+    "affiliateUrl": "https://www.amazon.com/s?k=personalized+puzzle+name&tag=giftwithai-21",
+    "tags": [
+      "kid (7-9)",
+      "family member",
+      "gifts",
+      "$25 - $75"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 147,
+    "title": "Balance Bike (No Pedals)",
+    "description": "Lightweight bike to teach balance before pedals arrive.",
+    "image": "https://placehold.co/400x250/ffa07a/000000?text=Balance+Bike",
+    "price": "$79.99",
+    "availability": "In stock",
+    "rating": 4.4,
+    "affiliateUrl": "https://www.amazon.com/s?k=kids+balance+bike&tag=giftwithai-21",
+    "tags": [
+      "preschool (4-6)",
+      "toddler (1-3)",
+      "$25 - $75",
+      "outdoors"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 148,
+    "title": "Junior Telescope Accessory Kit",
+    "description": "Eyepieces and guides to extend curiosity beyond a starter scope.",
+    "image": "https://placehold.co/400x250/00008b/ffffff?text=Telescope+Kit",
+    "price": "$29.99",
+    "availability": "In stock",
+    "rating": 4.2,
+    "affiliateUrl": "https://www.amazon.com/s?k=junior+telescope+accessory+kit&tag=giftwithai-21",
+    "tags": [
+      "tween (10-12)",
+      "teen (13-19)",
+      "$25 - $75",
+      "educational"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 149,
+    "title": "Roller Skates (Adjustable)",
+    "description": "Beginner skates with adjustable sizing and safety features.",
+    "image": "https://placehold.co/400x250/ffd700/000000?text=Roller+Skates",
+    "price": "$49.99",
+    "availability": "In stock",
+    "rating": 4.1,
+    "affiliateUrl": "https://www.amazon.com/s?k=kids+roller+skates+adjustable&tag=giftwithai-21",
+    "tags": [
+      "tween (10-12)",
+      "teen (13-19)",
+      "outdoors",
+      "$25 - $75"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 150,
+    "title": "s Baking Playset",
+    "description": "Toy baking tools with safe materials for pretend pastry adventures.",
+    "image": "https://placehold.co/400x250/ffdead/000000?text=Baking+Playset",
+    "price": "$19.99",
+    "availability": "In stock",
+    "rating": 4,
+    "affiliateUrl": "https://www.amazon.com/s?k=children+baking+playset&tag=giftwithai-21",
+    "tags": [
+      "preschool (4-6)",
+      "kid (7-9)",
+      "under $25",
+      "play"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 151,
+    "title": "Junior Gardening Fairytale Kit",
+    "description": "Seed packets with fairy garden accessories and tiny homes.",
+    "image": "https://placehold.co/400x250/98fb98/000000?text=Fairy+Garden",
+    "price": "$22.99",
+    "availability": "In stock",
+    "rating": 4.3,
+    "affiliateUrl": "https://www.amazon.com/s?k=junior+fairy+garden+kit&tag=giftwithai-21",
+    "tags": [
+      "kid (7-9)",
+      "preschool (4-6)",
+      "under $25",
+      "outdoors"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 152,
+    "title": "Digital Alarm Clock",
+    "description": "Colorful alarm clock with nightlight and easy buttons for kids.",
+    "image": "https://placehold.co/400x250/6495ed/ffffff?text=Alarm+Clock",
+    "price": "$19.99",
+    "availability": "In stock",
+    "rating": 4.2,
+    "affiliateUrl": "https://www.amazon.com/s?k=kids+digital+alarm+clock&tag=giftwithai-21",
+    "tags": [
+      "kid (7-9)",
+      "tween (10-12)",
+      "under $25",
+      "home"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 153,
+    "title": "Junior Origami Deluxe Set",
+    "description": "Bright papers and step-by-step guides for budding paper artists.",
+    "image": "https://placehold.co/400x250/9acd32/000000?text=Origami+Deluxe",
+    "price": "$16.99",
+    "availability": "In stock",
+    "rating": 4.1,
+    "affiliateUrl": "https://www.amazon.com/s?k=junior+origami+set&tag=giftwithai-21",
+    "tags": [
+      "tween (10-12)",
+      "kid (7-9)",
+      "arts & crafts",
+      "under $25"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 154,
+    "title": "Gardening Play Table",
+    "description": "Small table for potting, planting and contained outdoor projects.",
+    "image": "https://placehold.co/400x250/20b2aa/ffffff?text=Gardening+Table",
+    "price": "$39.99",
+    "availability": "In stock",
+    "rating": 4,
+    "affiliateUrl": "https://www.amazon.com/s?k=kids+gardening+table&tag=giftwithai-21",
+    "tags": [
+      "kid (7-9)",
+      "tween (10-12)",
+      "$25 - $75",
+      "outdoors"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 155,
+    "title": "Personalized Lunchbox",
+    "description": "Insulated lunchbox with custom name option and fun patterns.",
+    "image": "https://placehold.co/400x250/ffb6c1/000000?text=Lunchbox",
+    "price": "$24.99",
+    "availability": "In stock",
+    "rating": 4.4,
+    "affiliateUrl": "https://www.amazon.com/s?k=personalized+lunchbox&tag=giftwithai-21",
+    "tags": [
+      "kid (7-9)",
+      "preschool (4-6)",
+      "family",
+      "under $25"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 156,
+    "title": "Junior Coding Cards (Screen-free)",
+    "description": "Deck of coding challenges to teach sequencing and logic.",
+    "image": "https://placehold.co/400x250/00ced1/000000?text=Coding+Cards",
+    "price": "$14.99",
+    "availability": "In stock",
+    "rating": 4.5,
+    "affiliateUrl": "https://www.amazon.com/s?k=junior+coding+cards&tag=giftwithai-21",
+    "tags": [
+      "tween (10-12)",
+      "stem",
+      "under $25",
+      "educational"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 157,
+    "title": "Nature Journal Set",
+    "description": "Journal, stickers and prompts for outdoor observations and discoveries.",
+    "image": "https://placehold.co/400x250/98fb98/000000?text=Nature+Journal",
+    "price": "$12.99",
+    "availability": "In stock",
+    "rating": 4.6,
+    "affiliateUrl": "https://www.amazon.com/s?k=kids+nature+journal&tag=giftwithai-21",
+    "tags": [
+      "kid (7-9)",
+      "tween (10-12)",
+      "under $25",
+      "outdoors"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 158,
+    "title": "Junior Drumsticks & Practice Pad",
+    "description": "Quiet practice pad and padded sticks for beginning drummers.",
+    "image": "https://placehold.co/400x250/ff69b4/000000?text=Drumsticks",
+    "price": "$17.99",
+    "availability": "In stock",
+    "rating": 4.2,
+    "affiliateUrl": "https://www.amazon.com/s?k=junior+drumsticks+practice+pad&tag=giftwithai-21",
+    "tags": [
+      "tween (10-12)",
+      "teen (13-19)",
+      "music",
+      "under $25"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 159,
+    "title": "Wooden Play Kitchen Accessories",
+    "description": "Realistic wooden food and utensils for imaginative cooking play.",
+    "image": "https://placehold.co/400x250/ffa07a/000000?text=Kitchen+Accessories",
+    "price": "$29.99",
+    "availability": "In stock",
+    "rating": 4.5,
+    "affiliateUrl": "https://www.amazon.com/s?k=wooden+play+kitchen+accessories&tag=giftwithai-21",
+    "tags": [
+      "preschool (4-6)",
+      "kid (7-9)",
+      "$25 - $75",
+      "toys"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 160,
+    "title": "Glow-in-the-Dark T-Shirt (Kids)",
+    "description": "Fun glow print tees for night events and parties.",
+    "image": "https://placehold.co/400x250/ffd700/000000?text=Glow+Tee",
+    "price": "$16.99",
+    "availability": "In stock",
+    "rating": 4.1,
+    "affiliateUrl": "https://www.amazon.com/s?k=glow+in+the+dark+tshirt+kids&tag=giftwithai-21",
+    "tags": [
+      "tween (10-12)",
+      "teen (13-19)",
+      "under $25",
+      "clothing"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 161,
+    "title": "Junior Puzzle Box (Secret Compartment)",
+    "description": "Brainy wooden puzzle box with a hidden compartment to discover.",
+    "image": "https://placehold.co/400x250/8b4513/ffffff?text=Puzzle+Box",
+    "price": "$24.99",
+    "availability": "In stock",
+    "rating": 4.4,
+    "affiliateUrl": "https://www.amazon.com/s?k=junior+puzzle+box&tag=giftwithai-21",
+    "tags": [
+      "tween (10-12)",
+      "kid (7-9)",
+      "under $25",
+      "games"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 162,
+    "title": "Waterproof Play Mat",
+    "description": "Easy-clean play mat for sensory activities and art projects.",
+    "image": "https://placehold.co/400x250/20b2aa/ffffff?text=Play+Mat",
+    "price": "$29.99",
+    "availability": "In stock",
+    "rating": 4.3,
+    "affiliateUrl": "https://www.amazon.com/s?k=kids+waterproof+play+mat&tag=giftwithai-21",
+    "tags": [
+      "toddler (1-3)",
+      "preschool (4-6)",
+      "$25 - $75",
+      "home"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 163,
+    "title": "Junior Birdhouse Kit",
+    "description": "Simple build-and-paint birdhouse for backyard wildlife watching.",
+    "image": "https://placehold.co/400x250/98fb98/000000?text=Birdhouse+Kit",
+    "price": "$19.99",
+    "availability": "In stock",
+    "rating": 4.5,
+    "affiliateUrl": "https://www.amazon.com/s?k=junior+birdhouse+kit&tag=giftwithai-21",
+    "tags": [
+      "kid (7-9)",
+      "tween (10-12)",
+      "under $25",
+      "outdoors"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 164,
+    "title": "Travel Play Tray",
+    "description": "Portable table for car trips and airplane activities.",
+    "image": "https://placehold.co/400x250/ffd700/000000?text=Travel+Tray",
+    "price": "$24.99",
+    "availability": "In stock",
+    "rating": 4.2,
+    "affiliateUrl": "https://www.amazon.com/s?k=kids+travel+tray&tag=giftwithai-21",
+    "tags": [
+      "kid (7-9)",
+      "tween (10-12)",
+      "under $25",
+      "travel"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 165,
+    "title": "Junior Stargazing Guidebook",
+    "description": "Easy guide to constellations and backyard stargazing tips for kids.",
+    "image": "https://placehold.co/400x250/00008b/ffffff?text=Stargazing+Guide",
+    "price": "$12.99",
+    "availability": "In stock",
+    "rating": 4.6,
+    "affiliateUrl": "https://www.amazon.com/s?k=junior+stargazing+guidebook&tag=giftwithai-21",
+    "tags": [
+      "tween (10-12)",
+      "kid (7-9)",
+      "books",
+      "under $25"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 166,
+    "title": "Clay Modeling Set",
+    "description": "Air-dry clay with tools and molds for creative sculptures.",
+    "image": "https://placehold.co/400x250/ff7f50/000000?text=Clay+Set",
+    "price": "$18.99",
+    "availability": "In stock",
+    "rating": 4.1,
+    "affiliateUrl": "https://www.amazon.com/s?k=kids+clay+modeling+set&tag=giftwithai-21",
+    "tags": [
+      "tween (10-12)",
+      "kid (7-9)",
+      "arts & crafts",
+      "under $25"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 167,
+    "title": "Junior Skateboard Wheels Replacement Kit",
+    "description": "Soft wheels for smoother beginner rides and easy upgrades.",
+    "image": "https://placehold.co/400x250/000000/ffffff?text=Wheel+Kit",
+    "price": "$14.99",
+    "availability": "In stock",
+    "rating": 4,
+    "affiliateUrl": "https://www.amazon.com/s?k=skateboard+wheels+replacement&tag=giftwithai-21",
+    "tags": [
+      "tween (10-12)",
+      "teen (13-19)",
+      "under $25",
+      "outdoors"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 168,
+    "title": "Fishing Rod (Beginner)",
+    "description": "Lightweight rod with safe tackle for first fishing trips.",
+    "image": "https://placehold.co/400x250/00bfff/000000?text=Fishing+Rod",
+    "price": "$24.99",
+    "availability": "In stock",
+    "rating": 4.1,
+    "affiliateUrl": "https://www.amazon.com/s?k=kids+fishing+rod+beginner&tag=giftwithai-21",
+    "tags": [
+      "kid (7-9)",
+      "tween (10-12)",
+      "outdoors",
+      "under $25"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 169,
+    "title": "Junior Weather Station Kit",
+    "description": "Mini station to measure rain, wind and temperature for science fun.",
+    "image": "https://placehold.co/400x250/00ced1/000000?text=Weather+Kit",
+    "price": "$34.99",
+    "availability": "In stock",
+    "rating": 4.3,
+    "affiliateUrl": "https://www.amazon.com/s?k=junior+weather+station+kit&tag=giftwithai-21",
+    "tags": [
+      "tween (10-12)",
+      "stem",
+      "$25 - $75",
+      "educational"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 170,
+    "title": "Travel Pillow (Neck Support)",
+    "description": "Soft ergonomic pillow for naps on the road with cute covers.",
+    "image": "https://placehold.co/400x250/ffb6c1/000000?text=Travel+Pillow",
+    "price": "$14.99",
+    "availability": "In stock",
+    "rating": 4.2,
+    "affiliateUrl": "https://www.amazon.com/s?k=kids+travel+pillow&tag=giftwithai-21",
+    "tags": [
+      "kid (7-9)",
+      "tween (10-12)",
+      "under $25",
+      "travel"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 171,
+    "title": "Junior Garden Seed Kit",
+    "description": "Assorted seeds and kid-friendly instructions for multiple plantings.",
+    "image": "https://placehold.co/400x250/98fb98/000000?text=Seed+Kit",
+    "price": "$12.99",
+    "availability": "In stock",
+    "rating": 4.4,
+    "affiliateUrl": "https://www.amazon.com/s?k=junior+garden+seed+kit&tag=giftwithai-21",
+    "tags": [
+      "kid (7-9)",
+      "preschool (4-6)",
+      "under $25",
+      "outdoors"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 172,
+    "title": "Nightlight Projector Lamp",
+    "description": "Soothing projector with animal or star themes and adjustable settings.",
+    "image": "https://placehold.co/400x250/8a2be2/ffffff?text=Nightlight+Lamp",
+    "price": "$24.99",
+    "availability": "In stock",
+    "rating": 4.3,
+    "affiliateUrl": "https://www.amazon.com/s?k=kids+nightlight+projector+lamp&tag=giftwithai-21",
+    "tags": [
+      "toddler (1-3)",
+      "preschool (4-6)",
+      "under $25",
+      "home"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 173,
+    "title": "Junior Art Stencil Set",
+    "description": "Stencils for drawing vehicles, animals and letters for neat art sessions.",
+    "image": "https://placehold.co/400x250/ff7f50/000000?text=Stencil+Set",
+    "price": "$9.99",
+    "availability": "In stock",
+    "rating": 4.1,
+    "affiliateUrl": "https://www.amazon.com/s?k=junior+art+stencil+set&tag=giftwithai-21",
+    "tags": [
+      "preschool (4-6)",
+      "kid (7-9)",
+      "arts & crafts",
+      "under $25"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 174,
+    "title": "Solar System Mobile",
+    "description": "Hangable mobile with planets and fun facts for bedrooms.",
+    "image": "https://placehold.co/400x250/00008b/ffffff?text=Solar+Mobile",
+    "price": "$19.99",
+    "availability": "In stock",
+    "rating": 4.2,
+    "affiliateUrl": "https://www.amazon.com/s?k=kids+solar+system+mobile&tag=giftwithai-21",
+    "tags": [
+      "kid (7-9)",
+      "tween (10-12)",
+      "under $25",
+      "home"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 175,
+    "title": "Junior Bird Feeder Kit",
+    "description": "Build and decorate a feeder to attract birds and learn care.",
+    "image": "https://placehold.co/400x250/98fb98/000000?text=Bird+Feeder+Kit",
+    "price": "$24.99",
+    "availability": "In stock",
+    "rating": 4.5,
+    "affiliateUrl": "https://www.amazon.com/s?k=junior+bird+feeder+kit&tag=giftwithai-21",
+    "tags": [
+      "kid (7-9)",
+      "outdoors",
+      "$25 - $75",
+      "educational"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 176,
+    "title": "Weighted Blanket (Small)",
+    "description": "Lightweight weighted blanket for calm naps and sensory comfort.",
+    "image": "https://placehold.co/400x250/ffdead/000000?text=Weighted+Blanket",
+    "price": "$39.99",
+    "availability": "In stock",
+    "rating": 4.4,
+    "affiliateUrl": "https://www.amazon.com/s?k=kids+weighted+blanket&tag=giftwithai-21",
+    "tags": [
+      "tween (10-12)",
+      "kid (7-9)",
+      "$25 - $75",
+      "home"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 177,
+    "title": "Junior Magic Trick Set",
+    "description": "Easy magic props and step-by-step guides for simple illusions.",
+    "image": "https://placehold.co/400x250/ff69b4/000000?text=Magic+Set",
+    "price": "$14.99",
+    "availability": "In stock",
+    "rating": 4,
+    "affiliateUrl": "https://www.amazon.com/s?k=junior+magic+trick+set&tag=giftwithai-21",
+    "tags": [
+      "tween (10-12)",
+      "kid (7-9)",
+      "under $25",
+      "play"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 178,
+    "title": "Science Geology Kit",
+    "description": "Explore rocks and learn identification with kid-safe tools.",
+    "image": "https://placehold.co/400x250/00ced1/000000?text=Geology+Kit",
+    "price": "$29.99",
+    "availability": "In stock",
+    "rating": 4.5,
+    "affiliateUrl": "https://www.amazon.com/s?k=kids+geology+kit&tag=giftwithai-21",
+    "tags": [
+      "tween (10-12)",
+      "stem",
+      "$25 - $75",
+      "educational"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 179,
+    "title": "Personalized Star Map Poster",
+    "description": "Poster of the night sky for a specific date and location — keepsake and wow.",
+    "image": "https://placehold.co/400x250/8b4513/ffffff?text=Star+Map",
+    "price": "$29.99",
+    "availability": "In stock",
+    "rating": 4.7,
+    "affiliateUrl": "https://www.amazon.com/s?k=personalized+star+map+poster&tag=giftwithai-21",
+    "tags": [
+      "teen (13-19)",
+      "adult (20-55)",
+      "$25 - $75",
+      "gifts"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 180,
+    "title": "Eco-Friendly Crayons",
+    "description": "Biodegradable crayons with bright pigments and easy grip shapes.",
+    "image": "https://placehold.co/400x250/ffd700/000000?text=Eco+Crayons",
+    "price": "$9.99",
+    "availability": "In stock",
+    "rating": 4.3,
+    "affiliateUrl": "https://www.amazon.com/s?k=eco+friendly+crayons+kids&tag=giftwithai-21",
+    "tags": [
+      "toddler (1-3)",
+      "preschool (4-6)",
+      "under $25",
+      "arts & crafts"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 181,
+    "title": "Junior Coding Board Game",
+    "description": "Board game that teaches logic and sequencing through play.",
+    "image": "https://placehold.co/400x250/00ced1/000000?text=Coding+Board+Game",
+    "price": "$34.99",
+    "availability": "In stock",
+    "rating": 4.4,
+    "affiliateUrl": "https://www.amazon.com/s?k=junior+coding+board+game&tag=giftwithai-21",
+    "tags": [
+      "tween (10-12)",
+      "stem",
+      "$25 - $75",
+      "educational"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 182,
+    "title": "Garden Sprinkler Toy",
+    "description": "Fun sprinkler with safe spray patterns for summer outdoor play.",
+    "image": "https://placehold.co/400x250/20b2aa/ffffff?text=Sprinkler+Toy",
+    "price": "$19.99",
+    "availability": "In stock",
+    "rating": 4.2,
+    "affiliateUrl": "https://www.amazon.com/s?k=kids+garden+sprinkler+toy&tag=giftwithai-21",
+    "tags": [
+      "kid (7-9)",
+      "toddler (1-3)",
+      "outdoors",
+      "under $25"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 183,
+    "title": "Junior Sewing Starter Pack",
+    "description": "Safe fabrics, large needles and easy projects for beginners.",
+    "image": "https://placehold.co/400x250/ff69b4/000000?text=Sewing+Pack",
+    "price": "$24.99",
+    "availability": "In stock",
+    "rating": 4.1,
+    "affiliateUrl": "https://www.amazon.com/s?k=junior+sewing+starter+pack&tag=giftwithai-21",
+    "tags": [
+      "tween (10-12)",
+      "arts & crafts",
+      "$25 - $75"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 184,
+    "title": "Lemonade Stand Kit",
+    "description": "Signs, cups and play money for entrepreneurial summer afternoons.",
+    "image": "https://placehold.co/400x250/ffb347/000000?text=Lemonade+Kit",
+    "price": "$29.99",
+    "availability": "In stock",
+    "rating": 4,
+    "affiliateUrl": "https://www.amazon.com/s?k=kids+lemonade+stand+kit&tag=giftwithai-21",
+    "tags": [
+      "kid (7-9)",
+      "tween (10-12)",
+      "$25 - $75",
+      "play"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 185,
+    "title": "Junior Puzzle Race Track",
+    "description": "Track set with small cars and timed challenges for competitive play.",
+    "image": "https://placehold.co/400x250/ffd700/000000?text=Race+Track",
+    "price": "$39.99",
+    "availability": "In stock",
+    "rating": 4.2,
+    "affiliateUrl": "https://www.amazon.com/s?k=junior+puzzle+race+track&tag=giftwithai-21",
+    "tags": [
+      "kid (7-9)",
+      "tween (10-12)",
+      "$25 - $75",
+      "games"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 186,
+    "title": "Travel Snack Container Set",
+    "description": "Stackable snack containers for portioned lunches and trips.",
+    "image": "https://placehold.co/400x250/20b2aa/ffffff?text=Snack+Containers",
+    "price": "$14.99",
+    "availability": "In stock",
+    "rating": 4.3,
+    "affiliateUrl": "https://www.amazon.com/s?k=kids+travel+snack+containers&tag=giftwithai-21",
+    "tags": [
+      "kid (7-9)",
+      "tween (10-12)",
+      "under $25",
+      "practical"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 187,
+    "title": "Junior Glow Bracelet Maker",
+    "description": "Make glow bracelets and accessories for playdates and parties.",
+    "image": "https://placehold.co/400x250/ffd700/000000?text=Bracelet+Maker",
+    "price": "$12.99",
+    "availability": "In stock",
+    "rating": 4,
+    "affiliateUrl": "https://www.amazon.com/s?k=glow+bracelet+maker&tag=giftwithai-21",
+    "tags": [
+      "tween (10-12)",
+      "teen (13-19)",
+      "under $25",
+      "crafts"
+    ],
+    "asin": ""
+  },
+  {
+    "id": 188,
+    "title": "Magnetic Poetry Kit",
+    "description": "Word magnets for creative poems on the fridge and practice with language.",
+    "image": "https://placehold.co/400x250/ff7f50/000000?text=Magnetic+Poetry",
+    "price": "$11.99",
+    "availability": "In stock",
+    "rating": 4.4,
+    "affiliateUrl": "https://www.amazon.com/s?k=kids+magnetic+poetry&tag=giftwithai-21",
+    "tags": [
+      "tween (10-12)",
+      "kid (7-9)",
+      "under $25",
+      "books"
+    ],
+    "asin": ""
   }
 ]
