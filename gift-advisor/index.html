@@ -132,19 +132,19 @@
         <div style="background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center;">
             <strong style="display:block; margin-bottom:10px;">eGift Cards</strong>
             <p style="font-size: 0.9em; color: #666;">The safest choice. Sent via email or SMS instantly.</p>
-            <a href="https://www.amazon.com/s?k=amazon+gift+card+digital&tag=giftwithai-21" target="_blank" style="display: inline-block; background: #dc3545; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">Shop Gift Cards</a>
+            <a href="https://www.amazon.com/s?k=amazon+gift+card+digital&tag=giftwithai-20" target="_blank" style="display: inline-block; background: #dc3545; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">Shop Gift Cards</a>
         </div>
 
         <div style="background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center;">
             <strong style="display:block; margin-bottom:10px;">Audiobooks (Audible)</strong>
             <p style="font-size: 0.9em; color: #666;">Digital books delivered directly to their phone or tablet.</p>
-            <a href="https://www.amazon.com/s?k=audible+gift+membership&tag=giftwithai-21" target="_blank" style="display: inline-block; background: #28a745; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">Browse Audible</a>
+            <a href="https://www.amazon.com/s?k=audible+gift+membership&tag=giftwithai-20" target="_blank" style="display: inline-block; background: #28a745; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">Browse Audible</a>
         </div>
 
         <div style="background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center;">
             <strong style="display:block; margin-bottom:10px;">Amazon Prime</strong>
             <p style="font-size: 0.9em; color: #666;">Get 30 days of free fast shipping and movies.</p>
-            <a href="https://www.amazon.se/prime?tag=giftwithai-21" target="_blank" style="display: inline-block; background: #28a745; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">Start Free Trial</a>
+            <a href="https://www.amazon.se/prime?tag=giftwithai-20" target="_blank" style="display: inline-block; background: #28a745; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">Start Free Trial</a>
         </div>
     </div>
 </section><!-- Navigation -->
@@ -329,7 +329,7 @@
     const workerUrl = "https://bold-lake-a224.moodysaleem.workers.dev/";
     // Capture endpoint: prefer a page-level override (window.CAPTURE_ENDPOINT), otherwise fall back to the D1-enabled Worker
     const captureEndpoint = window.CAPTURE_ENDPOINT || "https://twilight-salad-f78c.moodysaleem.workers.dev/";
-    const affiliateTag = "giftwithai-21";
+    const affiliateTag = "giftwithai-20";
     const requiredKeys = ['Recipient','Gender','Budget','Occasion','Timeline'];
     const clientBatchSize = 3;
     const clientMaxFetch = 12;
@@ -476,7 +476,7 @@
 
     // generateAffiliateLink (improved)
     function generateAffiliateLink(name, asin, itemAffiliateUrl) {
-      const tag = affiliateTag || 'giftwithai-21';
+      const tag = affiliateTag || 'giftwithai-20';
       try {
         if (itemAffiliateUrl && typeof itemAffiliateUrl === 'string' && itemAffiliateUrl.includes('amazon.')) {
           const parsedAsin = extractAsinFromUrl(itemAffiliateUrl);
